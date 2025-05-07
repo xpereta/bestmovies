@@ -1,4 +1,4 @@
-struct Character: Decodable, Identifiable {
+struct CharacterDTO: Decodable {
     let id: Int
     let name: String
     let created: String
