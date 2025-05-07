@@ -1,8 +1,9 @@
 import Combine
 import SwiftUI
 
+@MainActor
 protocol CharactersListViewModelProtocol: ObservableObject {
-    
+    func loadCharacters()
 }
 
 @MainActor
