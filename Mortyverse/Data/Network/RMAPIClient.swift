@@ -2,9 +2,6 @@ import Foundation
 
 enum RMEndpoint {
     case characters
-    //    case character(id: Int)
-    //    case locations
-    //    case episodes
 
     var url: URL? {
         var components = URLComponents()
