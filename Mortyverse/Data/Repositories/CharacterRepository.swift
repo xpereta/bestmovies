@@ -2,7 +2,6 @@ import Foundation
 
 protocol CharacterRepositoryProvider {
     func fetchCharacters() async throws -> [Character]
-//    func fetchCharacter(id: Int) async throws -> Character
 }
 
 final class CharacterRepository: CharacterRepositoryProvider {
