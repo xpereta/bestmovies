@@ -27,7 +27,7 @@ struct CharactersListView: View {
                 VStack {
                     Text("Error: \(message)")
                     Button("Retry") {
-                        viewModel.retry()
+                        viewModel.send(.retry)
                     }
                 }
             }

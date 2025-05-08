@@ -15,13 +15,13 @@ enum CharactersListViewState {
 
 enum CharactersListAction {
     case onAppear
-    case loadStarted
+    case retry
     case loadSuccess([Character])
     case loadError(String)
 }
 
 @MainActor
-final class CharactersListViewModel: CharactersListViewModelProtocol {   
+final class CharactersListViewModel: CharactersListViewModelProtocol {
     @Published private(set) var state: CharactersListViewState = .initial
     
     private let useCase: GetCharactersUseCase
@@ -31,20 +31,12 @@ final class CharactersListViewModel: CharactersListViewModelProtocol {
     }
     
     func send(_ action: CharactersListAction) {
-        reducer(state: &state, action: action)
-        
-        switch action {
-        case .onAppear:
-            send(.loadStarted)
-            loadCharacters()
-        default:
-            break
+        if let effect = reducer(state: &state, action: action) {
+            effect()
         }
     }
     
     func loadCharacters() {
-        send(.loadStarted)
-        
         Task {
             do {
                 let characters = try await useCase.execute()
@@ -57,20 +49,24 @@ final class CharactersListViewModel: CharactersListViewModelProtocol {
         }
     }
     
-    func retry() {
-        loadCharacters()
-    }
-    
-    private func reducer(state: inout CharactersListViewState, action: CharactersListAction) {
+    private func reducer(state: inout CharactersListViewState, action: CharactersListAction) -> (()->Void)? {
         switch action {
         case .onAppear:
-            loadCharacters()
-        case .loadStarted:
-            break
+            state = .loading
+            return { self.loadCharacters() }
+            //return { [weak self] in self?.loadCharacters() }
+            
+        case .retry:
+            state = .loading
+            return { self.loadCharacters() }
+
         case .loadSuccess(let characters):
             state = .loaded(characters)
-        case .loadError(let errorMessage):
-            state = .error(message: errorMessage)
+            return nil
+        
+        case .loadError(let message):
+            state = .error(message: message)
+            return nil
         }
     }
 }

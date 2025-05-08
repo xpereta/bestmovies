@@ -17,5 +17,3 @@ final class CharacterRepository: CharacterRepositoryProvider {
         return domainCharacters
     }
 }
-
-
