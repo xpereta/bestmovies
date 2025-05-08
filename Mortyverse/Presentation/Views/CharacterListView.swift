@@ -9,7 +9,11 @@ struct CharactersListView: View {
             VStack(alignment: .leading) {
                 Text(character.name)
                     .font(.headline)
-                Text(character.created.description)
+                HStack {
+                    Spacer()
+                    Text("Created at \(character.created, format: .dateTime.day().month().year())")
+                        .font(.footnote)
+                }
             }
         }
         .task {
