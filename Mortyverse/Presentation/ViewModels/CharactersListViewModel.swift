@@ -23,6 +23,7 @@ enum CharactersListAction {
 @MainActor
 final class CharactersListViewModel: CharactersListViewModelProtocol {
     @Published private(set) var state: CharactersListViewState = .initial
+    private var isLoading = false
     
     private let useCase: GetCharactersUseCase
     
@@ -52,20 +53,27 @@ final class CharactersListViewModel: CharactersListViewModelProtocol {
     private func reducer(state: inout CharactersListViewState, action: CharactersListAction) -> (()->Void)? {
         switch action {
         case .onAppear:
+            guard isLoading == false else { return nil }
+
             state = .loading
-            return { self.loadCharacters() }
-            //return { [weak self] in self?.loadCharacters() }
+            isLoading = true
+            return { [weak self] in self?.loadCharacters() }
             
         case .retry:
+            guard isLoading == false else { return nil }
+            
             state = .loading
-            return { self.loadCharacters() }
+            isLoading = true
+            return { [weak self] in self?.loadCharacters() }
 
         case .loadSuccess(let characters):
             state = .loaded(characters)
+            isLoading = false
             return nil
         
         case .loadError(let message):
             state = .error(message: message)
+            isLoading = false
             return nil
         }
     }
