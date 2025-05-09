@@ -20,7 +20,7 @@ final class CharacterRepository: CharacterRepositoryProvider {
     
     func fetchCharacters(page: Int = 1) async throws -> paginatedResult<Character> {
         print("Repository * Fetching characters - Page: \(page)")
-        let response: CharacterResponse = try await apiClient.fetch(.characters(page: 1))
+        let response: CharacterResponse = try await apiClient.fetch(.characters(page: page))
         let domainCharacters = CharacterDTOMapper.mapList(response.results)
         
         return paginatedResult(

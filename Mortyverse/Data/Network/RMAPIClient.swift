@@ -50,7 +50,7 @@ final class RMAPIClient {
         guard let url = endpoint.url else {
             throw RMError.invalidURL
         }
-        
+        print("API: \(url)")
         do {
             let (data, response) = try await session.data(from: url)
             

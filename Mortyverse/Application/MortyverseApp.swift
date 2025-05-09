@@ -15,7 +15,7 @@ struct MortyverseApp: App {
         WindowGroup {
 //            ContentView()
 //                .environment(\.managedObjectContext, persistenceController.container.viewContext)
-            CharactersListView()
+            SimpleCharactersListView()
         }
     }
 }
