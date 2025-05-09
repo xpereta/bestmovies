@@ -12,7 +12,7 @@ final class CharacterRepository: CharacterRepositoryProvider {
     }
     
     func fetchCharacters() async throws -> [Character] {
-        let response: CharacterResponse = try await apiClient.fetch(.characters)
+        let response: CharacterResponse = try await apiClient.fetch(.characters(page: 1))
         let domainCharacters = CharacterDTOMapper.mapList(response.results)
         return domainCharacters
     }

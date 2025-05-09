@@ -1,13 +1,15 @@
 import Foundation
 
 enum RMEndpoint {
-    case characters
+    case characters(page: Int? = nil)
 
     var url: URL? {
         var components = URLComponents()
         components.scheme = "https"
         components.host = "rickandmortyapi.com"
         components.path = "/api/" + path
+        
+        components.queryItems = queryItems
         
         return components.url
     }
@@ -18,10 +20,21 @@ enum RMEndpoint {
             return "character"
         }
     }
+    
+    private var queryItems: [URLQueryItem]? {
+        switch self {
+        case .characters(let page):
+            guard let page else { return nil }
+            let item = URLQueryItem(name: "page", value: String(page))
+            return [item]
+        }
+    }
 }
 
 enum RMError: Error {
     case invalidURL
+    case invalidResponse
+    case invalidStatusCode
     case networkError(Error)
     case decodingError(Error)
 }
@@ -29,7 +42,7 @@ enum RMError: Error {
 final class RMAPIClient {
     private let session: URLSession
     
-    init(session: URLSession = URLSession(configuration: URLSessionConfiguration.default)) {
+    init(session: URLSession = URLSession(configuration: .default)) {
         self.session = session
     }
     
@@ -39,7 +52,16 @@ final class RMAPIClient {
         }
         
         do {
-            let (data, _) = try await session.data(from: url)
+            let (data, response) = try await session.data(from: url)
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                throw RMError.invalidResponse
+            }
+            
+            guard (200..<300).contains(httpResponse.statusCode) else {
+                throw RMError.invalidStatusCode
+            }
+            
             return try JSONDecoder().decode(T.self, from: data)
         } catch let error as DecodingError {
             throw RMError.decodingError(error)
