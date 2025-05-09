@@ -8,7 +8,6 @@ protocol SimpleCharactersListViewModelProtocol: ObservableObject {
 
 @MainActor
 final class SimpleCharactersListViewModel: SimpleCharactersListViewModelProtocol {
-    @Published private(set) var state: CharactersListViewState = .initial
     @Published private(set) var isLoading = false
     @Published private(set) var currentPage = 1
     @Published private(set) var hasMorePages = false
