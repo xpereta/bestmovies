@@ -1,3 +1,9 @@
+struct PaginatedCharacters {
+    let characters: [Character]
+    let currentPage: Int
+    let hasMorePages: Bool
+}
+
 final class GetCharactersUseCase {
     private let repository: CharacterRepositoryProvider
     
@@ -5,7 +11,13 @@ final class GetCharactersUseCase {
         self.repository = repository
     }
     
-    func execute() async throws -> [Character] {
-        try await repository.fetchCharacters()
+    func execute(page: Int = 1) async throws -> PaginatedCharacters {
+        let result = try await repository.fetchCharacters(page: page)
+        
+        return PaginatedCharacters(
+            characters: result.items,
+            currentPage: result.currentPage,
+            hasMorePages: result.hasMorePages
+        )
     }
 }
