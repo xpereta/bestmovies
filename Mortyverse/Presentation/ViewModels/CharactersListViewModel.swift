@@ -1,5 +1,4 @@
 import Combine
-import SwiftUI
 
 @MainActor
 protocol CharactersListViewModelProtocol: ObservableObject {
@@ -43,8 +42,7 @@ final class CharactersListViewModel: CharactersListViewModelProtocol {
                 let characters = try await useCase.execute()
                 self.send(.loadSuccess(characters))
             } catch let error {
-                let errorMessage = "Error fetching characters."
-                print("Error running use case: \(errorMessage)")
+                let errorMessage = "Error fetching characters: \(error.localizedDescription)."
                 self.send(.loadError(errorMessage))
             }
         }
