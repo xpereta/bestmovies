@@ -2,6 +2,7 @@ import Foundation
 
 enum RMEndpoint {
     case characters(page: Int? = nil)
+    case character(id: Int)
 
     var url: URL? {
         var components = URLComponents()
@@ -18,6 +19,8 @@ enum RMEndpoint {
         switch self {
         case .characters:
             return "character"
+        case .character(let id):
+            return "character/\(id)"
         }
     }
     
@@ -27,6 +30,8 @@ enum RMEndpoint {
             guard let page else { return nil }
             let item = URLQueryItem(name: "page", value: String(page))
             return [item]
+        case .character:
+            return nil
         }
     }
 }

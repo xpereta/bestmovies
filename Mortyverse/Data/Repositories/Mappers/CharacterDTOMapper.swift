@@ -14,7 +14,9 @@ struct CharacterDTOMapper {
             id: dto.id,
             name: dto.name,
             created: created,
-            image: dto.image
+            image: dto.image,
+            species: dto.species,
+            gender: dto.gender
         )
     }
     
