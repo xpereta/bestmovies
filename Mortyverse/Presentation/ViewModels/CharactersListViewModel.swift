@@ -1,92 +1,80 @@
 import Foundation
 import Combine
 
-@MainActor
-protocol CharactersListViewModelProtocol: ObservableObject {
-    func starLoading()
-    func loadNextPage()
+enum CharactersListViewState {
+    case idle
+    case loading
+    case loaded([Character], currentPage: Int, hasMore: Bool, isLoadingMore: Bool)
+    case error(String)
 }
 
 @MainActor
-final class CharactersListViewModel: CharactersListViewModelProtocol {
-    @Published private(set) var isLoading = false
-    @Published private(set) var currentPage = 1
-    @Published private(set) var hasMorePages = false
-    @Published private(set) var characters: [Character] = []
-    @Published private(set) var errorMessage: String? = nil
-    @Published var searchText = ""
-    
-    private var cancellables = Set<AnyCancellable>()
+final class CharactersListViewModel: ObservableObject {
+    @Published private(set) var state: CharactersListViewState = .idle
+    @Published var searchText: String = ""
     
     private let getCharactersUseCase: GetCharactersUseCase
-    private var searchTask: Task<Void, Never>?
+    private var cancellables = Set<AnyCancellable>()
     
     init(getCharactersUseCase: GetCharactersUseCase = GetCharactersUseCase(repository: CharacterRepository())) {
         self.getCharactersUseCase = getCharactersUseCase
-        setupSearchSubscriber()
+        setupSearchSubscription()
     }
     
-    deinit {
-        cancellables.removeAll()
-        searchTask?.cancel()
-    }
-    
-    private func setupSearchSubscriber() {
+    private func setupSearchSubscription() {
         $searchText
+            .debounce(for: .seconds(0.5), scheduler: DispatchQueue.main)
             .removeDuplicates()
-            .debounce(for: .milliseconds(300), scheduler: DispatchQueue.main)
-            .sink { [weak self] searchText in
-                print("Received new value: \(searchText)")
-                self?.resetAndSearch()
+            .sink { [weak self] _ in
+                self?.resetAndLoad()
             }
             .store(in: &cancellables)
     }
     
-    private func resetAndSearch() {
-        searchTask?.cancel()
-        characters = []
-        currentPage = 1
-        hasMorePages = false
-        
-        searchTask = Task {
-            starLoading()
-        }
+    func starLoading() {
+        resetAndLoad()
     }
     
-    func starLoading() {
-        print("ViewModel: Start loading called")
-        guard !isLoading else { return }
-        guard characters.isEmpty else { return }
+    private func resetAndLoad() {
+        state = .loading
         
-        isLoading = true
-        loadCharacters(page: currentPage)
+        Task {
+            do {
+                let result = try await getCharactersUseCase.execute(page: 1, name: searchText)
+                state = .loaded(
+                    result.characters,
+                    currentPage: 1,
+                    hasMore: result.hasMorePages,
+                    isLoadingMore: false
+                )
+            } catch {
+                state = .error(error.localizedDescription)
+            }
+        }
     }
     
     func loadNextPage() {
-        print("ViewModel: load next page called")
-        guard !isLoading else { return }
+        guard case let .loaded(characters, currentPage, true, false) = state else { return }
         
-        isLoading = true
-        loadCharacters(page: currentPage + 1)
+        let nextPage = currentPage + 1
+        state = .loaded(characters, currentPage: currentPage, hasMore: true, isLoadingMore: true)
+        
+        Task {
+            do {
+                let result = try await getCharactersUseCase.execute(page: nextPage, name: searchText)
+                state = .loaded(
+                    characters + result.characters,
+                    currentPage: nextPage,
+                    hasMore: result.hasMorePages,
+                    isLoadingMore: false
+                )
+            } catch {
+                state = .error(error.localizedDescription)
+            }
+        }
     }
     
     func onDissapear() {
-        searchTask?.cancel()
-    }
-    
-    private func loadCharacters(page: Int) {
-        Task {
-            do {
-                let searchQuery = searchText.isEmpty ? nil : searchText
-                let paginatedResult = try await getCharactersUseCase.execute(page: page, name: searchQuery)
-                characters.append(contentsOf: paginatedResult.characters)
-                errorMessage = nil
-                currentPage = page
-                hasMorePages = paginatedResult.hasMorePages
-            } catch let error {
-                errorMessage = "Error getting characters: \(error.localizedDescription)."
-            }
-            isLoading = false
-        }
+        cancellables.removeAll()
     }
 }

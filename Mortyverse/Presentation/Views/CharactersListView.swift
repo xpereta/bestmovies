@@ -10,30 +10,17 @@ struct CharactersListView: View {
                 SearchBar(text: $viewModel.searchText)
                     .autocorrectionDisabled()
                 
-                List {
-                    ForEach(viewModel.characters) { character in
-                        CharacterRow(character: character)
-                    }
-                    if viewModel.hasMorePages {
-                        HStack {
-                            ProgressView("Loading...")
-                                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        }
-                        .onAppear() {
-                            viewModel.loadNextPage()
-                        }
-                    }
-                }
-                .animation(.default, value: viewModel.characters)
-                .overlay {
-                    if viewModel.characters.isEmpty && !viewModel.isLoading {
-                        VStack {
-                            Spacer()
-                            Text("No Results")
-                            Image(systemName: "magnifyingglass")
-                            Text("Try searching with a different term")
-                            Spacer()
-                        }
+                Group {
+                    switch viewModel.state {
+                    case .idle:
+                        EmptyView()
+                    case .loading:
+                        ProgressView("Loading...")
+                    case .loaded(let characters, _, let hasMore, let isLoadingMore):
+                        charactersList(characters: characters, hasMore: hasMore, isLoadingMore: isLoadingMore)
+                    case .error(let message):
+                        Text(message)
+                            .foregroundColor(.red)
                     }
                 }
             }
@@ -42,6 +29,38 @@ struct CharactersListView: View {
             }
             .task {
                 viewModel.starLoading()
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private func charactersList(characters: [Character], hasMore: Bool, isLoadingMore: Bool) -> some View {
+        List {
+            ForEach(characters) { character in
+                CharacterRow(character: character)
+            }
+            if hasMore {
+                HStack {
+                    ProgressView("Loading more...")
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                }
+                .onAppear {
+                    if !isLoadingMore {
+                        viewModel.loadNextPage()
+                    }
+                }
+            }
+        }
+        .animation(.default, value: characters)
+        .overlay {
+            if characters.isEmpty {
+                VStack {
+                    Spacer()
+                    Text("No Results")
+                    Image(systemName: "magnifyingglass")
+                    Text("Try searching with a different term")
+                    Spacer()
+                }
             }
         }
     }
