@@ -11,8 +11,8 @@ final class GetCharactersUseCase {
         self.repository = repository
     }
     
-    func execute(page: Int = 1) async throws -> PaginatedCharacters {
-        let result = try await repository.fetchCharacters(page: page)
+    func execute(page: Int = 1, name: String?) async throws -> PaginatedCharacters {
+        let result = try await repository.fetchCharacters(page: page, name: name)
         
         return PaginatedCharacters(
             characters: result.items,

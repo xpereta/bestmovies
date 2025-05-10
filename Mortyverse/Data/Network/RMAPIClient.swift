@@ -1,7 +1,7 @@
 import Foundation
 
 enum RMEndpoint {
-    case characters(page: Int? = nil)
+    case characters(page: Int? = nil, name: String? = nil)
     case character(id: Int)
 
     var url: URL? {
@@ -26,10 +26,11 @@ enum RMEndpoint {
     
     private var queryItems: [URLQueryItem]? {
         switch self {
-        case .characters(let page):
-            guard let page else { return nil }
-            let item = URLQueryItem(name: "page", value: String(page))
-            return [item]
+        case .characters(let page, let name):
+            var items: [URLQueryItem] = []
+            if let page { items.append(URLQueryItem(name: "page", value: String(page))) }
+            if let name { items.append(URLQueryItem(name: "name", value: name)) }
+            return items.isEmpty ? nil : items
         case .character:
             return nil
         }
@@ -56,6 +57,7 @@ final class RMAPIClient {
             throw RMError.invalidURL
         }
         print("API: \(url)")
+        try! await Task.sleep(nanoseconds: 2_000_000_000)
         do {
             let (data, response) = try await session.data(from: url)
             

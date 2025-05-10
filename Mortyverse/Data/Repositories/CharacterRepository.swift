@@ -8,7 +8,7 @@ struct paginatedResult<T> {
 }
 
 protocol CharacterRepositoryProvider {
-    func fetchCharacters(page: Int) async throws -> paginatedResult<Character>
+    func fetchCharacters(page: Int, name: String?) async throws -> paginatedResult<Character>
     func fetchCharacter(id: Int) async throws -> Character
 }
 
@@ -19,9 +19,9 @@ final class CharacterRepository: CharacterRepositoryProvider {
         self.apiClient = apiClient
     }
     
-    func fetchCharacters(page: Int = 1) async throws -> paginatedResult<Character> {
-        print("Repository * Fetching characters - Page: \(page)")
-        let response: CharacterResponse = try await apiClient.fetch(.characters(page: page))
+    func fetchCharacters(page: Int = 1, name: String? = nil) async throws -> paginatedResult<Character> {
+        print("Repository * Fetching characters - Page: \(page), Search: \(name ?? "none")")
+        let response: CharacterResponse = try await apiClient.fetch(.characters(page: page, name: name))
         let domainCharacters = CharacterDTOMapper.mapList(response.results)
         
         return paginatedResult(

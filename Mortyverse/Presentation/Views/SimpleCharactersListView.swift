@@ -6,27 +6,41 @@ struct SimpleCharactersListView: View {
     
     var body: some View {
         NavigationView {
-            List() {
-                ForEach(viewModel.characters) { character in
-                    //                HStack {
-                    //                    Text(character.name)
-                    //                    Spacer()
-                    //                    Text("\(character.id)")
-                    //                }
-                    CharacterRow(character: character)
-                }
-                if viewModel.hasMorePages {
-                    HStack {
-                        Spacer()
-                        ProgressView()
-                        Spacer()
+            VStack {
+                SearchBar(text: $viewModel.searchText)
+                    .autocorrectionDisabled()
+                
+                List {
+                    ForEach(viewModel.characters) { character in
+                        CharacterRow(character: character)
                     }
-                    .onAppear() {
-                        viewModel.loadNextPage()
+                    if viewModel.hasMorePages {
+                        HStack {
+                            Spacer()
+                            ProgressView()
+                            Spacer()
+                        }
+                        .onAppear() {
+                            viewModel.loadNextPage()
+                        }
+                    }
+                }
+                .overlay {
+                    if viewModel.characters.isEmpty && !viewModel.isLoading {
+                        VStack {
+                            Spacer()
+                            Text("No Results")
+                            Image(systemName: "magnifyingglass")
+                            Text("Try searching with a different term")
+                            Spacer()
+                        }
                     }
                 }
             }
-            .onAppear() {
+            .onDisappear {
+                viewModel.onDissapear()
+            }
+            .task {
                 viewModel.starLoading()
             }
         }

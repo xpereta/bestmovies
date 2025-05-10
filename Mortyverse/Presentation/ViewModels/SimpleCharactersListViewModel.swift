@@ -1,3 +1,4 @@
+import Foundation
 import Combine
 
 @MainActor
@@ -13,17 +14,49 @@ final class SimpleCharactersListViewModel: SimpleCharactersListViewModelProtocol
     @Published private(set) var hasMorePages = false
     @Published private(set) var characters: [Character] = []
     @Published private(set) var errorMessage: String? = nil
+    @Published var searchText = ""
     
-    private let useCase: GetCharactersUseCase
-
-    init(useCase: GetCharactersUseCase = GetCharactersUseCase(repository: CharacterRepository())) {
-        self.useCase = useCase
+    private var cancellables = Set<AnyCancellable>()
+    
+    private let getCharactersUseCase: GetCharactersUseCase
+    private var searchTask: Task<Void, Never>?
+    
+    init(getCharactersUseCase: GetCharactersUseCase = GetCharactersUseCase(repository: CharacterRepository())) {
+        self.getCharactersUseCase = getCharactersUseCase
+        setupSearchSubscriber()
+    }
+    
+    deinit {
+        cancellables.removeAll()
+        searchTask?.cancel()
+    }
+    
+    private func setupSearchSubscriber() {
+        $searchText
+            .removeDuplicates()
+            .debounce(for: .milliseconds(300), scheduler: DispatchQueue.main)
+            .sink { [weak self] searchText in
+                print("Received new value: \(searchText)")
+                self?.resetAndSearch()
+            }
+            .store(in: &cancellables)
+    }
+    
+    private func resetAndSearch() {
+        searchTask?.cancel()
+        characters = []
+        currentPage = 1
+        hasMorePages = false
+        
+        searchTask = Task {
+            starLoading()
+        }
     }
     
     func starLoading() {
         print("ViewModel: Start loading called")
-        
         guard !isLoading else { return }
+        guard characters.isEmpty else { return }
         
         isLoading = true
         loadCharacters(page: currentPage)
@@ -31,23 +64,27 @@ final class SimpleCharactersListViewModel: SimpleCharactersListViewModelProtocol
     
     func loadNextPage() {
         print("ViewModel: load next page called")
-
         guard !isLoading else { return }
         
         isLoading = true
         loadCharacters(page: currentPage + 1)
     }
     
+    func onDissapear() {
+        searchTask?.cancel()
+    }
+    
     private func loadCharacters(page: Int) {
         Task {
             do {
-                let paginatedResult = try await useCase.execute(page: page)
+                let searchQuery = searchText.isEmpty ? nil : searchText
+                let paginatedResult = try await getCharactersUseCase.execute(page: page, name: searchQuery)
                 characters.append(contentsOf: paginatedResult.characters)
                 errorMessage = nil
                 currentPage = page
                 hasMorePages = paginatedResult.hasMorePages
             } catch let error {
-                errorMessage = "Error fetching characters: \(error.localizedDescription)."
+                errorMessage = "Error getting characters: \(error.localizedDescription)."
             }
             isLoading = false
         }
