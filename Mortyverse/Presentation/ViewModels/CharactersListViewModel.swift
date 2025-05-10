@@ -31,7 +31,9 @@ final class CharactersListViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
-    func starLoading() {
+    func startLoading() {
+        guard case .idle = state else { return }
+        
         resetAndLoad()
     }
     

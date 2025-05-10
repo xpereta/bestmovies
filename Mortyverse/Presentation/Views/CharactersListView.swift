@@ -28,7 +28,7 @@ struct CharactersListView: View {
                 viewModel.onDissapear()
             }
             .task {
-                viewModel.starLoading()
+                viewModel.startLoading()
             }
         }
     }
