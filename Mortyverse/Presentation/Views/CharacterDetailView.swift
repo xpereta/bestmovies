@@ -32,7 +32,6 @@ struct CharacterDetailView: View {
                                 .aspectRatio(1, contentMode: .fit)
                                 .clipShape(RoundedRectangle(cornerRadius: 10))
                         }
-                        
                         Text("Created: \(character.created.formatted(date: .long, time: .standard))")
                             .font(.caption)
                             .foregroundColor(.secondary)

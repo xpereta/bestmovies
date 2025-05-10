@@ -1,108 +1,92 @@
-//import Combine
-//
-//@MainActor
-//protocol CharactersListViewModelProtocol: ObservableObject {
-//    func loadCharacters(page: Int)
-//}
-//
-//enum CharactersListViewState {
-//    case initial
-//    case loading
-//    case loadingNextPage(existingCharacters: [Character])
-//    case loaded(characters: [Character], currentPage: Int, hasNextPage: Bool)
-//    case error(message: String)
-//}
-//
-//enum CharactersListAction {
-//    case onAppear
-//    case loadNextPage
-//    case retry
-//    case loadSuccess(PaginatedCharacters)
-//    case loadError(String)
-//}
-//
-//@MainActor
-//final class CharactersListViewModel: CharactersListViewModelProtocol {
-//    @Published private(set) var state: CharactersListViewState = .initial
-//    private var isLoading = false
-//    private var currentPage = 1
-//    
-//    private let useCase: GetCharactersUseCase
-//    
-//    init(useCase: GetCharactersUseCase = GetCharactersUseCase(repository: CharacterRepository())) {
-//        self.useCase = useCase
-//    }
-//    
-//    func send(_ action: CharactersListAction) {
-//        if let effect = reducer(state: &state, action: action) {
-//            effect()
-//        }
-//    }
-//    
-//    func loadCharacters(page: Int = 1) {
-//        Task {
-//            do {
-//                let paginatedResult = try await useCase.execute(page: page)
-//                self.send(.loadSuccess(paginatedResult))
-//            } catch let error {
-//                let errorMessage = "Error fetching characters: \(error.localizedDescription)."
-//                self.send(.loadError(errorMessage))
-//            }
-//        }
-//    }
-//    
-//    private func reducer(state: inout CharactersListViewState, action: CharactersListAction) -> (()->Void)? {
-//        switch action {
-//        case .onAppear:
-//            guard isLoading == false else { return nil }
-//
-//            state = .loading
-//            isLoading = true
-//            currentPage = 1
-//            
-//            return { [weak self] in self?.loadCharacters(page: 1) }
-//            
-//        case .loadNextPage:
-//            guard isLoading == false else { return nil }
-//            guard case let .loaded(characters, page, hasNext) = state,
-//                  hasNext else { return nil }
-//            
-//            state = .loadingNextPage(existingCharacters: characters)
-//            isLoading = true
-//            
-//            return { [weak self] in self?.loadCharacters(page: page + 1) }
-//            
-//        case .retry:
-//            guard isLoading == false else { return nil }
-//            
-//            state = .loading
-//            isLoading = true
-//            currentPage = 1
-//
-//            return { [weak self] in self?.loadCharacters(page: 1) }
-//
-//        case .loadSuccess(let result):
-//            let updatedCharacters: [Character] = {
-//                if case let .loadingNextPage(existingCharacters) = state {
-//                    return existingCharacters + result.characters
-//                }
-//                return result.characters
-//            }()
-//            
-//            state = .loaded(
-//                characters: updatedCharacters,
-//                currentPage: result.currentPage,
-//                hasNextPage: result.hasMorePages
-//            )
-//            isLoading = false
-//            
-//            return nil
-//        
-//        case .loadError(let message):
-//            state = .error(message: message)
-//            isLoading = false
-//            
-//            return nil
-//        }
-//    }
-//}
+import Foundation
+import Combine
+
+@MainActor
+protocol CharactersListViewModelProtocol: ObservableObject {
+    func starLoading()
+    func loadNextPage()
+}
+
+@MainActor
+final class CharactersListViewModel: CharactersListViewModelProtocol {
+    @Published private(set) var isLoading = false
+    @Published private(set) var currentPage = 1
+    @Published private(set) var hasMorePages = false
+    @Published private(set) var characters: [Character] = []
+    @Published private(set) var errorMessage: String? = nil
+    @Published var searchText = ""
+    
+    private var cancellables = Set<AnyCancellable>()
+    
+    private let getCharactersUseCase: GetCharactersUseCase
+    private var searchTask: Task<Void, Never>?
+    
+    init(getCharactersUseCase: GetCharactersUseCase = GetCharactersUseCase(repository: CharacterRepository())) {
+        self.getCharactersUseCase = getCharactersUseCase
+        setupSearchSubscriber()
+    }
+    
+    deinit {
+        cancellables.removeAll()
+        searchTask?.cancel()
+    }
+    
+    private func setupSearchSubscriber() {
+        $searchText
+            .removeDuplicates()
+            .debounce(for: .milliseconds(300), scheduler: DispatchQueue.main)
+            .sink { [weak self] searchText in
+                print("Received new value: \(searchText)")
+                self?.resetAndSearch()
+            }
+            .store(in: &cancellables)
+    }
+    
+    private func resetAndSearch() {
+        searchTask?.cancel()
+        characters = []
+        currentPage = 1
+        hasMorePages = false
+        
+        searchTask = Task {
+            starLoading()
+        }
+    }
+    
+    func starLoading() {
+        print("ViewModel: Start loading called")
+        guard !isLoading else { return }
+        guard characters.isEmpty else { return }
+        
+        isLoading = true
+        loadCharacters(page: currentPage)
+    }
+    
+    func loadNextPage() {
+        print("ViewModel: load next page called")
+        guard !isLoading else { return }
+        
+        isLoading = true
+        loadCharacters(page: currentPage + 1)
+    }
+    
+    func onDissapear() {
+        searchTask?.cancel()
+    }
+    
+    private func loadCharacters(page: Int) {
+        Task {
+            do {
+                let searchQuery = searchText.isEmpty ? nil : searchText
+                let paginatedResult = try await getCharactersUseCase.execute(page: page, name: searchQuery)
+                characters.append(contentsOf: paginatedResult.characters)
+                errorMessage = nil
+                currentPage = page
+                hasMorePages = paginatedResult.hasMorePages
+            } catch let error {
+                errorMessage = "Error getting characters: \(error.localizedDescription)."
+            }
+            isLoading = false
+        }
+    }
+}

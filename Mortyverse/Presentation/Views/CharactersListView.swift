@@ -1,8 +1,8 @@
 import SwiftUI
 import Combine
 
-struct SimpleCharactersListView: View {
-    @StateObject private var viewModel = SimpleCharactersListViewModel()
+struct CharactersListView: View {
+    @StateObject private var viewModel = CharactersListViewModel()
     
     var body: some View {
         NavigationView {
@@ -16,15 +16,15 @@ struct SimpleCharactersListView: View {
                     }
                     if viewModel.hasMorePages {
                         HStack {
-                            Spacer()
-                            ProgressView()
-                            Spacer()
+                            ProgressView("Loading...")
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
                         }
                         .onAppear() {
                             viewModel.loadNextPage()
                         }
                     }
                 }
+                .animation(.default, value: viewModel.characters)
                 .overlay {
                     if viewModel.characters.isEmpty && !viewModel.isLoading {
                         VStack {
@@ -69,5 +69,5 @@ struct CharacterRow: View {
 }
 
 #Preview {
-    SimpleCharactersListView()
+    CharactersListView()
 }

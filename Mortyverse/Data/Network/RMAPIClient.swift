@@ -57,7 +57,7 @@ final class RMAPIClient {
             throw RMError.invalidURL
         }
         print("API: \(url)")
-        try! await Task.sleep(nanoseconds: 2_000_000_000)
+//        try! await Task.sleep(nanoseconds: 1_000_000_000)
         do {
             let (data, response) = try await session.data(from: url)
             
