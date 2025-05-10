@@ -20,17 +20,37 @@ struct CharacterDetailView: View {
                         Text(character.name)
                             .font(.title)
                             .bold()
-                        
-                        AsyncImage(url: URL(string: character.image)) { image in
-                            image
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .clipShape(RoundedRectangle(cornerRadius: 10))
-                        } placeholder: {
-                            Rectangle()
-                                .fill(Color.gray.opacity(0.3))
-                                .aspectRatio(1, contentMode: .fit)
-                                .clipShape(RoundedRectangle(cornerRadius: 10))
+                        AsyncImage(
+                            url: URL(string: character.image),
+                            transaction: Transaction(
+                                animation: .easeIn(duration: 0.2)
+                            )
+                        ){ phase in
+                            switch phase {
+                            case .success(let image):
+                                image
+                                    .resizable()
+                                    .scaledToFit()
+                                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                                    .transition(.opacity)
+                                
+                            case .failure(_):
+                                Image(systemName: "person.circle.fill")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .foregroundColor(.gray)
+                                    .opacity(0.3)
+                                
+                            case .empty:
+                                Rectangle()
+                                    .fill(Color.gray)
+                                    .opacity(0.3)
+                                    .scaledToFill()
+                                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                                
+                            @unknown default:
+                                ProgressView()
+                            }
                         }
                         Text("Created: \(character.created.formatted(date: .long, time: .standard))")
                             .font(.caption)
