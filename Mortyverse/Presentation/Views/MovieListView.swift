@@ -27,6 +27,9 @@ struct MovieListView: View {
             .task {
                 viewModel.startLoading()
             }
+            .onAppear() {
+                viewModel.startLoading()
+            }
             .onDisappear {
                 viewModel.onDissapear()
             }

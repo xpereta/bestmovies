@@ -54,7 +54,10 @@ final class MovieListViewModel: ObservableObject {
         searchTask = Task {
             do {
                 let result = try await getMoviesUseCase.execute(page: 1, query: searchText)
-                guard !Task.isCancelled else { return }
+                guard !Task.isCancelled else {
+                    state = .idle
+                    return
+                }
                 state = .loaded(
                     result.movies,
                     currentPage: 1,
@@ -62,7 +65,11 @@ final class MovieListViewModel: ObservableObject {
                     isLoadingMore: false
                 )
             } catch {
-                state = .error(error.localizedDescription)
+                if Task.isCancelled {
+                    state = .idle
+                } else {
+                    state = .error(error.localizedDescription)
+                }
             }
         }
     }
