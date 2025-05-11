@@ -14,11 +14,16 @@ final class MovieListViewModel: ObservableObject {
     @Published var searchText: String = ""
     
     private let getMoviesUseCase: GetMoviesUseCase
+    private var searchTask: Task<Void, Never>?
     private var cancellables = Set<AnyCancellable>()
     
     init(getMoviesUseCase: GetMoviesUseCase = GetMoviesUseCase(repository: MovieRepository())) {
         self.getMoviesUseCase = getMoviesUseCase
         setupSearchSubscription()
+    }
+    
+    deinit {
+        cancellables.removeAll()
     }
     
     private func setupSearchSubscription() {
@@ -40,13 +45,33 @@ final class MovieListViewModel: ObservableObject {
     }
     
     private func resetAndLoad() {
-        print("🧠 MovieListViewModel: setupSearchSubscription")
+        print("🧠 MovieListViewModel: resetAndLoad")
 
         state = .loading
         
         Task {
             do {
                 let result = try await getMoviesUseCase.execute(page: 1, query: searchText)
+                state = .loaded(
+                    result.movies,
+                    currentPage: 1,
+                    hasMore: result.hasMorePages,
+                    isLoadingMore: false
+                )
+            } catch {
+                state = .error(error.localizedDescription)
+            }
+        }
+    }
+    
+    private func resetAndSearch() {
+        print("🧠 MovieListViewModel: resetAndSearch")
+        
+        searchTask?.cancel()
+        searchTask = Task {
+            do {
+                let result = try await getMoviesUseCase.execute(page: 1, query: searchText)
+                guard !Task.isCancelled else { return }
                 state = .loaded(
                     result.movies,
                     currentPage: 1,
@@ -81,6 +106,7 @@ final class MovieListViewModel: ObservableObject {
     }
     
     func onDissapear() {
-        cancellables.removeAll()
+        searchTask?.cancel()
+        searchTask = nil
     }
 }
