@@ -18,9 +18,12 @@ protocol MovieRepositoryProtocol {
 
 final class MovieRepository: MovieRepositoryProtocol {
     private let apiClient: TMDBAPIClientProtocol
+    private let apiProvider: ApiProvider
+
     
     init(apiClient: TMDBAPIClientProtocol = TMDBAPIClient()) {
         self.apiClient = apiClient
+        self.apiProvider = URLSessionApiProvider()
     }
     
     func fetchMovies(page: Int, query: String?) async throws -> (movies: [Movie], hasMorePages: Bool) {
@@ -40,9 +43,11 @@ final class MovieRepository: MovieRepositoryProtocol {
     
     func fetchMovieDetails(_ id: Int) async throws -> MovieDetails {
         do {
-            let movie = try await apiClient.fetchMovie(id)
+//            let movie = try await apiClient.fetchMovie(id)
+            let request = try TMDBApiEndpoint.movie(id: id).makeURLRequest()
+            let movie = try await apiProvider.performRequest(request, decodeTo: MovieDetailsDTO.self)
             return MovieDetailsDTOMapper.map(movie)
-        } catch NetworkError.failed(statusCode: 404) {
+        } catch ApiProviderError.failed(statusCode: 404) {
             throw MovieRepositoryError.movieNotFound(withId: id)
         }
     }
