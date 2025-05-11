@@ -15,7 +15,8 @@ struct MortyverseApp: App {
         WindowGroup {
 //            ContentView()
 //                .environment(\.managedObjectContext, persistenceController.container.viewContext)
-            MovieListView()
+//            MovieListView()
+            CoordinatorView()
         }
     }
 }

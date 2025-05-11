@@ -80,9 +80,12 @@ struct FailedImage: View {
 
 struct MovieRow: View {
     let movie: Movie
+    @EnvironmentObject private var coordinator: Coordinator
     
     var body: some View {
-        NavigationLink(destination: MovieDetailView(movieId: movie.id)) {
+        Button {
+            coordinator.push(page: .movieDetails(movie.id))
+        } label: {
             HStack(spacing: 12) {
                 AsyncImage(url: movie.posterURL) { phase in
                     switch phase {
@@ -119,7 +122,10 @@ struct MovieRow: View {
                 }
             }
             .padding(.vertical, 8)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .contentShape(Rectangle())
         }
+        .buttonStyle(.plain)
     }
 }
 
