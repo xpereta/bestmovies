@@ -17,23 +17,23 @@ protocol MovieRepositoryProtocol {
 }
 
 final class MovieRepository: MovieRepositoryProtocol {
-    private let apiClient: TMDBAPIClientProtocol
     private let apiProvider: ApiProvider
 
-    
-    init(apiClient: TMDBAPIClientProtocol = TMDBAPIClient()) {
-        self.apiClient = apiClient
-        self.apiProvider = URLSessionApiProvider()
+    init(apiProvider: ApiProvider = URLSessionApiProvider()) {
+        self.apiProvider = apiProvider
     }
     
     func fetchMovies(page: Int, query: String?) async throws -> (movies: [Movie], hasMorePages: Bool) {
         let response: MovieResponse
+        let request: URLRequest
         
         if let query = query, !query.isEmpty {
-            response = try await apiClient.searchMovies(query: query, page: page)
+            request = try TMDBApiEndpoint.searchMovies(query: query, page: page).makeURLRequest()
         } else {
-            response = try await apiClient.fetchMovies(page: page)
+            request = try TMDBApiEndpoint.topRated(page: page).makeURLRequest()
         }
+        
+        response = try await apiProvider.performRequest(request, decodeTo: MovieResponse.self)
         
         let movies = MovieDTOMapper.mapList(response.results)
         let hasMorePages = response.page < response.totalPages
@@ -43,7 +43,6 @@ final class MovieRepository: MovieRepositoryProtocol {
     
     func fetchMovieDetails(_ id: Int) async throws -> MovieDetails {
         do {
-//            let movie = try await apiClient.fetchMovie(id)
             let request = try TMDBApiEndpoint.movie(id: id).makeURLRequest()
             let movie = try await apiProvider.performRequest(request, decodeTo: MovieDetailsDTO.self)
             return MovieDetailsDTOMapper.map(movie)
