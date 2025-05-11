@@ -65,11 +65,7 @@ final class MovieListViewModel: ObservableObject {
                     isLoadingMore: false
                 )
             } catch {
-                if Task.isCancelled {
-                    state = .idle
-                } else {
-                    state = .error(error.localizedDescription)
-                }
+                state = .error(error.localizedDescription)
             }
         }
     }
@@ -93,12 +89,5 @@ final class MovieListViewModel: ObservableObject {
                 state = .error(error.localizedDescription)
             }
         }
-    }
-    
-    func onDissapear() {
-        print("🧠 MovieListViewModel: onDissapear")
-
-        searchTask?.cancel()
-        searchTask = nil
     }
 }
