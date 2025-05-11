@@ -1,5 +1,4 @@
 import SwiftUI
-import Combine
 
 struct MovieListView: View {
     @StateObject private var viewModel = MovieListViewModel()

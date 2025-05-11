@@ -22,6 +22,7 @@ final class MovieListViewModel: ObservableObject {
     }
     
     private func setupSearchSubscription() {
+        print("🧠 MovieListViewModel: setupSearchSubscription")
         $searchText
             .debounce(for: .seconds(0.5), scheduler: DispatchQueue.main)
             .removeDuplicates()
@@ -32,12 +33,15 @@ final class MovieListViewModel: ObservableObject {
     }
     
     func startLoading() {
+        print("🧠 MovieListViewModel: startLoading")
         guard case .idle = state else { return }
         
         resetAndLoad()
     }
     
     private func resetAndLoad() {
+        print("🧠 MovieListViewModel: setupSearchSubscription")
+
         state = .loading
         
         Task {

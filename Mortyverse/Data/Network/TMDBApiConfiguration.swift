@@ -8,6 +8,7 @@ enum TMDBApiConfiguration {
     enum Endpoint {
         case topRated(page: Int)
         case searchMovies(query: String, page: Int)
+        case movie(id: Int)
         
         var path: String {
             switch self {
@@ -15,6 +16,8 @@ enum TMDBApiConfiguration {
                 return "/movie/top_rated"
             case .searchMovies:
                 return "/search/movie"
+            case .movie(id: let id):
+                return "/movie/\(id)"
             }
         }
         
@@ -37,6 +40,8 @@ enum TMDBApiConfiguration {
                     URLQueryItem(name: "query", value: query),
                     URLQueryItem(name: "page", value: String(page))
                 ])
+            case .movie:
+                break
             }
             
             return items

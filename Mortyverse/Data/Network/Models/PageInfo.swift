@@ -1,3 +1,5 @@
+import Foundation
+
 struct PageInfo: Decodable {
     let count: Int
     let pages: Int

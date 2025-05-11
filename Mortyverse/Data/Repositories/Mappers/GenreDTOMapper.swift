@@ -1,0 +1,14 @@
+import Foundation
+
+struct GenreDTOMapper {
+    static func map(_ dto: GenreDTO) -> Genre {
+        return Genre(
+            id: dto.id,
+            name: dto.name
+        )
+    }
+    
+    static func mapList(_ dto: [GenreDTO]) -> [Genre] {
+        return dto.map { map($0) }
+    }
+}

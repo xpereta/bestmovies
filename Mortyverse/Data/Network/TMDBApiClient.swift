@@ -10,6 +10,7 @@ enum NetworkError: Error {
 protocol TMDBAPIClientProtocol {
     func fetchMovies(page: Int) async throws -> MovieResponse
     func searchMovies(query: String, page: Int) async throws -> MovieResponse
+    func fetchMovie(_ id: Int) async throws -> MovieDetailsDTO
 }
 
 final class TMDBAPIClient: TMDBAPIClientProtocol {
@@ -35,7 +36,16 @@ final class TMDBAPIClient: TMDBAPIClientProtocol {
         return try await fetch(url: url)
     }
     
+    func fetchMovie(_ id: Int) async throws -> MovieDetailsDTO {
+        guard let url = TMDBApiConfiguration.Endpoint.movie(id: id).url else {
+            throw NetworkError.invalidURL
+        }
+        
+        return try await fetch(url: url)
+    }
+    
     private func fetch<T: Decodable>(url: URL) async throws -> T {
+        print("TMDBAPIClient: Fetching \(url)")
         let (data, response) = try await session.data(from: url)
         
         guard let httpResponse = response as? HTTPURLResponse else {

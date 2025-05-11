@@ -8,7 +8,7 @@ struct SearchBar: View {
             Image(systemName: "magnifyingglass")
                 .foregroundColor(.gray)
             
-            TextField("Search characters...", text: $text)
+            TextField("Search movies...", text: $text)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
             
             if !text.isEmpty {
