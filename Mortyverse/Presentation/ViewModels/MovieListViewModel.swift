@@ -1,23 +1,23 @@
 import Foundation
 import Combine
 
-enum CharactersListViewState {
+enum MoviesListViewState {
     case idle
     case loading
-    case loaded([Character], currentPage: Int, hasMore: Bool, isLoadingMore: Bool)
+    case loaded([Movie], currentPage: Int, hasMore: Bool, isLoadingMore: Bool)
     case error(String)
 }
 
 @MainActor
-final class CharactersListViewModel: ObservableObject {
-    @Published private(set) var state: CharactersListViewState = .idle
+final class MovieListViewModel: ObservableObject {
+    @Published private(set) var state: MoviesListViewState = .idle
     @Published var searchText: String = ""
     
-    private let getCharactersUseCase: GetCharactersUseCase
+    private let getMoviesUseCase: GetMoviesUseCase
     private var cancellables = Set<AnyCancellable>()
     
-    init(getCharactersUseCase: GetCharactersUseCase = GetCharactersUseCase(repository: CharacterRepository())) {
-        self.getCharactersUseCase = getCharactersUseCase
+    init(getMoviesUseCase: GetMoviesUseCase = GetMoviesUseCase(repository: MovieRepository())) {
+        self.getMoviesUseCase = getMoviesUseCase
         setupSearchSubscription()
     }
     
@@ -42,9 +42,9 @@ final class CharactersListViewModel: ObservableObject {
         
         Task {
             do {
-                let result = try await getCharactersUseCase.execute(page: 1, name: searchText)
+                let result = try await getMoviesUseCase.execute(page: 1, query: searchText)
                 state = .loaded(
-                    result.characters,
+                    result.movies,
                     currentPage: 1,
                     hasMore: result.hasMorePages,
                     isLoadingMore: false
@@ -56,16 +56,16 @@ final class CharactersListViewModel: ObservableObject {
     }
     
     func loadNextPage() {
-        guard case let .loaded(characters, currentPage, true, false) = state else { return }
+        guard case let .loaded(movies, currentPage, true, false) = state else { return }
         
         let nextPage = currentPage + 1
-        state = .loaded(characters, currentPage: currentPage, hasMore: true, isLoadingMore: true)
+        state = .loaded(movies, currentPage: currentPage, hasMore: true, isLoadingMore: true)
         
         Task {
             do {
-                let result = try await getCharactersUseCase.execute(page: nextPage, name: searchText)
+                let result = try await getMoviesUseCase.execute(page: nextPage, query: searchText)
                 state = .loaded(
-                    characters + result.characters,
+                    movies + result.movies,
                     currentPage: nextPage,
                     hasMore: result.hasMorePages,
                     isLoadingMore: false
