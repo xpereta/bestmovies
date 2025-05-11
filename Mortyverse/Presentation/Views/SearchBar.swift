@@ -9,6 +9,7 @@ struct SearchBar: View {
                 .foregroundColor(.gray)
             
             TextField("Search movies...", text: $text)
+                .autocorrectionDisabled()
                 .textFieldStyle(RoundedBorderTextFieldStyle())
             
             if !text.isEmpty {
