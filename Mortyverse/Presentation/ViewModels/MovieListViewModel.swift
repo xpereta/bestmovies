@@ -14,7 +14,7 @@ final class MovieListViewModel: ObservableObject {
     @Published var searchText: String = ""
     
     private let getMoviesUseCase: GetMoviesUseCase
-    private var searchTask: Task<Void, Never>?
+    private var loadTask: Task<Void, Never>?
     private var cancellables = Set<AnyCancellable>()
     
     init(getMoviesUseCase: GetMoviesUseCase = GetMoviesUseCase(repository: MovieRepository())) {
@@ -47,11 +47,11 @@ final class MovieListViewModel: ObservableObject {
     private func resetAndLoad() {
         print("🧠 MovieListViewModel: resetAndLoad")
 
-        searchTask?.cancel()
+        loadTask?.cancel()
         
         state = .loading
         
-        searchTask = Task {
+        loadTask = Task {
             do {
                 let result = try await getMoviesUseCase.execute(page: 1, query: searchText)
                 guard !Task.isCancelled else {
