@@ -47,27 +47,10 @@ final class MovieListViewModel: ObservableObject {
     private func resetAndLoad() {
         print("🧠 MovieListViewModel: resetAndLoad")
 
+        searchTask?.cancel()
+        
         state = .loading
         
-        Task {
-            do {
-                let result = try await getMoviesUseCase.execute(page: 1, query: searchText)
-                state = .loaded(
-                    result.movies,
-                    currentPage: 1,
-                    hasMore: result.hasMorePages,
-                    isLoadingMore: false
-                )
-            } catch {
-                state = .error(error.localizedDescription)
-            }
-        }
-    }
-    
-    private func resetAndSearch() {
-        print("🧠 MovieListViewModel: resetAndSearch")
-        
-        searchTask?.cancel()
         searchTask = Task {
             do {
                 let result = try await getMoviesUseCase.execute(page: 1, query: searchText)
@@ -106,6 +89,8 @@ final class MovieListViewModel: ObservableObject {
     }
     
     func onDissapear() {
+        print("🧠 MovieListViewModel: onDissapear")
+
         searchTask?.cancel()
         searchTask = nil
     }

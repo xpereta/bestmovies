@@ -24,11 +24,11 @@ struct MovieListView: View {
                 }
             }
             .navigationTitle("Best Movies")
-            .onDisappear {
-                viewModel.onDissapear()
-            }
             .task {
                 viewModel.startLoading()
+            }
+            .onDisappear {
+                viewModel.onDissapear()
             }
         }
     }
