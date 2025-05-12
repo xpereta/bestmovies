@@ -9,7 +9,7 @@ class MovieDTOMapperSpec: QuickSpec {
             context("when mapping a single DTO") {
                 context("with valid information") {
                     it("maps all properties correctly") {
-                        let dto = MovieDTO(
+                        let dto = TMDBAPI.DTO.Movie(
                             id: 1,
                             title: "The Matrix",
                             overview: "A computer hacker learns about the true nature of reality",
@@ -37,7 +37,7 @@ class MovieDTOMapperSpec: QuickSpec {
                 
                 context("with missing poster path") {
                     it("maps to nil posterPath") {
-                        let dto = MovieDTO(
+                        let dto = TMDBAPI.DTO.Movie(
                             id: 1,
                             title: "The Matrix",
                             overview: "A computer hacker learns about the true nature of reality",
@@ -55,7 +55,7 @@ class MovieDTOMapperSpec: QuickSpec {
                 
                 context("with invalid date") {
                     it("returns nil as releaseDate") {
-                        let dto = MovieDTO(
+                        let dto = TMDBAPI.DTO.Movie(
                             id: 1,
                             title: "The Matrix",
                             overview: "A computer hacker learns about the true nature of reality",
@@ -72,7 +72,7 @@ class MovieDTOMapperSpec: QuickSpec {
                 
                 context("with non date") {
                     it("returns nil as releaseDate") {
-                        let dto = MovieDTO(
+                        let dto = TMDBAPI.DTO.Movie(
                             id: 1,
                             title: "The Matrix",
                             overview: "A computer hacker learns about the true nature of reality",
@@ -89,7 +89,7 @@ class MovieDTOMapperSpec: QuickSpec {
                 
                 context("wihtout date date") {
                     it("returns nil as releaseDate") {
-                        let dto = MovieDTO(
+                        let dto = TMDBAPI.DTO.Movie(
                             id: 1,
                             title: "The Matrix",
                             overview: "A computer hacker learns about the true nature of reality",
@@ -108,7 +108,7 @@ class MovieDTOMapperSpec: QuickSpec {
             context("when mapping multiple DTOs") {
                 it("maps all DTOs correctly") {
                     let dtos = [
-                        MovieDTO(
+                        TMDBAPI.DTO.Movie(
                             id: 1,
                             title: "The Matrix",
                             overview: "First movie",
@@ -116,7 +116,7 @@ class MovieDTOMapperSpec: QuickSpec {
                             releaseDate: "1999-03-31",
                             voteAverage: 8.7
                         ),
-                        MovieDTO(
+                        TMDBAPI.DTO.Movie(
                             id: 2,
                             title: "The Matrix Reloaded",
                             overview: "Second movie",

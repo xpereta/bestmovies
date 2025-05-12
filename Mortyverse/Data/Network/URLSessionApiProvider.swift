@@ -2,8 +2,7 @@ import Foundation
 
 public final class URLSessionApiProvider: ApiProvider {
     private let urlSession: URLSession
-//    private let logger: = appLogger(categoryFor: URLSessionApiProvider.self)
-
+    
     public init(urlSession: URLSession = .shared) {
         self.urlSession = urlSession
     }

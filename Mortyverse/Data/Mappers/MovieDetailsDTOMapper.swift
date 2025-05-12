@@ -7,7 +7,7 @@ struct MovieDetailsDTOMapper {
         return formatter
     }()
     
-    static func map(_ dto: MovieDetailsDTO) -> MovieDetails {
+    static func map(_ dto: TMDBAPI.DTO.MovieDetails) -> MovieDetails {
         let date = dateFormatter.date(from: dto.releaseDate)
         
         return MovieDetails(
@@ -30,7 +30,7 @@ struct MovieDetailsDTOMapper {
     }
 }
 
-extension MovieDetailsDTO {
+extension TMDBAPI.DTO.MovieDetails {
     func toDomain() throws -> MovieDetails {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"

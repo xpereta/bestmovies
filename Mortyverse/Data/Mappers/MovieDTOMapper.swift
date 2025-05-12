@@ -7,7 +7,7 @@ struct MovieDTOMapper {
         return formatter
     }()
     
-    static func map(_ dto: MovieDTO) -> Movie {
+    static func map(_ dto: TMDBAPI.DTO.Movie) -> Movie {
         let date = dateFormatter.date(from: dto.releaseDate)
         
         return Movie(
@@ -20,7 +20,7 @@ struct MovieDTOMapper {
         )
     }
     
-    static func mapList(_ dto: [MovieDTO]) -> [Movie] {
+    static func mapList(_ dto: [TMDBAPI.DTO.Movie]) -> [Movie] {
         return dto.map { map($0) }
     }
 }
