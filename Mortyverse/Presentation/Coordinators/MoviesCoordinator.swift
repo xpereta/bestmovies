@@ -20,13 +20,18 @@ class Coordinator: ObservableObject {
         path.removeLast(path.count)
     }
     
-    @ViewBuilder
+    @MainActor @ViewBuilder
     func build(page: AppPage) -> some View {
         switch page {
         case .moviesList:
             MovieListView()
         case .movieDetails(let id):
-            MovieDetailView(movieId: id)
+            let apiConfiguration = TMDBConfiguration(baseURL: "https://api.themoviedb.org/3", apiKey: "97d24ffef95aebe28225de0c524590d9")
+            let repository = MovieRepository(apiConfiguration: apiConfiguration)
+            let useCase = GetMovieDetailsUseCase(repository: repository)
+            let viewModel = MovieDetailViewModel(movieId: id, useCase: useCase)
+            
+            MovieDetailView(viewModel: viewModel)
         }
     }
 }

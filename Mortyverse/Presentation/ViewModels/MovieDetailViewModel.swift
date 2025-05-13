@@ -2,7 +2,24 @@ import Foundation
 import Combine
 
 @MainActor
-final class MovieDetailViewModel: ObservableObject {
+protocol MovieDetailViewModelProtocol: ObservableObject {
+    var state: MovieDetailViewModel.State { get }
+    func loadMovie()
+}
+
+@MainActor
+final class StubMovieDetailViewModel: MovieDetailViewModelProtocol {
+    @Published var state: MovieDetailViewModel.State
+    
+    init(state: MovieDetailViewModel.State) {
+        self.state = state
+    }
+    
+    func loadMovie() {}
+}
+
+@MainActor
+final class MovieDetailViewModel: MovieDetailViewModelProtocol {
     enum State: Equatable {
         case idle
         case loading

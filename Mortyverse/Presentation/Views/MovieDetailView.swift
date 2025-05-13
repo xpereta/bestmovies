@@ -1,14 +1,10 @@
 import SwiftUI
 
-struct MovieDetailView: View {
-    @StateObject private var viewModel: MovieDetailViewModel
+struct MovieDetailView<ViewModel>: View where ViewModel: MovieDetailViewModelProtocol {
+    @StateObject private var viewModel: ViewModel
     
-    init(movieId: Int) {
-        let apiConfiguration = TMDBConfiguration(baseURL: "https://api.themoviedb.org/3", apiKey: "97d24ffef95aebe28225de0c524590d9")
-
-        let repository = MovieRepository(apiConfiguration: apiConfiguration)
-        let useCase = GetMovieDetailsUseCase(repository: repository)
-        _viewModel = StateObject(wrappedValue: MovieDetailViewModel(movieId: movieId, useCase: useCase))
+    init(viewModel: @autoclosure @escaping () -> ViewModel) {
+        _viewModel = StateObject(wrappedValue: viewModel())
     }
     
     var body: some View {
@@ -118,8 +114,40 @@ struct MovieDetailView: View {
     }
 }
 
-#warning("Create previews for all viewmodel states")
+#Preview("Idle") {
+    MovieDetailView(viewModel: StubMovieDetailViewModel(state: .idle))
+}
 
-#Preview {
-    MovieDetailView(movieId: 512)
+#Preview("Loading") {
+    MovieDetailView(viewModel: StubMovieDetailViewModel(state: .loading))
+}
+
+#Preview("Loaded") {
+    let movieDetails = MovieDetails(
+        id: 603,
+        title: "The Matrix",
+        overview: "Set in the 22nd century, The Matrix tells the story of a computer programmer who joins a rebellion to combat intelligent machines that have constructed a virtual reality simulation that keeps humanity under control.",
+        posterPath: "/f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg",
+        backdropPath: "/l4QHerTSbMI7qgvasqxP36pqjN6.jpg",
+        releaseDate: Date(),
+        voteAverage: 8.7,
+        voteCount: 24563,
+        runtime: 136,
+        genres: [
+            Genre(id: 28, name: "Action"),
+            Genre(id: 878, name: "Science Fiction")
+        ],
+        status: "Released",
+        tagline: "Welcome to the Real World",
+        budget: 63000000,
+        revenue: 463517383,
+        originalLanguage: "en"
+    )
+
+    let loadedState = MovieDetailViewModel.State.loaded(movieDetails)
+ MovieDetailView(viewModel: StubMovieDetailViewModel(state: loadedState))
+}
+
+#Preview("Error") {
+    MovieDetailView(viewModel: StubMovieDetailViewModel(state: .error("Sorry, something went wrong")))
 }
