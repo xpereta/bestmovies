@@ -1,7 +1,7 @@
 import Foundation
 import Combine
 
-enum MoviesListViewState {
+enum MoviesListViewState: Equatable {
     case idle
     case loading
     case loaded([Movie], currentPage: Int, hasMore: Bool, isLoadingMore: Bool)
@@ -13,11 +13,11 @@ final class MovieListViewModel: ObservableObject {
     @Published private(set) var state: MoviesListViewState = .idle
     @Published var searchText: String = ""
     
-    private let getMoviesUseCase: GetMoviesUseCase
+    private let getMoviesUseCase: GetMoviesUseCaseProtocol
     private var loadTask: Task<Void, Never>?
     private var cancellables = Set<AnyCancellable>()
     
-    init(getMoviesUseCase: GetMoviesUseCase) {
+    init(getMoviesUseCase: GetMoviesUseCaseProtocol) {
         self.getMoviesUseCase = getMoviesUseCase
         setupSearchSubscription()
     }

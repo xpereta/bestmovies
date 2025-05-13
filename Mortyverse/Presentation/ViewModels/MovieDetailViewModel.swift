@@ -3,7 +3,7 @@ import Combine
 
 @MainActor
 final class MovieDetailViewModel: ObservableObject {
-    enum State {
+    enum State: Equatable {
         case idle
         case loading
         case loaded(MovieDetails)
@@ -12,10 +12,10 @@ final class MovieDetailViewModel: ObservableObject {
     
     @Published private(set) var state: State = .idle
     
-    private let getMovieDetailsUseCase: GetMovieDetailsUseCase
+    private let getMovieDetailsUseCase: GetMovieDetailsUseCaseProtocol
     private let movieId: Int
     
-    init(movieId: Int, useCase: GetMovieDetailsUseCase) {
+    init(movieId: Int, useCase: GetMovieDetailsUseCaseProtocol) {
         self.movieId = movieId
         self.getMovieDetailsUseCase = useCase
     }
