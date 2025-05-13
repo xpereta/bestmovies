@@ -1,10 +1,14 @@
 import SwiftUI
 
 struct MovieDetailView: View {
-    @ObservedObject private var viewModel: MovieDetailViewModel
+    @StateObject private var viewModel: MovieDetailViewModel
     
     init(movieId: Int) {
-        self.viewModel = MovieDetailViewModel(movieId: movieId)
+        let apiConfiguration = TMDBConfiguration(baseURL: "https://api.themoviedb.org/3", apiKey: "97d24ffef95aebe28225de0c524590d9")
+
+        let repository = MovieRepository(apiConfiguration: apiConfiguration)
+        let useCase = GetMovieDetailsUseCase(repository: repository)
+        _viewModel = StateObject(wrappedValue: MovieDetailViewModel(movieId: movieId, useCase: useCase))
     }
     
     var body: some View {

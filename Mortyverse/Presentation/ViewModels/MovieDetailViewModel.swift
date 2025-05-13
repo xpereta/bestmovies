@@ -15,7 +15,7 @@ final class MovieDetailViewModel: ObservableObject {
     private let getMovieDetailsUseCase: GetMovieDetailsUseCase
     private let movieId: Int
     
-    init(movieId: Int, useCase: GetMovieDetailsUseCase = GetMovieDetailsUseCase()) {
+    init(movieId: Int, useCase: GetMovieDetailsUseCase) {
         self.movieId = movieId
         self.getMovieDetailsUseCase = useCase
     }

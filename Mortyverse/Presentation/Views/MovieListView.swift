@@ -1,7 +1,15 @@
 import SwiftUI
 
 struct MovieListView: View {
-    @StateObject private var viewModel = MovieListViewModel()
+    @StateObject private var viewModel: MovieListViewModel
+    
+    init() {
+        let apiConfiguration = TMDBConfiguration(baseURL: "https://api.themoviedb.org/3", apiKey: "97d24ffef95aebe28225de0c524590d9")
+
+        let repository = MovieRepository(apiConfiguration: apiConfiguration)
+        let useCase = GetMoviesUseCase(repository: repository)
+        _viewModel = StateObject(wrappedValue: MovieListViewModel(getMoviesUseCase: useCase))
+    }
     
     var body: some View {
         NavigationView {

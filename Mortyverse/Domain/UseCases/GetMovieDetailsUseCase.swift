@@ -1,7 +1,7 @@
 struct GetMovieDetailsUseCase {
     private let repository: MovieRepositoryProtocol
     
-    init(repository: MovieRepositoryProtocol = MovieRepository()) {
+    init(repository: MovieRepositoryProtocol) {
         self.repository = repository
     }
     

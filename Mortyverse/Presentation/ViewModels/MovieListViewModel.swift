@@ -17,7 +17,7 @@ final class MovieListViewModel: ObservableObject {
     private var loadTask: Task<Void, Never>?
     private var cancellables = Set<AnyCancellable>()
     
-    init(getMoviesUseCase: GetMoviesUseCase = GetMoviesUseCase(repository: MovieRepository())) {
+    init(getMoviesUseCase: GetMoviesUseCase) {
         self.getMoviesUseCase = getMoviesUseCase
         setupSearchSubscription()
     }
