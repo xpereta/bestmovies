@@ -1,19 +1,28 @@
 import Foundation
 
+struct TMDBConfiguration {
+    let baseURL: String
+    let apiKey: String
+    
+    init (baseURL: String, apiKey: String) {
+        self.baseURL = baseURL
+        self.apiKey = apiKey
+    }
+}
+
 extension TMDBAPI {
-    enum Endpoint: ApiEndpoint {
-#warning("Explain how to secure this API key")
-        enum Configuration {
-            static let apiKey = "97d24ffef95aebe28225de0c524590d9"
-            static let baseURL = "https://api.themoviedb.org/3"
-        }
-        
-        case topRated(page: Int)
-        case searchMovies(query: String, page: Int)
-        case movie(id: Int)
+    enum Endpoint: ApiEndpoint {        
+        case topRated(page: Int, configuration: TMDBConfiguration)
+        case searchMovies(query: String, page: Int, configuration: TMDBConfiguration)
+        case movie(id: Int, configuration: TMDBConfiguration)
         
         var baseURL: String {
-            Configuration.baseURL
+            switch self {
+            case .topRated(page: _, configuration: let configuration),
+                    .searchMovies(query: _, page: _, configuration: let configuration),
+                    .movie(id: _, configuration: let configuration):
+                return configuration.baseURL
+            }
         }
         
         var path: String {
@@ -22,26 +31,26 @@ extension TMDBAPI {
                 return "/movie/top_rated"
             case .searchMovies:
                 return "/search/movie"
-            case .movie(id: let id):
+            case .movie(id: let id, _):
                 return "/movie/\(id)"
             }
         }
         
         var queryItems: [URLQueryItem] {
-            var items = [
-                URLQueryItem(name: "api_key", value: Configuration.apiKey)
-            ]
+            var items = [URLQueryItem]()
             
             switch self {
-            case .topRated(let page):
+            case .topRated(let page, let configuration):
+                items.append(URLQueryItem(name: "api_key", value: configuration.apiKey))
                 items.append(URLQueryItem(name: "page", value: String(page)))
-            case .searchMovies(let query, let page):
+            case .searchMovies(let query, let page, let configuration):
+                items.append(URLQueryItem(name: "api_key", value: configuration.apiKey))
                 items.append(contentsOf: [
                     URLQueryItem(name: "query", value: query),
                     URLQueryItem(name: "page", value: String(page))
                 ])
-            case .movie:
-                break
+            case .movie(_, let configuration):
+                items.append(URLQueryItem(name: "api_key", value: configuration.apiKey))
             }
             
             return items

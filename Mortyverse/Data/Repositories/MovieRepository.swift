@@ -26,11 +26,12 @@ final class MovieRepository: MovieRepositoryProtocol {
     func fetchMovies(page: Int, query: String?) async throws -> (movies: [Movie], hasMorePages: Bool) {
         let response: TMDBAPI.DTO.MovieResponse
         let request: URLRequest
+        let configuration = TMDBConfiguration(baseURL: "https://api.themoviedb.org/3", apiKey: "97d24ffef95aebe28225de0c524590d9")
         
         if let query = query, !query.isEmpty {
-            request = try TMDBAPI.Endpoint.searchMovies(query: query, page: page).makeURLRequest()
+            request = try TMDBAPI.Endpoint.searchMovies(query: query, page: page, configuration: configuration).makeURLRequest()
         } else {
-            request = try TMDBAPI.Endpoint.topRated(page: page).makeURLRequest()
+            request = try TMDBAPI.Endpoint.topRated(page: page, configuration: configuration).makeURLRequest()
         }
         
         response = try await apiProvider.performRequest(request, decodeTo: TMDBAPI.DTO.MovieResponse.self)
@@ -43,7 +44,9 @@ final class MovieRepository: MovieRepositoryProtocol {
     
     func fetchMovieDetails(_ id: Int) async throws -> MovieDetails {
         do {
-            let request = try TMDBAPI.Endpoint.movie(id: id).makeURLRequest()
+            let configuration = TMDBConfiguration(baseURL: "https://api.themoviedb.org/3", apiKey: "97d24ffef95aebe28225de0c524590d9")
+
+            let request = try TMDBAPI.Endpoint.movie(id: id, configuration: configuration).makeURLRequest()
             let movie = try await apiProvider.performRequest(request, decodeTo: TMDBAPI.DTO.MovieDetails.self)
             return MovieDetailsDTOMapper.map(movie)
         } catch ApiProviderError.failed(statusCode: 404) {

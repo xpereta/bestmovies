@@ -1,21 +1,27 @@
 import Foundation
 
-public final class URLSessionApiProvider: ApiProvider {
-    private let urlSession: URLSession
+protocol URLSessionProtocol {
+    func data(
+        for request: URLRequest,
+        delegate: URLSessionTaskDelegate?
+    ) async throws -> (Data, URLResponse)
+}
+
+extension URLSession: URLSessionProtocol { }
+
+final class URLSessionApiProvider: ApiProvider {
+    private let urlSession: URLSessionProtocol
     
-    public init(urlSession: URLSession = .shared) {
+    init(urlSession: URLSessionProtocol = URLSession.shared) {
         self.urlSession = urlSession
     }
     
-    public func performRequest(
+    func performRequest(
         _ urlRequest: URLRequest,
         delegate: URLSessionTaskDelegate? = nil,
     ) async throws -> (data: Data, urlResponse: URLResponse) {
-        guard let stringURL = urlRequest.url?.absoluteString else {
-            print("🚨 Invalid URL for request: \(urlRequest.description)")
-            throw ApiProviderError.invalidURL
-        }
-        
+        // We only need the absolute string for observability, this class is not responsible to check if the URL is valid
+        let stringURL = urlRequest.url?.absoluteString ?? "n/a"        
         print("🎬 Performing request: \(stringURL)")
 
         let (data, response) = try await urlSession.data(for: urlRequest, delegate: delegate)
