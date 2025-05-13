@@ -1,6 +1,6 @@
 import Foundation
 
-struct GenreDTOMapper {
+struct GenreMapper {
     static func map(_ dto: TMDBAPI.DTO.Genre) -> Genre {
         return Genre(
             id: dto.id,

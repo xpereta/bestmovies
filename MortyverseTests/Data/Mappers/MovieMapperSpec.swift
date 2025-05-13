@@ -3,7 +3,7 @@ import Quick
 import Nimble
 @testable import Mortyverse
 
-class MovieDTOMapperSpec: QuickSpec {
+class MovieMapperSpec: QuickSpec {
     override class func spec() {
         describe("MovieDTOMapper") {
             context("when mapping a single DTO") {
@@ -18,7 +18,7 @@ class MovieDTOMapperSpec: QuickSpec {
                             voteAverage: 8.7
                         )
                         
-                        let movie = MovieDTOMapper.map(dto)
+                        let movie = MovieMapper.map(dto)
                         
                         expect(movie.id).to(equal(1))
                         expect(movie.title).to(equal("The Matrix"))
@@ -46,7 +46,7 @@ class MovieDTOMapperSpec: QuickSpec {
                             voteAverage: 8.7
                         )
                         
-                        let movie = MovieDTOMapper.map(dto)
+                        let movie = MovieMapper.map(dto)
                         
                         expect(movie.posterPath).to(beNil())
                         expect(movie.posterURL).to(beNil())
@@ -64,7 +64,7 @@ class MovieDTOMapperSpec: QuickSpec {
                             voteAverage: 8.7
                         )
                         
-                        let movie = MovieDTOMapper.map(dto)
+                        let movie = MovieMapper.map(dto)
                         
                         expect(movie.releaseDate).to(beNil())
                     }
@@ -81,7 +81,7 @@ class MovieDTOMapperSpec: QuickSpec {
                             voteAverage: 8.7
                         )
                         
-                        let movie = MovieDTOMapper.map(dto)
+                        let movie = MovieMapper.map(dto)
                         
                         expect(movie.releaseDate).to(beNil())
                     }
@@ -98,7 +98,7 @@ class MovieDTOMapperSpec: QuickSpec {
                             voteAverage: 8.7
                         )
                         
-                        let movie = MovieDTOMapper.map(dto)
+                        let movie = MovieMapper.map(dto)
                         
                         expect(movie.releaseDate).to(beNil())
                     }
@@ -126,7 +126,7 @@ class MovieDTOMapperSpec: QuickSpec {
                         )
                     ]
                     
-                    let movies = MovieDTOMapper.mapList(dtos)
+                    let movies = MovieMapper.mapList(dtos)
                     
                     expect(movies).to(haveCount(2))
                     expect(movies[0].title).to(equal("The Matrix"))
@@ -134,7 +134,7 @@ class MovieDTOMapperSpec: QuickSpec {
                 }
                 
                 it("returns empty array when given empty input") {
-                    let movies = MovieDTOMapper.mapList([])
+                    let movies = MovieMapper.mapList([])
                     
                     expect(movies).to(beEmpty())
                 }

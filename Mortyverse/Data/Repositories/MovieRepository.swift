@@ -36,7 +36,7 @@ final class MovieRepository: MovieRepositoryProtocol {
         
         response = try await apiProvider.performRequest(request, decodeTo: TMDBAPI.DTO.MovieResponse.self)
         
-        let movies = MovieDTOMapper.mapList(response.results)
+        let movies = MovieMapper.mapList(response.results)
         let hasMorePages = response.page < response.totalPages
         
         return (movies: movies, hasMorePages: hasMorePages)
@@ -48,7 +48,7 @@ final class MovieRepository: MovieRepositoryProtocol {
 
             let request = try TMDBAPI.Endpoint.movie(id: id, configuration: configuration).makeURLRequest()
             let movie = try await apiProvider.performRequest(request, decodeTo: TMDBAPI.DTO.MovieDetails.self)
-            return MovieDetailsDTOMapper.map(movie)
+            return MovieDetailsMapper.map(movie)
         } catch ApiProviderError.failed(statusCode: 404) {
             throw MovieRepositoryError.movieNotFound(withId: id)
         }

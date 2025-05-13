@@ -1,6 +1,6 @@
 import Foundation
 
-struct MovieDTOMapper {
+struct MovieMapper {
     private static let dateFormatter = {
         let formatter = ISO8601DateFormatter()
         formatter.formatOptions = [.withFullDate]
