@@ -25,3 +25,20 @@ struct SearchBar: View {
     }
 }
 
+@available(iOS 18.0, *)
+#Preview {
+    @Previewable @State var text = ""
+    VStack {
+        SearchBar(text: $text)
+        Spacer()
+    }
+}
+
+@available(iOS 18.0, *)
+#Preview("with text") {
+    @Previewable @State var text = "Matrix"
+    VStack {
+        SearchBar(text: $text)
+        Spacer()
+    }
+}

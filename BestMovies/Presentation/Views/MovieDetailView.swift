@@ -39,70 +39,6 @@ struct MovieDetailView<ViewModel>: View where ViewModel: MovieDetailViewModelPro
     }
 }
 
-#Preview("Idle") {
-    MovieDetailView(viewModel: StubMovieDetailViewModel(state: .idle))
-}
-
-#Preview("Loading") {
-    MovieDetailView(viewModel: StubMovieDetailViewModel(state: .loading))
-}
-
-#Preview("Loaded") {
-    let movieDetails = MovieDetails(
-        id: 603,
-        title: "The Matrix",
-        overview: "Set in the 22nd century, The Matrix tells the story of a computer programmer who joins a rebellion to combat intelligent machines that have constructed a virtual reality simulation that keeps humanity under control.",
-        posterPath: "/f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg",
-        backdropPath: "/l4QHerTSbMI7qgvasqxP36pqjN6.jpg",
-        releaseDate: Date(),
-        voteAverage: 8.7,
-        voteCount: 24563,
-        runtime: 136,
-        genres: [
-            Genre(id: 28, name: "Action"),
-            Genre(id: 878, name: "Science Fiction")
-        ],
-        status: "Released",
-        tagline: "Welcome to the Real World",
-        budget: 63000000,
-        revenue: 463517383,
-        originalLanguage: "en"
-    )
-
-    let loadedState = MovieDetailViewModel.State.loaded(movieDetails)
- MovieDetailView(viewModel: StubMovieDetailViewModel(state: loadedState))
-}
-
-#Preview("Loaded, image error") {
-    let movieDetails = MovieDetails(
-        id: 603,
-        title: "The Matrix",
-        overview: "Set in the 22nd century, The Matrix tells the story of a computer programmer who joins a rebellion to combat intelligent machines that have constructed a virtual reality simulation that keeps humanity under control.",
-        posterPath: "/f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg",
-        backdropPath: "/error.jpg",
-        releaseDate: Date(),
-        voteAverage: 8.7,
-        voteCount: 24563,
-        runtime: 136,
-        genres: [
-            Genre(id: 28, name: "Action"),
-            Genre(id: 878, name: "Science Fiction")
-        ],
-        status: "Released",
-        tagline: "Welcome to the Real World",
-        budget: 63000000,
-        revenue: 463517383,
-        originalLanguage: "en"
-    )
-
-    let loadedState = MovieDetailViewModel.State.loaded(movieDetails)
- MovieDetailView(viewModel: StubMovieDetailViewModel(state: loadedState))
-}
-
-#Preview("Error") {
-    MovieDetailView(viewModel: StubMovieDetailViewModel(state: .error("Sorry, something went wrong")))
-}
-
 struct LoadedMovie: View {
     private let movie: MovieDetails
     
@@ -113,30 +49,25 @@ struct LoadedMovie: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
-                // Backdrop Image Section
                 BackdropImageSection(backdropURL: movie.backdropURL)
                 
                 VStack(alignment: .leading, spacing: 20) {
-                    // Header Section
                     MovieHeaderSection(
                         title: movie.title,
                         releaseDate: movie.releaseDate,
                         tagline: movie.tagline
                     )
                     
-                    // Rating and Runtime Section
                     MovieStatsSection(
                         voteAverage: movie.voteAverage,
                         voteCount: movie.voteCount,
                         runtime: movie.runtimeFormatted
                     )
                     
-                    // Genres Section
                     if !movie.genres.isEmpty {
                         GenresSection(genres: movie.genres)
                     }
                     
-                    // Overview Section
                     if !movie.overview.isEmpty {
                         OverviewSection(overview: movie.overview)
                     }
@@ -148,7 +79,7 @@ struct LoadedMovie: View {
     }
 }
 
-// MARK: - Supporting Views
+// MARK: - SubViews
 private struct BackdropImageSection: View {
     let backdropURL: URL?
     
@@ -301,6 +232,67 @@ struct TextJustifiedView: UIViewRepresentable {
     }
 }
 
-#Preview {
-    BackdropImageSection(backdropURL: URL("/noimage.jpg"))
+// MARK: - Previews for each state
+#Preview("Idle") {
+    MovieDetailView(viewModel: StubMovieDetailViewModel(state: .idle))
+}
+
+#Preview("Loading") {
+    MovieDetailView(viewModel: StubMovieDetailViewModel(state: .loading))
+}
+
+#Preview("Loaded") {
+    let movieDetails = MovieDetails(
+        id: 603,
+        title: "The Matrix",
+        overview: "Set in the 22nd century, The Matrix tells the story of a computer programmer who joins a rebellion to combat intelligent machines that have constructed a virtual reality simulation that keeps humanity under control.",
+        posterPath: "/f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg",
+        backdropPath: "/l4QHerTSbMI7qgvasqxP36pqjN6.jpg",
+        releaseDate: Date(),
+        voteAverage: 8.7,
+        voteCount: 24563,
+        runtime: 136,
+        genres: [
+            Genre(id: 28, name: "Action"),
+            Genre(id: 878, name: "Science Fiction")
+        ],
+        status: "Released",
+        tagline: "Welcome to the Real World",
+        budget: 63000000,
+        revenue: 463517383,
+        originalLanguage: "en"
+    )
+
+    let loadedState = MovieDetailViewModel.State.loaded(movieDetails)
+ MovieDetailView(viewModel: StubMovieDetailViewModel(state: loadedState))
+}
+
+#Preview("Loaded, image error") {
+    let movieDetails = MovieDetails(
+        id: 603,
+        title: "The Matrix",
+        overview: "Set in the 22nd century, The Matrix tells the story of a computer programmer who joins a rebellion to combat intelligent machines that have constructed a virtual reality simulation that keeps humanity under control.",
+        posterPath: "/f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg",
+        backdropPath: "/error.jpg",
+        releaseDate: Date(),
+        voteAverage: 8.7,
+        voteCount: 24563,
+        runtime: 136,
+        genres: [
+            Genre(id: 28, name: "Action"),
+            Genre(id: 878, name: "Science Fiction")
+        ],
+        status: "Released",
+        tagline: "Welcome to the Real World",
+        budget: 63000000,
+        revenue: 463517383,
+        originalLanguage: "en"
+    )
+
+    let loadedState = MovieDetailViewModel.State.loaded(movieDetails)
+ MovieDetailView(viewModel: StubMovieDetailViewModel(state: loadedState))
+}
+
+#Preview("Error") {
+    MovieDetailView(viewModel: StubMovieDetailViewModel(state: .error("Sorry, something went wrong")))
 }
