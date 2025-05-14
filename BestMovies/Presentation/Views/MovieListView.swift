@@ -1,10 +1,10 @@
 import SwiftUI
 
 struct MovieListView<ViewModel>: View where ViewModel: MovieListViewModelProtocol {
-    @ObservedObject private var viewModel: ViewModel
+    @StateObject private var viewModel: ViewModel
     
     init(viewModel: @autoclosure @escaping () -> ViewModel) {
-        _viewModel = ObservedObject(wrappedValue: viewModel())
+        _viewModel = StateObject(wrappedValue: viewModel())
     }
     
     var body: some View {
