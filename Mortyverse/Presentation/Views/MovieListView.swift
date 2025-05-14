@@ -32,7 +32,7 @@ struct MovieListView: View {
                 }
             }
             .navigationTitle("Best Movies")
-            .onAppear() {
+            .task() {
                 viewModel.startLoading()
             }
         }
@@ -79,7 +79,9 @@ struct FailedImage: View {
     
     var body: some View {
         Image(systemName: systemName)
+            .resizable()
             .foregroundStyle(.gray)
+            .opacity(0.6)
     }
 }
 
