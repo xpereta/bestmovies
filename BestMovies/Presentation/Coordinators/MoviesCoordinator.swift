@@ -7,6 +7,7 @@ enum AppPage: Hashable {
 
 class Coordinator: ObservableObject {
     @Published var path: NavigationPath = NavigationPath()
+    private let apiConfiguration = TMDBConfiguration(baseURL: "https://api.themoviedb.org/3", apiKey: "97d24ffef95aebe28225de0c524590d9")
     
     func push(page: AppPage) {
         path.append(page)
@@ -24,9 +25,12 @@ class Coordinator: ObservableObject {
     func build(page: AppPage) -> some View {
         switch page {
         case .moviesList:
-            MovieListView()
+            let repository = MovieRepository(apiConfiguration: apiConfiguration)
+            let useCase = GetMoviesUseCase(repository: repository)
+            let viewModel = MovieListViewModel(getMoviesUseCase: useCase)
+            
+            MovieListView(viewModel: viewModel)
         case .movieDetails(let id):
-            let apiConfiguration = TMDBConfiguration(baseURL: "https://api.themoviedb.org/3", apiKey: "97d24ffef95aebe28225de0c524590d9")
             let repository = MovieRepository(apiConfiguration: apiConfiguration)
             let useCase = GetMovieDetailsUseCase(repository: repository)
             let viewModel = MovieDetailViewModel(movieId: id, useCase: useCase)

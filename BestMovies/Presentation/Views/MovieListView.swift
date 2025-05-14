@@ -1,14 +1,10 @@
 import SwiftUI
 
-struct MovieListView: View {
-    @StateObject private var viewModel: MovieListViewModel
+struct MovieListView<ViewModel>: View where ViewModel: MovieListViewModelProtocol {
+    @ObservedObject private var viewModel: ViewModel
     
-    init() {
-        let apiConfiguration = TMDBConfiguration(baseURL: "https://api.themoviedb.org/3", apiKey: "97d24ffef95aebe28225de0c524590d9")
-
-        let repository = MovieRepository(apiConfiguration: apiConfiguration)
-        let useCase = GetMoviesUseCase(repository: repository)
-        _viewModel = StateObject(wrappedValue: MovieListViewModel(getMoviesUseCase: useCase))
+    init(viewModel: @autoclosure @escaping () -> ViewModel) {
+        _viewModel = ObservedObject(wrappedValue: viewModel())
     }
     
     var body: some View {
@@ -22,14 +18,19 @@ struct MovieListView: View {
                     case .idle:
                         EmptyView()
                     case .loading:
+                        Spacer()
                         ProgressView("Loading...")
+                        Spacer()
                     case .loaded(let movies, _, let hasMore, let isLoadingMore):
                         moviesList(movies: movies, hasMore: hasMore, isLoadingMore: isLoadingMore)
                     case .error(let message):
+                        Spacer()
                         Text(message)
                             .foregroundColor(.red)
+                        Spacer()
                     }
                 }
+                Spacer()
             }
             .navigationTitle("Best Movies")
             .task() {
@@ -61,8 +62,10 @@ struct MovieListView: View {
             if movies.isEmpty {
                 VStack {
                     Spacer()
-                    Text("Sorry, no movies found")
-                    Image(systemName: "magnifyingglass")
+                    HStack {
+                        Image(systemName: "magnifyingglass")
+                        Text("Sorry, no movies found")
+                    }
                     Spacer()
                 }
             }
@@ -70,20 +73,7 @@ struct MovieListView: View {
     }
 }
 
-struct FailedImage: View {
-    let systemName: String
-    
-    init(systemName: String = "film") {
-        self.systemName = systemName
-    }
-    
-    var body: some View {
-        Image(systemName: systemName)
-            .resizable()
-            .foregroundStyle(.gray)
-            .opacity(0.6)
-    }
-}
+// MARK: - SubViews
 
 struct MovieRow: View {
     let movie: Movie
@@ -101,11 +91,11 @@ struct MovieRow: View {
                             .resizable()
                             .aspectRatio(contentMode: .fill)
                     case .failure:
-                        FailedImage()
+                        FailedImageView()
                     case .empty:
                         ProgressView()
                     @unknown default:
-                        FailedImage()
+                        FailedImageView()
                     }
                 }
                 .frame(width: 60, height: 60)
@@ -136,6 +126,108 @@ struct MovieRow: View {
     }
 }
 
-#Preview {
-    MovieListView()
+// MARK: - Previews for each state
+
+#Preview("idle") {
+    let viewModel = StubMovieListViewModel(state: .idle)
+    MovieListView(viewModel: viewModel)
+}
+
+#Preview("loading") {
+    let viewModel = StubMovieListViewModel(state: .loading)
+    MovieListView(viewModel: viewModel)
+}
+
+#Preview("loaded, end of pages") {
+    let sampleMovies = [
+        Movie(
+            id: 1,
+            title: "Inception",
+            overview: "A thief who enters dreams",
+            posterPath: "/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg",
+            releaseDate: Date(timeIntervalSince1970: 1279238400),
+            voteAverage: 8.4,
+        ),
+        Movie(
+            id: 2,
+            title: "The Dark Knight",
+            overview: "Batman fights the Joker",
+            posterPath: "/qJ2tW6WMUDux911r6m7haRef0WH.jpg",
+            releaseDate: Date(timeIntervalSince1970: 1216166400),
+            voteAverage: 8.9,
+        ),
+        Movie(
+            id: 3,
+            title: "Pulp Fiction",
+            overview: "Multiple interrelated stories",
+            posterPath: "/d5iIlFn5s0ImszYzBPb8JPIfbXD.jpg",
+            releaseDate: Date(timeIntervalSince1970: 781401600),
+            voteAverage: 8.5,
+        )
+    ]
+    
+    let viewModel = StubMovieListViewModel(
+        state: .loaded(sampleMovies, currentPage: 1, hasMore: false, isLoadingMore: false)
+    )
+    MovieListView(viewModel: viewModel)
+}
+
+#Preview("loaded, has more pages") {
+    let sampleMovies = [
+        Movie(
+            id: 1,
+            title: "Inception",
+            overview: "A thief who enters dreams",
+            posterPath: "/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg",
+            releaseDate: Date(timeIntervalSince1970: 1279238400),
+            voteAverage: 8.4,
+        ),
+        Movie(
+            id: 2,
+            title: "The Dark Knight",
+            overview: "Batman fights the Joker",
+            posterPath: "/qJ2tW6WMUDux911r6m7haRef0WH.jpg",
+            releaseDate: Date(timeIntervalSince1970: 1216166400),
+            voteAverage: 8.9,
+        ),
+        Movie(
+            id: 3,
+            title: "Pulp Fiction",
+            overview: "Multiple interrelated stories",
+            posterPath: "/d5iIlFn5s0ImszYzBPb8JPIfbXD.jpg",
+            releaseDate: Date(timeIntervalSince1970: 781401600),
+            voteAverage: 8.5,
+        )
+    ]
+    
+    let viewModel = StubMovieListViewModel(
+        state: .loaded(sampleMovies, currentPage: 1, hasMore: true, isLoadingMore: false)
+    )
+    MovieListView(viewModel: viewModel)
+}
+
+#Preview("loaded, not found") {
+    let viewModel = StubMovieListViewModel(
+        state: .loaded([], currentPage: 1, hasMore: false, isLoadingMore: false), searchText: "Not a movie"
+    )
+    MovieListView(viewModel: viewModel)
+}
+
+#Preview("error") {
+    let viewModel = StubMovieListViewModel(state: .error("Sorry, something went wrong"))
+    MovieListView(viewModel: viewModel)
+}
+
+#Preview("Movie row") {
+    let movie = Movie(
+        id: 1,
+        title: "Inception",
+        overview: "A thief who enters dreams",
+        posterPath: "/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg",
+        releaseDate: Date(timeIntervalSince1970: 1279238400),
+        voteAverage: 8.4,
+    )
+    List {
+        MovieRow(movie: movie)
+    }
 }

@@ -93,12 +93,12 @@ private struct BackdropImageSection: View {
                             .resizable()
                             .aspectRatio(contentMode: .fill)
                     case .failure:
-                        FailedImage()
+                        FailedImageView()
                             .aspectRatio(contentMode: .fit)
                     case .empty:
                         ProgressView()
                     @unknown default:
-                        FailedImage()
+                        FailedImageView()
                     }
                 }
                 .frame(width: geometry.size.width, height: 200)

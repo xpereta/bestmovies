@@ -9,7 +9,29 @@ enum MoviesListViewState: Equatable {
 }
 
 @MainActor
-final class MovieListViewModel: ObservableObject {
+protocol MovieListViewModelProtocol: ObservableObject {
+    var state: MoviesListViewState { get }
+    var searchText: String { get set }
+    func startLoading()
+    func loadNextPage()
+}
+
+@MainActor
+final class StubMovieListViewModel: MovieListViewModelProtocol {
+    @Published var state: MoviesListViewState
+    @Published var searchText: String
+    
+    init(state: MoviesListViewState, searchText: String = "") {
+        self.state = state
+        self.searchText = searchText
+    }
+    
+    func startLoading() {}
+    func loadNextPage() {}
+}
+
+@MainActor
+final class MovieListViewModel: MovieListViewModelProtocol {
     @Published private(set) var state: MoviesListViewState = .idle
     @Published var searchText: String = ""
     
