@@ -1,4 +1,4 @@
-# mortyverse
+# BestMovies
 
 ## Project settings
 
