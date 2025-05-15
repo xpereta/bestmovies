@@ -29,30 +29,3 @@ struct MovieDetailsMapper {
         )
     }
 }
-
-extension TMDBAPI.DTO.MovieDetails {
-    func toDomain() throws -> MovieDetails {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-
-        let date = dateFormatter.date(from: releaseDate)
-
-        return MovieDetails(
-            id: id,
-            title: title,
-            overview: overview,
-            posterPath: posterPath,
-            backdropPath: backdropPath,
-            releaseDate: date,
-            voteAverage: voteAverage,
-            voteCount: voteCount,
-            runtime: runtime,
-            genres: genres.map { Genre(id: $0.id, name: $0.name) },
-            status: status,
-            tagline: tagline,
-            budget: budget,
-            revenue: revenue,
-            originalLanguage: originalLanguage
-        )
-    }
-}
