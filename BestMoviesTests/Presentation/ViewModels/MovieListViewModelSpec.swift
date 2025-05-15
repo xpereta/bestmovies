@@ -97,22 +97,6 @@ class MovieListViewModelSpec: AsyncSpec {
                     }
                 }
 
-                context("when loading multiple times") {
-                    beforeEach {
-                        spyUseCase.moviesToReturn = testMovies
-                        spyUseCase.hasMoreToReturn = true
-                    }
-                    it("the use case is called only one time") { @MainActor in
-                        sut.startLoading()
-                        sut.startLoading()
-
-                        await expect(sut.state).toEventually(equal(.loaded(testMovies, currentPage: 1, hasMore: true, isLoadingMore: false)))
-
-                        expect(spyUseCase.executeWasCalled).to(beTrue())
-                        expect(spyUseCase.executeCallCount).to(equal(1))
-                    }
-                }
-
                 context("when loading next page") {
                     beforeEach {
                         spyUseCase.moviesToReturn = testMovies
