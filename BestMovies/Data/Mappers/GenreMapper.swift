@@ -7,7 +7,7 @@ struct GenreMapper {
             name: dto.name
         )
     }
-    
+
     static func mapList(_ dto: [TMDBAPI.DTO.Genre]) -> [Genre] {
         return dto.map { map($0) }
     }

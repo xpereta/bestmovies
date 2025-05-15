@@ -7,7 +7,7 @@ struct Movie: Identifiable {
     let posterPath: String?
     let releaseDate: Date?  // We allow nil release dates because an error in date parser should not break the app
     let voteAverage: Double
-    
+
     var posterURL: URL? {
         guard let posterPath else { return nil }
         #warning("Poster URLs should be in configuration")
@@ -17,7 +17,7 @@ struct Movie: Identifiable {
 
 extension Movie: Equatable {
     // Optimized equatable implementation, id is enough for our use cases
-    static func ==(lhs: Movie, rhs: Movie) -> Bool {
+    static func == (lhs: Movie, rhs: Movie) -> Bool {
         return lhs.id == rhs.id
     }
 }

@@ -6,10 +6,10 @@ struct MovieMapper {
         formatter.formatOptions = [.withFullDate]
         return formatter
     }()
-    
+
     static func map(_ dto: TMDBAPI.DTO.Movie) -> Movie {
         let date = dateFormatter.date(from: dto.releaseDate)
-        
+
         return Movie(
             id: dto.id,
             title: dto.title,
@@ -19,7 +19,7 @@ struct MovieMapper {
             voteAverage: dto.voteAverage
         )
     }
-    
+
     static func mapList(_ dto: [TMDBAPI.DTO.Movie]) -> [Movie] {
         return dto.map { map($0) }
     }

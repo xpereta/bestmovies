@@ -17,7 +17,7 @@ extension TMDBAPI.DTO {
         let budget: Int
         let revenue: Int
         let originalLanguage: String
-        
+
         enum CodingKeys: String, CodingKey {
             case id
             case title

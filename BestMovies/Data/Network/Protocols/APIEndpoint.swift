@@ -12,7 +12,7 @@ public extension ApiEndpoint {
         components?.queryItems = queryItems
         return components?.url
     }
-    
+
     func makeURLRequest() throws -> URLRequest {
         guard let url else {
             throw ApiProviderError.invalidURL

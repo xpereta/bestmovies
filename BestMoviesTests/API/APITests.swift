@@ -1,6 +1,6 @@
-import Quick
-import Nimble
 @testable import BestMovies
+import Nimble
+import Quick
 
 //class RMEndpointSpec: QuickSpec {
 //    override class func spec() {
@@ -18,12 +18,12 @@ import Nimble
 //                let endpoint = RMEndpoint.characters
 //                expect(endpoint.url?.scheme) == "https"
 //            }
-//            
+//
 //            it("should have the correct host") {
 //                let endpoint = RMEndpoint.characters
 //                expect(endpoint.url?.host) == "rickandmortyapi.com"
 //            }
-//            
+//
 //            it("should have the correct path") {
 //                let endpoint = RMEndpoint.characters
 //                expect(endpoint.url?.path) == "/api/character"

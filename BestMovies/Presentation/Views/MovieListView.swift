@@ -2,17 +2,17 @@ import SwiftUI
 
 struct MovieListView<ViewModel>: View where ViewModel: MovieListViewModelType {
     @StateObject private var viewModel: ViewModel
-    
+
     init(viewModel: @autoclosure @escaping () -> ViewModel) {
         _viewModel = StateObject(wrappedValue: viewModel())
     }
-    
+
     var body: some View {
         NavigationView {
             VStack {
                 SearchBar(text: $viewModel.searchText)
                     .autocorrectionDisabled()
-                
+
                 Group {
                     switch viewModel.state {
                     case .idle:
@@ -33,12 +33,12 @@ struct MovieListView<ViewModel>: View where ViewModel: MovieListViewModelType {
                 Spacer()
             }
             .navigationTitle("Best Movies")
-            .task() {
+            .task {
                 viewModel.startLoading()
             }
         }
     }
-    
+
     @ViewBuilder
     private func moviesList(movies: [Movie], hasMore: Bool, isLoadingMore: Bool) -> some View {
         List {
@@ -78,7 +78,7 @@ struct MovieListView<ViewModel>: View where ViewModel: MovieListViewModelType {
 struct MovieRow: View {
     let movie: Movie
     @EnvironmentObject private var coordinator: Coordinator
-    
+
     var body: some View {
         Button {
             coordinator.push(page: .movieDetails(movie.id))
@@ -100,16 +100,16 @@ struct MovieRow: View {
                 }
                 .frame(width: 60, height: 60)
                 .clipShape(RoundedRectangle(cornerRadius: 8))
-                
+
                 VStack(alignment: .leading, spacing: 8) {
                     Text(movie.title)
                         .font(.headline)
-                    
+
                     if let date = movie.releaseDate {
                         Text(date, format: .dateTime.year())
                             .foregroundStyle(.secondary)
                     }
-                    
+
                     HStack {
                         Image(systemName: "star.fill")
                             .foregroundStyle(.yellow)
@@ -165,7 +165,7 @@ struct MovieRow: View {
             voteAverage: 8.5,
         )
     ]
-    
+
     let viewModel = StubMovieListViewModel(
         state: .loaded(sampleMovies, currentPage: 1, hasMore: false, isLoadingMore: false)
     )
@@ -199,7 +199,7 @@ struct MovieRow: View {
             voteAverage: 8.5,
         )
     ]
-    
+
     let viewModel = StubMovieListViewModel(
         state: .loaded(sampleMovies, currentPage: 1, hasMore: true, isLoadingMore: false)
     )

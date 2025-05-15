@@ -1,5 +1,5 @@
-import Foundation
 import FactoryKit
+import Foundation
 
 extension Container {
     var getMoviesUseCase: Factory<GetMoviesUseCaseType> {

@@ -1,20 +1,21 @@
-import Foundation
 import Combine
+import Foundation
 
 @MainActor
 protocol MovieDetailViewModelType: ObservableObject {
     var state: MovieDetailViewModel.State { get }
+
     func loadMovie()
 }
 
 @MainActor
 final class StubMovieDetailViewModel: MovieDetailViewModelType {
     @Published var state: MovieDetailViewModel.State
-    
+
     init(state: MovieDetailViewModel.State) {
         self.state = state
     }
-    
+
     func loadMovie() {}
 }
 
@@ -26,23 +27,23 @@ final class MovieDetailViewModel: MovieDetailViewModelType {
         case loaded(MovieDetails)
         case error(String)
     }
-    
+
     @Published private(set) var state: State = .idle
-    
+
     private let getMovieDetailsUseCase: GetMovieDetailsUseCaseType
     private let movieId: Int
-    
+
     init(movieId: Int, useCase: GetMovieDetailsUseCaseType) {
         self.movieId = movieId
-        self.getMovieDetailsUseCase = useCase
+        getMovieDetailsUseCase = useCase
     }
-    
+
     func loadMovie() {
         print("🧠 MovieDetailViewModel: loadMovie")
         guard case .idle = state else { return }
 
         state = .loading
-        
+
         Task {
             do {
                 let movie = try await getMovieDetailsUseCase.execute(movieId: movieId)

@@ -1,5 +1,5 @@
-import Foundation
 import Combine
+import Foundation
 
 enum MoviesListViewState: Equatable {
     case idle
@@ -12,6 +12,7 @@ enum MoviesListViewState: Equatable {
 protocol MovieListViewModelType: ObservableObject {
     var state: MoviesListViewState { get }
     var searchText: String { get set }
+
     func startLoading()
     func loadNextPage()
 }
@@ -20,12 +21,12 @@ protocol MovieListViewModelType: ObservableObject {
 final class StubMovieListViewModel: MovieListViewModelType {
     @Published var state: MoviesListViewState
     @Published var searchText: String
-    
+
     init(state: MoviesListViewState, searchText: String = "") {
         self.state = state
         self.searchText = searchText
     }
-    
+
     func startLoading() {}
     func loadNextPage() {}
 }
@@ -34,20 +35,20 @@ final class StubMovieListViewModel: MovieListViewModelType {
 final class MovieListViewModel: MovieListViewModelType {
     @Published private(set) var state: MoviesListViewState = .idle
     @Published var searchText: String = ""
-    
+
     private let useCase: GetMoviesUseCaseType
     private var loadTask: Task<Void, Never>?
     private var cancellables = Set<AnyCancellable>()
-    
+
     init(useCase: GetMoviesUseCaseType) {
         self.useCase = useCase
         setupSearchSubscription()
     }
-    
+
     deinit {
         cancellables.removeAll()
     }
-    
+
     private func setupSearchSubscription() {
         print("🧠 MovieListViewModel: setupSearchSubscription")
         $searchText
@@ -58,21 +59,21 @@ final class MovieListViewModel: MovieListViewModelType {
             }
             .store(in: &cancellables)
     }
-    
+
     func startLoading() {
         print("🧠 MovieListViewModel: startLoading")
         guard case .idle = state else { return }
-        
+
         resetAndLoad()
     }
-    
+
     private func resetAndLoad() {
         print("🧠 MovieListViewModel: resetAndLoad")
 
         loadTask?.cancel()
-        
+
         state = .loading
-        
+
         loadTask = Task {
             do {
                 let result = try await useCase.execute(page: 1, query: searchText)
@@ -91,13 +92,13 @@ final class MovieListViewModel: MovieListViewModelType {
             }
         }
     }
-    
+
     func loadNextPage() {
-        guard case let .loaded(movies, currentPage, true, false) = state else { return }
-        
+        guard case .loaded(let movies, let currentPage, true, false) = state else { return }
+
         let nextPage = currentPage + 1
         state = .loaded(movies, currentPage: currentPage, hasMore: true, isLoadingMore: true)
-        
+
         Task {
             do {
                 let result = try await useCase.execute(page: nextPage, query: searchText)

@@ -3,11 +3,11 @@ import UIKit
 
 struct MovieDetailView<ViewModel>: View where ViewModel: MovieDetailViewModelType {
     @StateObject private var viewModel: ViewModel
-    
+
     init(viewModel: @autoclosure @escaping () -> ViewModel) {
         _viewModel = StateObject(wrappedValue: viewModel())
     }
-    
+
     var body: some View {
         ZStack {
             switch viewModel.state {
@@ -16,15 +16,15 @@ struct MovieDetailView<ViewModel>: View where ViewModel: MovieDetailViewModelTyp
             case .loading:
                 ProgressView("Loading movie...")
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-                
+
             case .loaded(let movie):
                 LoadedMovie(movie)
-                
+
             case .error(let message):
                 VStack(spacing: 16) {
                     Text(message)
                         .foregroundColor(.red)
-                    
+
                     Button("Try Again") {
                         viewModel.loadMovie()
                     }
@@ -41,33 +41,33 @@ struct MovieDetailView<ViewModel>: View where ViewModel: MovieDetailViewModelTyp
 
 struct LoadedMovie: View {
     private let movie: MovieDetails
-    
+
     init(_ movie: MovieDetails) {
         self.movie = movie
     }
-    
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
                 BackdropImageSection(backdropURL: movie.backdropURL)
-                
+
                 VStack(alignment: .leading, spacing: 20) {
                     MovieHeaderSection(
                         title: movie.title,
                         releaseDate: movie.releaseDate,
                         tagline: movie.tagline
                     )
-                    
+
                     MovieStatsSection(
                         voteAverage: movie.voteAverage,
                         voteCount: movie.voteCount,
                         runtime: movie.runtimeFormatted
                     )
-                    
+
                     if !movie.genres.isEmpty {
                         GenresSection(genres: movie.genres)
                     }
-                    
+
                     if !movie.overview.isEmpty {
                         OverviewSection(overview: movie.overview)
                     }
@@ -80,9 +80,10 @@ struct LoadedMovie: View {
 }
 
 // MARK: - SubViews
+
 private struct BackdropImageSection: View {
     let backdropURL: URL?
-    
+
     var body: some View {
         if let backDropURL = backdropURL {
             GeometryReader { geometry in
@@ -113,20 +114,20 @@ private struct MovieHeaderSection: View {
     let title: String
     let releaseDate: Date?
     let tagline: String?
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
                 Text(title)
                     .font(.title)
                     .bold()
-                
+
                 if let date = releaseDate {
                     Text("(\(date, format: .dateTime.year()))")
                         .foregroundStyle(.secondary)
                 }
             }
-            
+
             if let tagline = tagline {
                 Text(tagline)
                     .italic()
@@ -140,7 +141,7 @@ private struct MovieStatsSection: View {
     let voteAverage: Double
     let voteCount: Int
     let runtime: String?
-    
+
     var body: some View {
         HStack(spacing: 16) {
             HStack {
@@ -150,7 +151,7 @@ private struct MovieStatsSection: View {
                 Text("(\(voteCount))")
                     .foregroundStyle(.secondary)
             }
-            
+
             if let runtime = runtime {
                 Text(runtime)
             }
@@ -160,7 +161,7 @@ private struct MovieStatsSection: View {
 
 private struct GenresSection: View {
     let genres: [Genre]
-    
+
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack {
@@ -180,11 +181,11 @@ private struct GenresSection: View {
 
 private struct OverviewSection: View {
     @State private var overview: String
-    
+
     init(overview: String) {
         self.overview = overview
     }
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("Overview")
@@ -233,6 +234,7 @@ struct TextJustifiedView: UIViewRepresentable {
 }
 
 // MARK: - Previews for each state
+
 #Preview("Idle") {
     MovieDetailView(viewModel: StubMovieDetailViewModel(state: .idle))
 }
@@ -245,7 +247,11 @@ struct TextJustifiedView: UIViewRepresentable {
     let movieDetails = MovieDetails(
         id: 603,
         title: "The Matrix",
-        overview: "Set in the 22nd century, The Matrix tells the story of a computer programmer who joins a rebellion to combat intelligent machines that have constructed a virtual reality simulation that keeps humanity under control.",
+        overview: """
+        Set in the 22nd century, The Matrix tells the story of a computer programmer who joins a rebellion to combat intelligent machines that have constructed a
+        """ + """
+                virtual reality simulation that keeps humanity under control.
+        """,
         posterPath: "/f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg",
         backdropPath: "/l4QHerTSbMI7qgvasqxP36pqjN6.jpg",
         releaseDate: Date(),
@@ -264,14 +270,18 @@ struct TextJustifiedView: UIViewRepresentable {
     )
 
     let loadedState = MovieDetailViewModel.State.loaded(movieDetails)
- MovieDetailView(viewModel: StubMovieDetailViewModel(state: loadedState))
+    MovieDetailView(viewModel: StubMovieDetailViewModel(state: loadedState))
 }
 
 #Preview("Loaded, image error") {
     let movieDetails = MovieDetails(
         id: 603,
         title: "The Matrix",
-        overview: "Set in the 22nd century, The Matrix tells the story of a computer programmer who joins a rebellion to combat intelligent machines that have constructed a virtual reality simulation that keeps humanity under control.",
+        overview: """
+        Set in the 22nd century, The Matrix tells the story of a computer programmer who joins a rebellion to combat intelligent
+        """ + """
+        machines that have constructed a virtual reality simulation that keeps humanity under control.
+        """,
         posterPath: "/f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg",
         backdropPath: "/error.jpg",
         releaseDate: Date(),
@@ -290,7 +300,7 @@ struct TextJustifiedView: UIViewRepresentable {
     )
 
     let loadedState = MovieDetailViewModel.State.loaded(movieDetails)
- MovieDetailView(viewModel: StubMovieDetailViewModel(state: loadedState))
+    MovieDetailView(viewModel: StubMovieDetailViewModel(state: loadedState))
 }
 
 #Preview("Error") {

@@ -2,16 +2,16 @@ import SwiftUI
 
 struct SearchBar: View {
     @Binding var text: String
-    
+
     var body: some View {
         HStack {
             Image(systemName: "magnifyingglass")
                 .foregroundColor(.gray)
-            
+
             TextField("Search movies...", text: $text)
                 .autocorrectionDisabled()
                 .textFieldStyle(RoundedBorderTextFieldStyle())
-            
+
             if !text.isEmpty {
                 Button(action: {
                     text = ""

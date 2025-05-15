@@ -1,9 +1,10 @@
-import Foundation
-import Quick
-import Nimble
 @testable import BestMovies
+import Foundation
+import Nimble
+import Quick
 
 class MovieDetailsMapperSpec: QuickSpec {
+    // swiftlint:disable:next function_body_length
     override class func spec() {
         describe("MovieDetailsMapper") {
             context("when mapping a DTO") {
@@ -29,9 +30,9 @@ class MovieDetailsMapperSpec: QuickSpec {
                             revenue: 463517383,
                             originalLanguage: "en"
                         )
-                        
+
                         let movieDetails = MovieDetailsMapper.map(dto)
-                        
+
                         expect(movieDetails.id).to(equal(1))
                         expect(movieDetails.title).to(equal("The Matrix"))
                         expect(movieDetails.overview).to(equal("A computer hacker learns about the true nature of reality"))
@@ -45,14 +46,14 @@ class MovieDetailsMapperSpec: QuickSpec {
                         expect(movieDetails.budget).to(equal(63000000))
                         expect(movieDetails.revenue).to(equal(463517383))
                         expect(movieDetails.originalLanguage).to(equal("en"))
-                        
+
                         // Date validation
                         let calendar = Calendar.current
                         let components = calendar.dateComponents([.year, .month, .day], from: movieDetails.releaseDate!)
                         expect(components.year).to(equal(1999))
                         expect(components.month).to(equal(3))
                         expect(components.day).to(equal(31))
-                        
+
                         // Genres validation
                         expect(movieDetails.genres).to(haveCount(2))
                         expect(movieDetails.genres[0].id).to(equal(28))
@@ -61,7 +62,7 @@ class MovieDetailsMapperSpec: QuickSpec {
                         expect(movieDetails.genres[1].name).to(equal("Science Fiction"))
                     }
                 }
-                
+
                 context("with missing optional values") {
                     it("maps to nil for optional properties") {
                         let dto = TMDBAPI.DTO.MovieDetails(
@@ -81,9 +82,9 @@ class MovieDetailsMapperSpec: QuickSpec {
                             revenue: 0,
                             originalLanguage: "en"
                         )
-                        
+
                         let movieDetails = MovieDetailsMapper.map(dto)
-                        
+
                         expect(movieDetails.posterPath).to(beNil())
                         expect(movieDetails.backdropPath).to(beNil())
                         expect(movieDetails.posterURL).to(beNil())
@@ -93,7 +94,7 @@ class MovieDetailsMapperSpec: QuickSpec {
                         expect(movieDetails.tagline).to(beNil())
                     }
                 }
-                
+
                 context("with runtime formatting") {
                     it("formats runtime correctly") {
                         let dto = TMDBAPI.DTO.MovieDetails(
@@ -113,7 +114,7 @@ class MovieDetailsMapperSpec: QuickSpec {
                             revenue: 0,
                             originalLanguage: "en"
                         )
-                        
+
                         let movieDetails = MovieDetailsMapper.map(dto)
                         expect(movieDetails.runtimeFormatted).to(equal("2h 34m"))
                     }

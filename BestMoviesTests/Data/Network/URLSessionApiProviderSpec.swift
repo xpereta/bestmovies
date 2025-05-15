@@ -1,50 +1,52 @@
-import Quick
-import Nimble
-import Foundation
 @testable import BestMovies
+import Foundation
+import Nimble
+import Quick
 
 final class URLSessionApiProviderSpec: AsyncSpec {
-    override class func spec() {
+    // swiftlint:disable:next function_body_length
+    override static func spec() {
         describe("URLSessionApiProvider") {
             var sut: URLSessionApiProvider!
             var mockSession: MockURLSession!
             let validURL = URL(string: "https://api.example.com/test")!
-            
+
             beforeEach {
                 mockSession = MockURLSession()
                 sut = URLSessionApiProvider(urlSession: mockSession)
             }
-            
+
             context("when performing a request") {
                 context("with valid URL and successful response") {
                     it("returns the expected data") {
-                        let expectedData = "test data".data(using: .utf8)!
+//                        let expectedData = "test data".data(using: .utf8)!
+                        let expectedData = Data("test data".utf8)
                         let response = HTTPURLResponse(
                             url: validURL,
                             statusCode: 200,
                             httpVersion: nil,
                             headerFields: nil
                         )!
-                        
+
                         mockSession.mockData = expectedData
                         mockSession.mockResponse = response
-                        
+
                         let request = URLRequest(url: validURL)
-                        
+
                         await expect { try await sut.performRequest(request).data }.to(equal(expectedData))
                     }
                 }
-                
+
                 context("with non-HTTP response") {
                     it("throws invalidResponse error") {
                         mockSession.mockResponse = URLResponse()
                         let request = URLRequest(url: validURL)
-                        
+
                         await expect { try await sut.performRequest(request) }
                             .to(throwError(ApiProviderError.invalidResponse))
                     }
                 }
-                
+
                 context("with not found status code") {
                     it("throws failed error with not found status code") {
                         let errorResponse = HTTPURLResponse(
@@ -55,12 +57,12 @@ final class URLSessionApiProviderSpec: AsyncSpec {
                         )!
                         mockSession.mockResponse = errorResponse
                         let request = URLRequest(url: validURL)
-                        
+
                         await expect { try await sut.performRequest(request) }
                             .to(throwError(ApiProviderError.failed(statusCode: 404)))
                     }
                 }
-                
+
                 context("with server error status code") {
                     it("throws failed error with server error status code") {
                         let errorResponse = HTTPURLResponse(
@@ -71,18 +73,18 @@ final class URLSessionApiProviderSpec: AsyncSpec {
                         )!
                         mockSession.mockResponse = errorResponse
                         let request = URLRequest(url: validURL)
-                        
+
                         await expect { try await sut.performRequest(request) }
                             .to(throwError(ApiProviderError.failed(statusCode: 404)))
                     }
                 }
-                
+
                 context("when not connected to internet error occurs") {
                     it("propagates the error") {
                         let networkError = NSError(domain: NSURLErrorDomain, code: NSURLErrorNotConnectedToInternet)
                         mockSession.mockError = networkError
                         let request = URLRequest(url: validURL)
-                        
+
                         await expect { try await sut.performRequest(request) }.to(throwError())
                     }
                 }
@@ -91,12 +93,11 @@ final class URLSessionApiProviderSpec: AsyncSpec {
     }
 }
 
-
 private class MockURLSession: URLSessionProtocol, @unchecked Sendable {
     var mockData: Data?
     var mockResponse: URLResponse?
     var mockError: Error?
-    
+
     func data(
         for request: URLRequest,
         delegate: URLSessionTaskDelegate?

@@ -2,7 +2,7 @@ import Foundation
 
 enum MovieRepositoryError: LocalizedError {
     case movieNotFound(withId: Int)
-    
+
     var errorDescription: String? {
         switch self {
         case .movieNotFound(let withId):
@@ -21,13 +21,13 @@ struct MovieRepository: MovieRepositoryType {
 
     func fetchMovies(page: Int, query: String?) async throws -> (movies: [Movie], hasMorePages: Bool) {
         let response = try await apiClient.fetchMovies(page: page, query: query)
-        
+
         let movies = MovieMapper.mapList(response.results)
         let hasMorePages = response.page < response.totalPages
-        
+
         return (movies: movies, hasMorePages: hasMorePages)
     }
-    
+
     func fetchMovieDetails(_ id: Int) async throws -> MovieDetails {
         do {
             let response = try await apiClient.fetchMovieDetails(id)

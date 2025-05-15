@@ -1,16 +1,17 @@
-import Foundation
-import Quick
-import Nimble
 @testable import BestMovies
+import Foundation
+import Nimble
+import Quick
 
 class TMDBAPIEndpointSpec: QuickSpec {
+    // swiftlint:disable:next function_body_length
     override class func spec() {
         describe("TMDBAPI.Endpoint") {
             let configuration = TMDBConfiguration(
                 baseURL: "https://api.themoviedb.org/3",
                 apiKey: "test_api_key"
             )
-            
+
             context("baseURL") {
                 it("returns the configured base URL") {
                     let endpoints: [TMDBAPI.Endpoint] = [
@@ -18,30 +19,30 @@ class TMDBAPIEndpointSpec: QuickSpec {
                         .searchMovies(query: "test", page: 1, configuration: configuration),
                         .movie(id: 123, configuration: configuration)
                     ]
-                    
+
                     endpoints.forEach { endpoint in
                         expect(endpoint.baseURL) == configuration.baseURL
                     }
                 }
             }
-            
+
             context("path") {
                 it("returns the correct path for topRated") {
                     let endpoint = TMDBAPI.Endpoint.topRated(page: 1, configuration: configuration)
                     expect(endpoint.path) == "/movie/top_rated"
                 }
-                
+
                 it("returns the correct path for searchMovies") {
                     let endpoint = TMDBAPI.Endpoint.searchMovies(query: "test", page: 1, configuration: configuration)
                     expect(endpoint.path) == "/search/movie"
                 }
-                
+
                 it("returns the correct path for movie") {
                     let endpoint = TMDBAPI.Endpoint.movie(id: 123, configuration: configuration)
                     expect(endpoint.path) == "/movie/123"
                 }
             }
-            
+
             context("queryItems") {
                 it("includes the api_key in all endpoints") {
                     let endpoints: [TMDBAPI.Endpoint] = [
@@ -49,7 +50,7 @@ class TMDBAPIEndpointSpec: QuickSpec {
                         .searchMovies(query: "test", page: 1, configuration: configuration),
                         .movie(id: 123, configuration: configuration)
                     ]
-                    
+
                     endpoints.forEach { endpoint in
                         expect(endpoint.queryItems).to(
                             containElementSatisfying { item in
@@ -58,7 +59,7 @@ class TMDBAPIEndpointSpec: QuickSpec {
                         )
                     }
                 }
-                
+
                 it("includes the page parameter for topRated") {
                     let endpoint = TMDBAPI.Endpoint.topRated(page: 2, configuration: configuration)
                     expect(endpoint.queryItems).to(
@@ -67,7 +68,7 @@ class TMDBAPIEndpointSpec: QuickSpec {
                         }
                     )
                 }
-                
+
                 it("includes the query and page parameters for searchMovies") {
                     let endpoint = TMDBAPI.Endpoint.searchMovies(
                         query: "Matrix",
@@ -85,7 +86,7 @@ class TMDBAPIEndpointSpec: QuickSpec {
                         }
                     )
                 }
-                
+
                 it("just includes the api_key for movie endpoint") {
                     let endpoint = TMDBAPI.Endpoint.movie(id: 123, configuration: configuration)
                     expect(endpoint.queryItems.count) == 1
@@ -93,7 +94,7 @@ class TMDBAPIEndpointSpec: QuickSpec {
                     expect(endpoint.queryItems.first?.value) == configuration.apiKey
                 }
             }
-            
+
             context("URL construction") {
                 it("constructs valid URLs for all endpoints") {
                     let endpoints: [(TMDBAPI.Endpoint, String)] = [
@@ -104,12 +105,12 @@ class TMDBAPIEndpointSpec: QuickSpec {
                         (.movie(id: 123, configuration: configuration),
                          "https://api.themoviedb.org/3/movie/123")
                     ]
-                    
+
                     endpoints.forEach { endpoint, expectedURLPrefix in
                         let url = endpoint.baseURL.appending(endpoint.path)
                         var urlComponents = URLComponents(string: url)
                         urlComponents?.queryItems = endpoint.queryItems
-                        
+
                         expect(urlComponents?.url).toNot(beNil())
                         expect(urlComponents?.url?.absoluteString.hasPrefix(expectedURLPrefix)) == true
                     }

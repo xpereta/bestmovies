@@ -5,14 +5,14 @@ extension TMDBAPI.DTO {
         let page: Int
         let results: [Movie]
         let totalPages: Int
-        
+
         enum CodingKeys: String, CodingKey {
             case page
             case results
             case totalPages = "total_pages"
         }
     }
-    
+
     struct Movie: Decodable {
         let id: Int
         let title: String
@@ -20,7 +20,7 @@ extension TMDBAPI.DTO {
         let posterPath: String?
         let releaseDate: String
         let voteAverage: Double
-        
+
         enum CodingKeys: String, CodingKey {
             case id
             case title

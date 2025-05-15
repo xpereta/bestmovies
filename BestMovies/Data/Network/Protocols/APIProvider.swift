@@ -15,7 +15,7 @@ extension ApiProvider {
         decoder: JSONDecoder = JSONDecoder(),
     ) async throws -> T {
         let data = try await performRequest(urlRequest, delegate: delegate).data
-        
+
         guard let decoded = try? decoder.decode(resultType, from: data) else {
             throw ApiProviderError.decodingFailed
         }
