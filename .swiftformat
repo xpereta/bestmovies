@@ -1,0 +1,93 @@
+--exclude .build
+--exclude .swiftpm
+
+# Rules
+
+# Insert blank line before class, struct, enum, extension, protocol or function declarations.
+--enable blankLinesBetweenScopes
+
+# Remove trailing blank line at the end of a scope.
+--enable blankLinesAtEndOfScope 
+
+# Wrap the opening brace of multiline statements.
+--disable wrapMultilineStatementBraces
+
+# Converts types used for hosting only static members into enums.
+--disable enumNamespaces
+
+# Support for formatting partial file fragments
+--fragment false
+
+# Wrap braces in accordance with selected style (K&R or Allman).
+--rules braces
+--allman false
+
+# Place else, catch or while keyword in accordance with current style (same or next line).
+--rules elseOnSameLine
+--elseposition same-line
+--guardelse next-line
+
+# Use Void for type declarations and () for values.
+--rules void
+--voidtype void
+
+# Indent code in accordance with the scope level.
+--rules indent
+--indent 4
+--tabwidth 2
+--ifdef outdent
+--indentcase false
+--xcodeindentation disabled
+--indentstrings false
+
+# Sort import statements alphabetically.
+--rules sortImports
+--importgrouping alphabetized
+
+# Use specified linebreak character for all linebreaks (CR, LF or CRLF).
+--rules linebreaks
+--linebreaks lf
+
+# Add or remove space around operators or delimiters.
+--rules spaceAroundOperators
+--operatorfunc spaced
+--ranges no-space
+
+# Reposition let or var bindings within pattern.
+--rules hoistPatternLet
+--patternlet inline
+
+# Insert/remove explicit self where applicable.
+--rules redundantSelf
+--self remove
+--selfrequired
+
+# Remove semicolons.
+--rules semicolons
+--semicolons inline
+
+# Mark unused function arguments with _.
+--rules unusedArguments
+--stripunusedargs closure-only
+
+# Use trailing closure syntax where applicable.
+--rules trailingClosures
+--trailingclosures
+
+# Remove trailing space at end of a line.
+--rules trailingSpace
+--trimwhitespace always
+
+# Remove whitespace inside empty braces.
+--rules emptyBraces
+--emptybraces no-space
+
+# Insert blank line before and after MARK: comments.
+--rules blankLinesAroundMark
+--lineaftermarks true
+
+# Some rules depended on the swiftversion and will be disabled automatically if it's not specified or supported
+--swiftversion 5
+
+# Remove consecutive blank lines.
+--rules consecutiveBlankLines
