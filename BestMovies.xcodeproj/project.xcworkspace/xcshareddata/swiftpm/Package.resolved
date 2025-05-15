@@ -1,5 +1,5 @@
 {
-  "originHash" : "8ebfea5711b26cad6668a5b4f78a802c20c12b799da2fd6f455ebae7e32a359e",
+  "originHash" : "6dee8303e4faf7cedf4455e212607b022958430be92aa760e03aa608c36f8843",
   "pins" : [
     {
       "identity" : "cwlcatchexception",
@@ -17,6 +17,15 @@
       "state" : {
         "revision" : "0139c665ebb45e6a9fbdb68aabfd7c39f3fe0071",
         "version" : "2.2.2"
+      }
+    },
+    {
+      "identity" : "factory",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/hmlongco/Factory/",
+      "state" : {
+        "revision" : "22157b88670bbeac591895c0fc8b8f7f340cf757",
+        "version" : "2.5.0"
       }
     },
     {

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		475502F92DCA68FD00863B5D /* Quick in Frameworks */ = {isa = PBXBuildFile; productRef = 475502F82DCA68FD00863B5D /* Quick */; };
 		475503002DCA69F700863B5D /* Nimble in Frameworks */ = {isa = PBXBuildFile; productRef = 475502FF2DCA69F700863B5D /* Nimble */; };
+		476377832DD5DCFC00F60DF3 /* FactoryKit in Frameworks */ = {isa = PBXBuildFile; productRef = 476377822DD5DCFC00F60DF3 /* FactoryKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,6 +58,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				476377832DD5DCFC00F60DF3 /* FactoryKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -119,6 +121,7 @@
 			);
 			name = BestMovies;
 			packageProductDependencies = (
+				476377822DD5DCFC00F60DF3 /* FactoryKit */,
 			);
 			productName = BestMovies;
 			productReference = 475377EA2DCA5487004B69CC /* BestMovies.app */;
@@ -207,6 +210,7 @@
 			packageReferences = (
 				475502F72DCA68FD00863B5D /* XCRemoteSwiftPackageReference "Quick" */,
 				475502FE2DCA69F700863B5D /* XCRemoteSwiftPackageReference "Nimble" */,
+				476377812DD5DCFC00F60DF3 /* XCRemoteSwiftPackageReference "Factory" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 475377EB2DCA5487004B69CC /* Products */;
@@ -630,6 +634,14 @@
 				minimumVersion = 13.7.1;
 			};
 		};
+		476377812DD5DCFC00F60DF3 /* XCRemoteSwiftPackageReference "Factory" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/hmlongco/Factory/";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.5.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -642,6 +654,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 475502FE2DCA69F700863B5D /* XCRemoteSwiftPackageReference "Nimble" */;
 			productName = Nimble;
+		};
+		476377822DD5DCFC00F60DF3 /* FactoryKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 476377812DD5DCFC00F60DF3 /* XCRemoteSwiftPackageReference "Factory" */;
+			productName = FactoryKit;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
