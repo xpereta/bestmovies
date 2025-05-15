@@ -26,7 +26,7 @@ class Coordinator: ObservableObject {
         switch page {
         case .moviesList:
             let useCase = Container.shared.getMoviesUseCase()
-            let viewModel = MovieListViewModel(getMoviesUseCase: useCase)
+            let viewModel = MovieListViewModel(useCase: useCase)
             
             MovieListView(viewModel: viewModel)
         case .movieDetails(let id):

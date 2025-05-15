@@ -2,13 +2,13 @@ import Foundation
 import Combine
 
 @MainActor
-protocol MovieDetailViewModelProtocol: ObservableObject {
+protocol MovieDetailViewModelType: ObservableObject {
     var state: MovieDetailViewModel.State { get }
     func loadMovie()
 }
 
 @MainActor
-final class StubMovieDetailViewModel: MovieDetailViewModelProtocol {
+final class StubMovieDetailViewModel: MovieDetailViewModelType {
     @Published var state: MovieDetailViewModel.State
     
     init(state: MovieDetailViewModel.State) {
@@ -19,7 +19,7 @@ final class StubMovieDetailViewModel: MovieDetailViewModelProtocol {
 }
 
 @MainActor
-final class MovieDetailViewModel: MovieDetailViewModelProtocol {
+final class MovieDetailViewModel: MovieDetailViewModelType {
     enum State: Equatable {
         case idle
         case loading
@@ -29,10 +29,10 @@ final class MovieDetailViewModel: MovieDetailViewModelProtocol {
     
     @Published private(set) var state: State = .idle
     
-    private let getMovieDetailsUseCase: GetMovieDetailsUseCaseProtocol
+    private let getMovieDetailsUseCase: GetMovieDetailsUseCaseType
     private let movieId: Int
     
-    init(movieId: Int, useCase: GetMovieDetailsUseCaseProtocol) {
+    init(movieId: Int, useCase: GetMovieDetailsUseCaseType) {
         self.movieId = movieId
         self.getMovieDetailsUseCase = useCase
     }

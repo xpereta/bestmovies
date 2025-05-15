@@ -3,7 +3,7 @@ import Quick
 import Nimble
 @testable import BestMovies
 
-class MockGetMovieDetailsUseCase: GetMovieDetailsUseCaseProtocol {
+class MockGetMovieDetailsUseCase: GetMovieDetailsUseCaseType {
     var movieToReturn: MovieDetails?
     var errorToThrow: Error?
     var executeCallCount = 0

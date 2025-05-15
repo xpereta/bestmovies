@@ -4,7 +4,7 @@ import Nimble
 import Combine
 @testable import BestMovies
 
-class MockGetMoviesUseCase: GetMoviesUseCaseProtocol {
+class MockGetMoviesUseCase: GetMoviesUseCaseType {   
     var moviesToReturn: [Movie] = []
     var hasMoreToReturn: Bool = false
     var errorToThrow: Error?
@@ -37,7 +37,7 @@ class MovieListViewModelSpec: AsyncSpec {
             
             beforeEach {
                 mockUseCase = MockGetMoviesUseCase()
-                sut = await MovieListViewModel(getMoviesUseCase: mockUseCase)
+                sut = await MovieListViewModel(useCase: mockUseCase)
             }
             
             context("initial state") {

@@ -9,7 +9,7 @@ enum MoviesListViewState: Equatable {
 }
 
 @MainActor
-protocol MovieListViewModelProtocol: ObservableObject {
+protocol MovieListViewModelType: ObservableObject {
     var state: MoviesListViewState { get }
     var searchText: String { get set }
     func startLoading()
@@ -17,7 +17,7 @@ protocol MovieListViewModelProtocol: ObservableObject {
 }
 
 @MainActor
-final class StubMovieListViewModel: MovieListViewModelProtocol {
+final class StubMovieListViewModel: MovieListViewModelType {
     @Published var state: MoviesListViewState
     @Published var searchText: String
     
@@ -31,16 +31,16 @@ final class StubMovieListViewModel: MovieListViewModelProtocol {
 }
 
 @MainActor
-final class MovieListViewModel: MovieListViewModelProtocol {
+final class MovieListViewModel: MovieListViewModelType {
     @Published private(set) var state: MoviesListViewState = .idle
     @Published var searchText: String = ""
     
-    private let getMoviesUseCase: GetMoviesUseCaseProtocol
+    private let useCase: GetMoviesUseCaseType
     private var loadTask: Task<Void, Never>?
     private var cancellables = Set<AnyCancellable>()
     
-    init(getMoviesUseCase: GetMoviesUseCaseProtocol) {
-        self.getMoviesUseCase = getMoviesUseCase
+    init(useCase: GetMoviesUseCaseType) {
+        self.useCase = useCase
         setupSearchSubscription()
     }
     
@@ -75,7 +75,7 @@ final class MovieListViewModel: MovieListViewModelProtocol {
         
         loadTask = Task {
             do {
-                let result = try await getMoviesUseCase.execute(page: 1, query: searchText)
+                let result = try await useCase.execute(page: 1, query: searchText)
                 guard !Task.isCancelled else {
                     state = .idle
                     return
@@ -100,7 +100,7 @@ final class MovieListViewModel: MovieListViewModelProtocol {
         
         Task {
             do {
-                let result = try await getMoviesUseCase.execute(page: nextPage, query: searchText)
+                let result = try await useCase.execute(page: nextPage, query: searchText)
                 state = .loaded(
                     movies + result.movies,
                     currentPage: nextPage,

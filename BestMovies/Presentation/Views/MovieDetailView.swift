@@ -1,7 +1,7 @@
 import SwiftUI
 import UIKit
 
-struct MovieDetailView<ViewModel>: View where ViewModel: MovieDetailViewModelProtocol {
+struct MovieDetailView<ViewModel>: View where ViewModel: MovieDetailViewModelType {
     @StateObject private var viewModel: ViewModel
     
     init(viewModel: @autoclosure @escaping () -> ViewModel) {

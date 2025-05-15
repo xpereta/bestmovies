@@ -11,13 +11,13 @@ enum MovieRepositoryError: LocalizedError {
     }
 }
 
-protocol MovieRepositoryProtocol {
+protocol MovieRepositoryType {
     func fetchMovies(page: Int, query: String?) async throws -> (movies: [Movie], hasMorePages: Bool)
     func fetchMovieDetails(_ id: Int) async throws -> MovieDetails
 }
 
-struct MovieRepository: MovieRepositoryProtocol {
-    let apiClient: TMDBAPI.ClientProtocol
+struct MovieRepository: MovieRepositoryType {
+    let apiClient: TMDBAPI.ClientType
 
     func fetchMovies(page: Int, query: String?) async throws -> (movies: [Movie], hasMorePages: Bool) {
         let response = try await apiClient.fetchMovies(page: page, query: query)

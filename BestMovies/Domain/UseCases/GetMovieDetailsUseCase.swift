@@ -1,11 +1,11 @@
-protocol GetMovieDetailsUseCaseProtocol {
+protocol GetMovieDetailsUseCaseType {
     func execute(movieId: Int) async throws -> MovieDetails
 }
 
-struct GetMovieDetailsUseCase: GetMovieDetailsUseCaseProtocol {
-    private let repository: MovieRepositoryProtocol
+struct GetMovieDetailsUseCase: GetMovieDetailsUseCaseType {
+    private let repository: MovieRepositoryType
     
-    init(repository: MovieRepositoryProtocol) {
+    init(repository: MovieRepositoryType) {
         self.repository = repository
     }
     

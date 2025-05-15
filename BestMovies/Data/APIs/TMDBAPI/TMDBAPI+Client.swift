@@ -1,12 +1,12 @@
 import Foundation
 
 extension TMDBAPI {
-    protocol ClientProtocol {
+    protocol ClientType {
         func fetchMovies(page: Int, query: String?) async throws -> TMDBAPI.DTO.MovieResponse
         func fetchMovieDetails(_ id: Int) async throws -> TMDBAPI.DTO.MovieDetails
     }
     
-    struct Client: ClientProtocol {
+    struct Client: ClientType {
         let apiProvider: ApiProvider
         let apiConfiguration: TMDBConfiguration
         

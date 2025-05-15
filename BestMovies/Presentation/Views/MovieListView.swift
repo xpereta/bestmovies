@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct MovieListView<ViewModel>: View where ViewModel: MovieListViewModelProtocol {
+struct MovieListView<ViewModel>: View where ViewModel: MovieListViewModelType {
     @StateObject private var viewModel: ViewModel
     
     init(viewModel: @autoclosure @escaping () -> ViewModel) {
