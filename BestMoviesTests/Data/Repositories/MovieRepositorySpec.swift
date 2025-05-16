@@ -6,6 +6,7 @@ import Quick
 class MockTMDBAPIClient: TMDBAPI.ClientType {
     var movieResponseToReturn: TMDBAPI.DTO.MovieResponse?
     var movieDetailsToReturn: TMDBAPI.DTO.MovieDetails?
+    var reviewsResponseToReturn: TMDBAPI.DTO.ReviewResponse?
     var errorToThrow: Error?
 
     var fetchMoviesCallCount = 0
@@ -13,6 +14,8 @@ class MockTMDBAPIClient: TMDBAPI.ClientType {
     var lastQueryRequested: String?
 
     var fetchMovieDetailsCallCount = 0
+    var fetchReviewsCallCount = 0
+
     var lastMovieIdRequested: Int?
 
     func fetchMovies(page: Int, query: String?) async throws -> TMDBAPI.DTO.MovieResponse {
@@ -52,6 +55,16 @@ class MockTMDBAPIClient: TMDBAPI.ClientType {
             revenue: 0,
             originalLanguage: "en"
         )
+    }
+
+    func fetchMovieReviews(movieId: Int) async throws -> BestMovies.TMDBAPI.DTO.ReviewResponse {
+        fetchReviewsCallCount += 1
+
+        if let error = errorToThrow {
+            throw error
+        }
+
+        return reviewsResponseToReturn ?? TMDBAPI.DTO.ReviewResponse(results: [])
     }
 }
 
@@ -179,6 +192,72 @@ class MovieRepositorySpec: AsyncSpec {
                     it("propagates the error") {
                         await expect {
                             try await sut.fetchMovieDetails(123)
+                        }.to(throwError())
+                    }
+                }
+            }
+
+            // MARK: - fetchMovieReviews Tests
+
+            describe("fetchMovieReviews") {
+                context("when the request is successful") {
+                    beforeEach {
+                        mockClient.reviewsResponseToReturn = TMDBAPI.DTO.ReviewResponse(
+                            results: [
+                                .init(
+                                    id: "123",
+                                    author: "John Doe",
+                                    content: "Great movie!",
+                                    createdAt: "2024-01-15",
+                                    authorDetails: .init(
+                                        name: "John Doe",
+                                        avatarPath: "/avatar.jpg",
+                                        rating: 8.5
+                                    )
+                                ),
+                                .init(
+                                    id: "review2",
+                                    author: "Jane Smith",
+                                    content: "Amazing!",
+                                    createdAt: "2024-01-16",
+                                    authorDetails: nil
+                                )
+                            ]
+                        )
+                    }
+
+                    it("returns mapped reviews") {
+                        let reviews = try? await sut.fetchReviews(movieId: 123)
+
+                        expect(reviews?.count) == 2
+
+                        let firstReview = reviews?.first
+                        expect(firstReview?.id) == "123"
+                        expect(firstReview?.author) == "John Doe"
+                        expect(firstReview?.content) == "Great movie!"
+                        expect(firstReview?.authorDetails?.rating) == 8.5
+
+                        let secondReview = reviews?.last
+                        expect(secondReview?.id) == "review2"
+                        expect(secondReview?.author) == "Jane Smith"
+                        expect(secondReview?.authorDetails).to(beNil())
+                    }
+
+                    it("makes the correct API call") {
+                        _ = try? await sut.fetchReviews(movieId: 123)
+
+                        expect(mockClient.fetchReviewsCallCount) == 1
+                    }
+                }
+
+                context("when the request fails") {
+                    beforeEach {
+                        mockClient.errorToThrow = NSError(domain: "test", code: -1)
+                    }
+
+                    it("propagates the error") {
+                        await expect {
+                            try await sut.fetchReviews(movieId: 123)
                         }.to(throwError())
                     }
                 }

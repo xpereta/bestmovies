@@ -16,9 +16,14 @@ extension ApiProvider {
     ) async throws -> T {
         let data = try await performRequest(urlRequest, delegate: delegate).data
 
-        guard let decoded = try? decoder.decode(resultType, from: data) else {
+        do {
+            let decoded = try decoder.decode(resultType, from: data)
+            return decoded
+        } catch let error {
+#if DEBUG
+            print("🚨 ApiProvider, decoding error: \(error)")
+#endif
             throw ApiProviderError.decodingFailed
         }
-        return decoded
     }
 }

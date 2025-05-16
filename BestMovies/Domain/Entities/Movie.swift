@@ -10,8 +10,7 @@ struct Movie: Identifiable {
 
     var posterURL: URL? {
         guard let posterPath else { return nil }
-        #warning("Poster URLs should be in configuration")
-        return URL(string: "https://image.tmdb.org/t/p/w500\(posterPath)")
+        return URL(string: "\(Configuration.posterBaseURL)\(posterPath)")
     }
 }
 

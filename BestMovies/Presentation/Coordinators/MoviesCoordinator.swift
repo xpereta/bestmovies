@@ -30,10 +30,11 @@ class Coordinator: ObservableObject {
 
             MovieListView(viewModel: viewModel)
         case .movieDetails(let id):
-            let useCase = Container.shared.getMovieDetailsUseCase()
-            let viewModel = MovieDetailViewModel(movieId: id, useCase: useCase)
+            let movieDetailsUseCase = Container.shared.getMovieDetailsUseCase()
+            let reviewsUseCase = Container.shared.getReviewsUseCase()
+            let movieDetailsViewModel = MovieDetailViewModel(movieId: id, getMovieDetailsUseCase: movieDetailsUseCase, getReviewsUseCase: reviewsUseCase)
 
-            MovieDetailView(viewModel: viewModel)
+            MovieDetailView(viewModel: movieDetailsViewModel)
         }
     }
 }

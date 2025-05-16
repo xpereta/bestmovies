@@ -4,6 +4,7 @@ extension TMDBAPI {
     protocol ClientType {
         func fetchMovies(page: Int, query: String?) async throws -> TMDBAPI.DTO.MovieResponse
         func fetchMovieDetails(_ id: Int) async throws -> TMDBAPI.DTO.MovieDetails
+        func fetchMovieReviews(movieId: Int) async throws -> TMDBAPI.DTO.ReviewResponse
     }
 
     struct Client: ClientType {
@@ -27,6 +28,12 @@ extension TMDBAPI {
             let movie = try await apiProvider.performRequest(request, decodeTo: TMDBAPI.DTO.MovieDetails.self)
 
             return movie
+        }
+
+        func fetchMovieReviews(movieId: Int) async throws -> TMDBAPI.DTO.ReviewResponse {
+            let request = try TMDBAPI.Endpoint.movieReviews(movieId: movieId, configuration: apiConfiguration).makeURLRequest()
+
+            return try await apiProvider.performRequest(request, decodeTo: TMDBAPI.DTO.ReviewResponse.self)
         }
     }
 }

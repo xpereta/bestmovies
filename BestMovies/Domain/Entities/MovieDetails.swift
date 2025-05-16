@@ -19,12 +19,12 @@ struct MovieDetails: Identifiable, Equatable {
 
     var posterURL: URL? {
         guard let posterPath = posterPath else { return nil }
-        return URL(string: "https://image.tmdb.org/t/p/w500\(posterPath)")
+        return URL(string: "\(Configuration.posterBaseURL)\(posterPath)")
     }
 
     var backdropURL: URL? {
         guard let backdropPath = backdropPath else { return nil }
-        return URL(string: "https://image.tmdb.org/t/p/original\(backdropPath)")
+        return URL(string: "\(Configuration.posterBaseURL)\(backdropPath)")
     }
 
     var runtimeFormatted: String? {

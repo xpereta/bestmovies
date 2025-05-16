@@ -17,7 +17,8 @@ class TMDBAPIEndpointSpec: QuickSpec {
                     let endpoints: [TMDBAPI.Endpoint] = [
                         .topRated(page: 1, configuration: configuration),
                         .searchMovies(query: "test", page: 1, configuration: configuration),
-                        .movie(id: 123, configuration: configuration)
+                        .movie(id: 123, configuration: configuration),
+                        .movieReviews(movieId: 123, configuration: configuration)
                     ]
 
                     endpoints.forEach { endpoint in
@@ -41,6 +42,11 @@ class TMDBAPIEndpointSpec: QuickSpec {
                     let endpoint = TMDBAPI.Endpoint.movie(id: 123, configuration: configuration)
                     expect(endpoint.path) == "/movie/123"
                 }
+
+                it("returns the correct path for movieReviews") {
+                    let endpoint = TMDBAPI.Endpoint.movieReviews(movieId: 123, configuration: configuration)
+                    expect(endpoint.path) == "/movie/123/reviews"
+                }
             }
 
             context("queryItems") {
@@ -48,7 +54,8 @@ class TMDBAPIEndpointSpec: QuickSpec {
                     let endpoints: [TMDBAPI.Endpoint] = [
                         .topRated(page: 1, configuration: configuration),
                         .searchMovies(query: "test", page: 1, configuration: configuration),
-                        .movie(id: 123, configuration: configuration)
+                        .movie(id: 123, configuration: configuration),
+                        .movieReviews(movieId: 123, configuration: configuration)
                     ]
 
                     endpoints.forEach { endpoint in
@@ -103,7 +110,9 @@ class TMDBAPIEndpointSpec: QuickSpec {
                         (.searchMovies(query: "test", page: 1, configuration: configuration),
                          "https://api.themoviedb.org/3/search/movie"),
                         (.movie(id: 123, configuration: configuration),
-                         "https://api.themoviedb.org/3/movie/123")
+                         "https://api.themoviedb.org/3/movie/123"),
+                        (.movieReviews(movieId: 123, configuration: configuration),
+                         "https://api.themoviedb.org/3/movie/123/reviews")
                     ]
 
                     endpoints.forEach { endpoint, expectedURLPrefix in

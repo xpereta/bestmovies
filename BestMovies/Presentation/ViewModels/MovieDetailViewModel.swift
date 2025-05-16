@@ -24,18 +24,20 @@ final class MovieDetailViewModel: MovieDetailViewModelType {
     enum State: Equatable {
         case idle
         case loading
-        case loaded(MovieDetails)
+        case loaded(MovieDetails, [Review])
         case error(String)
     }
 
     @Published private(set) var state: State = .idle
 
     private let getMovieDetailsUseCase: GetMovieDetailsUseCaseType
+    private let getReviewsUseCase: GetReviewsUseCaseType
     private let movieId: Int
 
-    init(movieId: Int, useCase: GetMovieDetailsUseCaseType) {
+    init(movieId: Int, getMovieDetailsUseCase: GetMovieDetailsUseCaseType, getReviewsUseCase: GetReviewsUseCaseType ) {
         self.movieId = movieId
-        getMovieDetailsUseCase = useCase
+        self.getMovieDetailsUseCase = getMovieDetailsUseCase
+        self.getReviewsUseCase = getReviewsUseCase
     }
 
     func loadMovie() {
@@ -47,10 +49,22 @@ final class MovieDetailViewModel: MovieDetailViewModelType {
         Task {
             do {
                 let movie = try await getMovieDetailsUseCase.execute(movieId: movieId)
-                state = .loaded(movie)
+                state = .loaded(movie, [])
+
+                loadReviews()
             } catch {
                 state = .error("Failed to load movie details: \(error.localizedDescription)")
             }
+        }
+    }
+
+    private func loadReviews() {
+        Task {
+            guard case .loaded(let movieDetails, _) = state else { return }
+
+            let reviews = try await getReviewsUseCase.execute(movieId: self.movieId)
+
+            state = .loaded(movieDetails, reviews)
         }
     }
 }

@@ -14,9 +14,18 @@ extension Container {
         }
     }
 
+    var getReviewsUseCase: Factory<GetReviewsUseCaseType> {
+        Factory(self) {
+            GetReviewsUseCase(repository: self.getMoviesRepository())
+        }
+    }
+
     var getMoviesRepository: Factory<MovieRepositoryType> {
         Factory(self) {
-            let apiConfiguration = TMDBConfiguration(baseURL: "https://api.themoviedb.org/3", apiKey: "97d24ffef95aebe28225de0c524590d9")
+            let apiConfiguration = TMDBConfiguration(
+                baseURL: Configuration.apiBaseURL,
+                apiKey: Configuration.apiKey
+            )
             return MovieRepository(apiClient: self.apiClient(apiConfiguration))
         }
     }

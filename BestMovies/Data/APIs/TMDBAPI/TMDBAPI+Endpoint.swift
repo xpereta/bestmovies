@@ -10,12 +10,14 @@ extension TMDBAPI {
         case topRated(page: Int, configuration: TMDBConfiguration)
         case searchMovies(query: String, page: Int, configuration: TMDBConfiguration)
         case movie(id: Int, configuration: TMDBConfiguration)
+        case movieReviews(movieId: Int, configuration: TMDBConfiguration)
 
         var baseURL: String {
             switch self {
             case .topRated(page: _, configuration: let configuration),
                  .searchMovies(query: _, page: _, configuration: let configuration),
-                 .movie(id: _, configuration: let configuration):
+                 .movie(id: _, configuration: let configuration),
+                 .movieReviews(movieId: _, configuration: let configuration):
                 return configuration.baseURL
             }
         }
@@ -28,6 +30,8 @@ extension TMDBAPI {
                 return "/search/movie"
             case .movie(id: let id, _):
                 return "/movie/\(id)"
+            case .movieReviews(movieId: let id, _):
+                return "/movie/\(id)/reviews"
             }
         }
 
@@ -44,7 +48,8 @@ extension TMDBAPI {
                     URLQueryItem(name: "query", value: query),
                     URLQueryItem(name: "page", value: String(page))
                 ])
-            case .movie(_, let configuration):
+            case .movie(_, let configuration),
+                 .movieReviews(_, let configuration):
                 items.append(URLQueryItem(name: "api_key", value: configuration.apiKey))
             }
 

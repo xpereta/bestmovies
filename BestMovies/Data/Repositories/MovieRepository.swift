@@ -14,6 +14,7 @@ enum MovieRepositoryError: LocalizedError {
 protocol MovieRepositoryType {
     func fetchMovies(page: Int, query: String?) async throws -> (movies: [Movie], hasMorePages: Bool)
     func fetchMovieDetails(_ id: Int) async throws -> MovieDetails
+    func fetchReviews(movieId: Int) async throws -> [Review]
 }
 
 struct MovieRepository: MovieRepositoryType {
@@ -36,5 +37,13 @@ struct MovieRepository: MovieRepositoryType {
         } catch ApiProviderError.failed(statusCode: 404) {
             throw MovieRepositoryError.movieNotFound(withId: id)
         }
+    }
+
+    func fetchReviews(movieId: Int) async throws -> [Review] {
+        let response = try await apiClient.fetchMovieReviews(movieId: movieId)
+
+        let reviews = ReviewMapper.mapList(response.results)
+
+        return reviews
     }
 }

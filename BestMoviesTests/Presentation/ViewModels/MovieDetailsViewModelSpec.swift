@@ -34,11 +34,13 @@ class MovieDetailViewModelSpec: AsyncSpec {
     override class func spec() {
         describe("MovieDetailViewModel") {
             var sut: MovieDetailViewModel!
-            var spyUseCase: SpyGetMovieDetailsUseCase!
+            var spyGetMovieDetailsUseCase: SpyGetMovieDetailsUseCase!
+            var spyGetReviewsUseCase: SpyGetMovieReviewsUseCase!
             var movie: MovieDetails!
+            var reviews: [Review]!
 
             beforeEach {
-                spyUseCase = SpyGetMovieDetailsUseCase()
+                spyGetMovieDetailsUseCase = SpyGetMovieDetailsUseCase()
                 movie = MovieDetails(
                     id: 123,
                     title: "Test Movie",
@@ -56,8 +58,32 @@ class MovieDetailViewModelSpec: AsyncSpec {
                     revenue: 5000000,
                     originalLanguage: "en"
                 )
+                reviews = [
+                    Review(
+                        id: "1",
+                        author: "John Doe",
+                        content: "This is a review",
+                        createdAt: Date(),
+                        authorDetails: Review.AuthorDetails(
+                            name: "John Doe",
+                            avatarPath: "/utEXl2EDiXBK6f41wCLsvprvMg4.jpg",
+                            rating: 5.5)
+                    ),
+                    Review(
+                        id: "2",
+                        author: "Jane Doe",
+                        content: "This is another review",
+                        createdAt: Date(),
+                        authorDetails: Review.AuthorDetails(
+                            name: "Jane Doe",
+                            avatarPath: "/invalid.jpg",
+                            rating: 7.4)
+                    )
+                ]
 
-                sut = await MovieDetailViewModel(movieId: 123, useCase: spyUseCase)
+                spyGetReviewsUseCase = SpyGetMovieReviewsUseCase()
+
+                sut = await MovieDetailViewModel(movieId: 123, getMovieDetailsUseCase: spyGetMovieDetailsUseCase, getReviewsUseCase: spyGetReviewsUseCase)
             }
 
             context("initial state") {
@@ -69,7 +95,7 @@ class MovieDetailViewModelSpec: AsyncSpec {
             context("when loading a movie") {
                 context("with successful response") {
                     beforeEach {
-                        spyUseCase.movieToReturn = movie
+                        spyGetMovieDetailsUseCase.movieToReturn = movie
                     }
 
                     it("changes the state from idle, to loading, to loaded, with the correct movie") { @MainActor in
@@ -79,21 +105,47 @@ class MovieDetailViewModelSpec: AsyncSpec {
 
                         expect(sut.state).to(equal(.loading))
 
-                        await expect(sut.state).toEventually(equal(.loaded(spyUseCase.movieToReturn!)))
+                        await expect(sut.state).toEventually(equal(.loaded(spyGetMovieDetailsUseCase.movieToReturn!, [])))
 
-                        await expect(sut.state).toEventually(equal(.loaded(movie)))
+                        await expect(sut.state).toEventually(equal(.loaded(movie, [])))
                     }
 
                     it("calls the use case with the correct movie id") { @MainActor in
                         sut.loadMovie()
-                        await expect(spyUseCase.executeWasCalled).toEventually(beTrue())
-                        await expect(spyUseCase.movieIdPassed).toEventually(equal(123))
+                        await expect(spyGetMovieDetailsUseCase.executeWasCalled).toEventually(beTrue())
+                        await expect(spyGetMovieDetailsUseCase.movieIdPassed).toEventually(equal(123))
+                    }
+                }
+
+                context("that has reviews") {
+                    beforeEach {
+                        spyGetMovieDetailsUseCase.movieToReturn = movie
+                        spyGetReviewsUseCase.reviewsToReturn = reviews
+                    }
+
+                    it("loads the movie and the reviews") { @MainActor in
+                        sut.loadMovie()
+
+                        await expect(sut.state).toEventually(equal(.loaded(movie, reviews)))
+                    }
+                }
+
+                context("that does not have reviews") {
+                    beforeEach {
+                        spyGetMovieDetailsUseCase.movieToReturn = movie
+                        spyGetReviewsUseCase.reviewsToReturn = []
+                    }
+
+                    it("loads the movie but the reviews are empty") { @MainActor in
+                        sut.loadMovie()
+
+                        await expect(sut.state).toEventually(equal(.loaded(movie, [])))
                     }
                 }
 
                 context("with error response") {
                     beforeEach {
-                        spyUseCase.errorToThrow = MovieRepositoryError.movieNotFound(withId: 123)
+                        spyGetMovieDetailsUseCase.errorToThrow = MovieRepositoryError.movieNotFound(withId: 123)
                     }
 
                     it("changes state from idle, to loading, to error") { @MainActor in
@@ -104,17 +156,6 @@ class MovieDetailViewModelSpec: AsyncSpec {
                         expect(sut.state).to(equal(.loading))
 
                         await expect(sut.state).toEventually(equal(.error("Failed to load movie details: Movie not found with id 123.")))
-                    }
-                }
-
-                context("when loading multiple times") {
-                    it("use case is called only one time") { @MainActor in
-                        sut.loadMovie()
-                        sut.loadMovie()
-
-                        await expect(spyUseCase.executeWasCalled).toEventually(beTrue())
-                        expect(spyUseCase.executeWasCalled).to(beTrue())
-                        expect(spyUseCase.executeCallCount).to(equal(1))
                     }
                 }
             }

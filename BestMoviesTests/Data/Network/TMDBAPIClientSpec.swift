@@ -186,6 +186,118 @@ class TMDBAPIClientSpec: AsyncSpec {
                     }
                 }
             }
+
+            context("fetchMovieReviews") {
+                let validResponse = """
+                {
+                    "results": [
+                        {
+                            "id": "1",
+                            "author": "John Doe",
+                            "content": "A good movie",
+                            "created_at": "2021-06-23T15:58:13.726Z",
+                            "author_details": {
+                                "name": "John",
+                                "avatar_path": "/avatar.jpg",
+                                "rating": 8.5
+                            }
+                        },
+                        {
+                            "id": "2",
+                            "author": "Jane Smith",
+                            "content": "Amazing!",
+                            "created_at": "2021-09-18T19:56:48.348Z"
+                        }
+                    ]
+                }
+                """
+
+                let invalidResponse = """
+                    Clearly not a JSON response
+                """
+
+                let undecodableResponse = """
+                {
+                    "results": [
+                        {
+                            "id": "1",
+                            "author": "John Doe",
+                            "content": "A good movie",
+                            "created_at": "2021-06-23T15:58:13.726Z",
+                            "author_details": {
+                                "name": "John",
+                                "avatar_path": "/avatar.jpg",
+                                "rating": "Clearly not a double"
+                            }
+                        }
+                    ]
+                }
+                """
+
+                context("when fetching movie reviews") {
+                    beforeEach {
+                        spyProvider.dataToReturn = Data(validResponse.utf8)
+                    }
+
+                    it("makes request with correct URL and parameters") {
+                        _ = try await sut.fetchMovieReviews(movieId: 123)
+
+                        let url = spyProvider.lastRequest?.url?.absoluteString
+                        expect(url).to(contain("https://api.test.com/movie/123/reviews"))
+                        expect(url).to(contain("api_key=test-api-key"))
+                    }
+
+                    it("returns parsed review response") {
+                        let response = try await sut.fetchMovieReviews(movieId: 123)
+
+                        expect(response.results).to(haveCount(2))
+                        let review = response.results.first
+                        expect(review?.id) == "1"
+                        expect(review?.author) == "John Doe"
+                        expect(review?.content) == "A good movie"
+                        expect(review?.createdAt) == "2021-06-23T15:58:13.726Z"
+                        expect(review?.authorDetails?.name) == "John"
+                        expect(review?.authorDetails?.avatarPath) == "/avatar.jpg"
+                        expect(review?.authorDetails?.rating) == 8.5
+                    }
+                }
+
+                context("when receiving invalid response") {
+                    beforeEach {
+                        spyProvider.dataToReturn = Data(invalidResponse.utf8)
+                    }
+
+                    it("in throws an error") {
+                        await expect {
+                            try await sut.fetchMovieReviews(movieId: 123)
+                        }.to(throwError())
+                    }
+                }
+
+                context("when receiving response that is not decodable") {
+                    beforeEach {
+                        spyProvider.dataToReturn = Data(undecodableResponse.utf8)
+                    }
+
+                    it("in throws an error") {
+                        await expect {
+                            try await sut.fetchMovieReviews(movieId: 123)
+                        }.to(throwError(ApiProviderError.decodingFailed.self))
+                    }
+                }
+
+                context("when api provider throws any another error") {
+                    beforeEach {
+                        spyProvider.errorToThrow = NSError(domain: "test", code: -1)
+                    }
+
+                    it("propagates the error") {
+                        await expect {
+                            try await sut.fetchMovieReviews(movieId: 123)
+                        }.to(throwError())
+                    }
+                }
+            }
         }
     }
 }
