@@ -67,10 +67,14 @@ There's no question that a motivated attacker will eventually get hold of our AP
 
 Additional layers with obfuscation and encryption can be added even when using `.xconfig` files But usually our risk assessment will point us to a more robust solution as described next.
 
-## Protect the keys by not exposing them to clients
+### Protect the keys by not exposing them to clients
 When a significant risk exists as a result of exposing our API keys it's usually a good solution to create our own backend proxy. This proxy uses the API key that is only available server-side, receives mobile client requests, and uses this server-side API key to performs the queries agains the third party API.
 
 As we control this backend proxy we can can implement more robust security using:
 - OAuth 2.0 authentication
 - SLL certificate pinning
 - App Attest using DeviceCheck services
+
+## Demo
+
+![BestMovies Demo](docs/images/BestMovies_recording.gif)
