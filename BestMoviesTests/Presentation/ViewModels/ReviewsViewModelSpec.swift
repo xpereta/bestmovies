@@ -26,6 +26,7 @@ class SpyGetMovieReviewsUseCase: GetReviewsUseCaseType {
 }
 
 class ReviewsViewModelSpec: AsyncSpec {
+    // swiftlint:disable:next function_body_length
     override class func spec() {
         describe("ReviewsViewModel") {
             var sut: ReviewsViewModel!
