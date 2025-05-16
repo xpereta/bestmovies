@@ -1,22 +1,5 @@
 import Foundation
 
-enum MovieRepositoryError: LocalizedError {
-    case movieNotFound(withId: Int)
-
-    var errorDescription: String? {
-        switch self {
-        case .movieNotFound(let withId):
-            return "Movie not found with id \(withId)."
-        }
-    }
-}
-
-protocol MovieRepositoryType {
-    func fetchMovies(page: Int, query: String?) async throws -> (movies: [Movie], hasMorePages: Bool)
-    func fetchMovieDetails(_ id: Int) async throws -> MovieDetails
-    func fetchReviews(movieId: Int) async throws -> [Review]
-}
-
 struct MovieRepository: MovieRepositoryType {
     let apiClient: TMDBAPI.ClientType
 
