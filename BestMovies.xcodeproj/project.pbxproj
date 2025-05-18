@@ -34,6 +34,7 @@
 		475377EA2DCA5487004B69CC /* BestMovies.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BestMovies.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		475377FD2DCA5489004B69CC /* BestMoviesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BestMoviesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		475378072DCA5489004B69CC /* BestMoviesUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BestMoviesUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		47D3EBCE2DD9F2240059B8B6 /* Networking */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Networking; path = packages/Networking; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -86,6 +87,7 @@
 		475377E12DCA5487004B69CC = {
 			isa = PBXGroup;
 			children = (
+				47D3EBCE2DD9F2240059B8B6 /* Networking */,
 				475377EC2DCA5487004B69CC /* BestMovies */,
 				475378002DCA5489004B69CC /* BestMoviesTests */,
 				4753780A2DCA5489004B69CC /* BestMoviesUITests */,
