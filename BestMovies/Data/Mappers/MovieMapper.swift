@@ -1,4 +1,5 @@
 import Foundation
+import TMDBAPI
 
 struct MovieMapper {
     private static let dateFormatter = {

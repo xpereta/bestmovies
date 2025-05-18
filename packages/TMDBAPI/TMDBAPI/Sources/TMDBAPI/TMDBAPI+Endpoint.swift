@@ -1,19 +1,24 @@
 import Foundation
 import Networking
 
-struct TMDBConfiguration {
-    let baseURL: String
-    let apiKey: String
+public struct TMDBConfiguration {
+    public let baseURL: String
+    public let apiKey: String
+
+    public init(baseURL: String, apiKey: String) {
+        self.baseURL = baseURL
+        self.apiKey = apiKey
+    }
 }
 
-extension TMDBAPI {
+public extension TMDBAPI {
     enum Endpoint: ApiEndpoint {
         case topRated(page: Int, configuration: TMDBConfiguration)
         case searchMovies(query: String, page: Int, configuration: TMDBConfiguration)
         case movie(id: Int, configuration: TMDBConfiguration)
         case movieReviews(movieId: Int, configuration: TMDBConfiguration)
 
-        var baseURL: String {
+        public var baseURL: String {
             switch self {
             case .topRated(page: _, configuration: let configuration),
                  .searchMovies(query: _, page: _, configuration: let configuration),
@@ -23,7 +28,7 @@ extension TMDBAPI {
             }
         }
 
-        var path: String {
+        public var path: String {
             switch self {
             case .topRated:
                 return "/movie/top_rated"
@@ -36,7 +41,7 @@ extension TMDBAPI {
             }
         }
 
-        var queryItems: [URLQueryItem] {
+        public var queryItems: [URLQueryItem] {
             var items = [URLQueryItem]()
 
             switch self {

@@ -2,6 +2,7 @@
 import Foundation
 import Nimble
 import Quick
+import TMDBAPI
 
 class GenreMapperSpec: QuickSpec {
     override class func spec() {

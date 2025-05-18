@@ -1,4 +1,5 @@
 import Foundation
+import TMDBAPI
 
 struct ReviewMapper {
     private static let dateFormatter = {

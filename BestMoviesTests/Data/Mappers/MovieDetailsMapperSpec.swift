@@ -2,6 +2,7 @@
 import Foundation
 import Nimble
 import Quick
+import TMDBAPI
 
 class MovieDetailsMapperSpec: QuickSpec {
     // swiftlint:disable:next function_body_length
