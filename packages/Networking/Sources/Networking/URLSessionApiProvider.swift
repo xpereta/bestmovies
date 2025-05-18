@@ -1,6 +1,6 @@
 import Foundation
 
-protocol URLSessionProtocol {
+public protocol URLSessionProtocol {
     func data(
         for request: URLRequest,
         delegate: URLSessionTaskDelegate?
@@ -9,14 +9,14 @@ protocol URLSessionProtocol {
 
 extension URLSession: URLSessionProtocol {}
 
-final class URLSessionApiProvider: ApiProvider {
+public final class URLSessionApiProvider: ApiProvider {
     private let urlSession: URLSessionProtocol
 
-    init(urlSession: URLSessionProtocol = URLSession.shared) {
+    public init(urlSession: URLSessionProtocol = URLSession.shared) {
         self.urlSession = urlSession
     }
 
-    func performRequest(
+    public func performRequest(
         _ urlRequest: URLRequest,
         delegate: URLSessionTaskDelegate? = nil,
     ) async throws -> (data: Data, urlResponse: URLResponse) {

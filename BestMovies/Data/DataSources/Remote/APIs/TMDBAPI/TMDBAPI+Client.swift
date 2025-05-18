@@ -1,4 +1,5 @@
 import Foundation
+import Networking
 
 extension TMDBAPI {
     protocol ClientType {

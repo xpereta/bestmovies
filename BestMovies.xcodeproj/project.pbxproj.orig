@@ -138,8 +138,11 @@
 			name = BestMovies;
 			packageProductDependencies = (
 				476377822DD5DCFC00F60DF3 /* FactoryKit */,
-				47D3EBD32DD9F7400059B8B6 /* Networking */,
+<<<<<<< HEAD
 				47043A2C2DE4966200D2BAA3 /* AsyncAlgorithms */,
+=======
+				47D3EBD32DD9F7400059B8B6 /* Networking */,
+>>>>>>> 6e531c9 (Move networking code to Networking package)
 			);
 			productName = BestMovies;
 			productReference = 475377EA2DCA5487004B69CC /* BestMovies.app */;
