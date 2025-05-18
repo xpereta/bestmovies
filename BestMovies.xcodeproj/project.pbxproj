@@ -10,6 +10,7 @@
 		475502F92DCA68FD00863B5D /* Quick in Frameworks */ = {isa = PBXBuildFile; productRef = 475502F82DCA68FD00863B5D /* Quick */; };
 		475503002DCA69F700863B5D /* Nimble in Frameworks */ = {isa = PBXBuildFile; productRef = 475502FF2DCA69F700863B5D /* Nimble */; };
 		476377832DD5DCFC00F60DF3 /* FactoryKit in Frameworks */ = {isa = PBXBuildFile; productRef = 476377822DD5DCFC00F60DF3 /* FactoryKit */; };
+		47D3EBD42DD9F7400059B8B6 /* Networking in Frameworks */ = {isa = PBXBuildFile; productRef = 47D3EBD32DD9F7400059B8B6 /* Networking */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +60,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				47D3EBD42DD9F7400059B8B6 /* Networking in Frameworks */,
 				476377832DD5DCFC00F60DF3 /* FactoryKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -89,6 +91,7 @@
 				475377EC2DCA5487004B69CC /* BestMovies */,
 				475378002DCA5489004B69CC /* BestMoviesTests */,
 				4753780A2DCA5489004B69CC /* BestMoviesUITests */,
+				47D3EBD22DD9F7400059B8B6 /* Frameworks */,
 				475377EB2DCA5487004B69CC /* Products */,
 			);
 			sourceTree = "<group>";
@@ -101,6 +104,13 @@
 				475378072DCA5489004B69CC /* BestMoviesUITests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		47D3EBD22DD9F7400059B8B6 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -126,6 +136,7 @@
 			name = BestMovies;
 			packageProductDependencies = (
 				476377822DD5DCFC00F60DF3 /* FactoryKit */,
+				47D3EBD32DD9F7400059B8B6 /* Networking */,
 			);
 			productName = BestMovies;
 			productReference = 475377EA2DCA5487004B69CC /* BestMovies.app */;
@@ -704,6 +715,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 476377812DD5DCFC00F60DF3 /* XCRemoteSwiftPackageReference "Factory" */;
 			productName = FactoryKit;
+		};
+		47D3EBD32DD9F7400059B8B6 /* Networking */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Networking;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

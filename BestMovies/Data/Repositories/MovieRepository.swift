@@ -1,4 +1,5 @@
 import Foundation
+import Networking
 
 struct MovieRepository: MovieRepositoryType {
     let apiClient: TMDBAPI.ClientType

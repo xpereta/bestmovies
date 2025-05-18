@@ -1,13 +1,13 @@
 import Foundation
 
-protocol ApiProvider {
+public protocol ApiProvider {
     func performRequest(
         _ urlRequest: URLRequest,
         delegate: URLSessionTaskDelegate?
     ) async throws -> (data: Data, urlResponse: URLResponse)
 }
 
-extension ApiProvider {
+public extension ApiProvider {
     func performRequest<T: Decodable>(
         _ urlRequest: URLRequest,
         delegate: URLSessionTaskDelegate? = nil,

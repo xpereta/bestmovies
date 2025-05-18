@@ -1,4 +1,6 @@
-enum ApiProviderError: Error {
+import Foundation
+
+public enum ApiProviderError: Error {
     case invalidURL
     case invalidResponse
     case failed(statusCode: Int)
