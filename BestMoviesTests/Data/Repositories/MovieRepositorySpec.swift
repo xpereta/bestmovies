@@ -1,5 +1,6 @@
 @testable import BestMovies
 import Foundation
+import Networking
 import Nimble
 import Quick
 
