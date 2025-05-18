@@ -1,9 +1,8 @@
-@testable import BestMovies
 import Foundation
 import Networking
 import Nimble
 import Quick
-import TMDBAPI
+@testable import TMDBAPI
 
 class SpyApiProvider: ApiProvider {
     var dataToReturn: Data = Data()

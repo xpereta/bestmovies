@@ -1,9 +1,8 @@
-@testable import BestMovies
 import Foundation
 import Networking
 import Nimble
 import Quick
-import TMDBAPI
+@testable import TMDBAPI
 
 class TMDBAPIEndpointSpec: QuickSpec {
     // swiftlint:disable:next function_body_length

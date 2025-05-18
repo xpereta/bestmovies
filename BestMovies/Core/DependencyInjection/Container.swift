@@ -1,6 +1,7 @@
 import FactoryKit
 import Foundation
 import Networking
+import TMDBAPI
 
 extension Container {
     var getMoviesUseCase: Factory<GetMoviesUseCaseType> {

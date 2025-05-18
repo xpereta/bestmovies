@@ -1,4 +1,5 @@
 import Foundation
+import TMDBAPI
 
 struct MovieMapper {
     private let dateParseStrategy: Date.ParseStrategy

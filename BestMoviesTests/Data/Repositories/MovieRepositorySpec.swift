@@ -3,6 +3,7 @@ import Foundation
 import Networking
 import Nimble
 import Quick
+import TMDBAPI
 
 class MockTMDBAPIClient: TMDBAPI.ClientType {
     var movieResponseToReturn: TMDBAPI.DTO.MovieResponse?
@@ -58,7 +59,7 @@ class MockTMDBAPIClient: TMDBAPI.ClientType {
         )
     }
 
-    func fetchMovieReviews(movieId: Int) async throws -> BestMovies.TMDBAPI.DTO.ReviewResponse {
+    func fetchMovieReviews(movieId: Int) async throws -> TMDBAPI.DTO.ReviewResponse {
         fetchReviewsCallCount += 1
 
         if let error = errorToThrow {

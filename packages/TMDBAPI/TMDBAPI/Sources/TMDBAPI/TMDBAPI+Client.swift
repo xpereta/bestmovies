@@ -1,7 +1,7 @@
 import Foundation
 import Networking
 
-extension TMDBAPI {
+public extension TMDBAPI {
     protocol ClientType {
         func fetchMovies(page: Int, query: String?) async throws -> TMDBAPI.DTO.MovieResponse
         func fetchMovieDetails(_ id: Int) async throws -> TMDBAPI.DTO.MovieDetails
@@ -12,7 +12,12 @@ extension TMDBAPI {
         let apiProvider: ApiProvider
         let apiConfiguration: TMDBConfiguration
 
-        func fetchMovies(page: Int, query: String?) async throws -> TMDBAPI.DTO.MovieResponse {
+        public init(apiProvider: ApiProvider, apiConfiguration: TMDBConfiguration) {
+            self.apiProvider = apiProvider
+            self.apiConfiguration = apiConfiguration
+        }
+
+        public func fetchMovies(page: Int, query: String?) async throws -> TMDBAPI.DTO.MovieResponse {
             let request: URLRequest
 
             if let query = query, !query.isEmpty {
@@ -24,14 +29,14 @@ extension TMDBAPI {
             return try await apiProvider.performRequest(request, decodeTo: TMDBAPI.DTO.MovieResponse.self)
         }
 
-        func fetchMovieDetails(_ id: Int) async throws -> TMDBAPI.DTO.MovieDetails {
+        public func fetchMovieDetails(_ id: Int) async throws -> TMDBAPI.DTO.MovieDetails {
             let request = try TMDBAPI.Endpoint.movie(id: id, configuration: apiConfiguration).makeURLRequest()
             let movie = try await apiProvider.performRequest(request, decodeTo: TMDBAPI.DTO.MovieDetails.self)
 
             return movie
         }
 
-        func fetchMovieReviews(movieId: Int) async throws -> TMDBAPI.DTO.ReviewResponse {
+        public func fetchMovieReviews(movieId: Int) async throws -> TMDBAPI.DTO.ReviewResponse {
             let request = try TMDBAPI.Endpoint.movieReviews(movieId: movieId, configuration: apiConfiguration).makeURLRequest()
 
             return try await apiProvider.performRequest(request, decodeTo: TMDBAPI.DTO.ReviewResponse.self)
