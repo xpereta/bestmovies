@@ -27,39 +27,52 @@ This project uses Swift Package Manager to manage the following third party depe
 
 ## Functional description
 BestMovies is an iOS application that allows users to browse the top rated movies from The Movie Database (TMDB). It consists of a main list view of movies, including a search bar, and a child view that displays movie details.
+
 ## Architecture approach
 The app follows Clean Architecture principles with a pragmatic approach. The current state provides reasonable separation of concerns and would allow different teams to work independently on features and layers. The tradeoffs would need to be evaluated if additional additional abstractions and complexity would bring benefits, for example to adapt to the needs of the product, team organization or ways of working.
+
 ### Domain layer
 A Domain layer holds use cases that hold business logic and data model entities. The business logic is inherently simple because most of the functionality is delegated to queries performed to the TMDB API. However, having this layer provides a reasonable foundation for growth and easy maintenance.
+
 ### Presentation layer
 Provides the facilities to present information to the user and receive their actions. Follows the MVVM architectural pattern with the views implemented in SwiftUI.
 
+This layer depends on the Domain layer.
+
+#### Coordinator
 The Coordinator pattern is used to facilitate navigation, so each view is agnostic of the details of navigation and their position in the view hierarchy. This will enable teams to work independently on features more easily and enable view reutilisation and composition.
 
-The presentation layer uses Domain entities directly. This is a conscious pragmatic decision for simplicity, as the current presentation is heavily influenced by the Domain entities structure (in turn closely matches the Data source DTO), with little formatting needed. Once the needs of the product evolve and views become more complex, it should be considered if the effort to add view specific data entities and mapping infrastructure is deserved. 
+#### View Entities
+The presentation layer uses Domain entities directly as view entities. This is a conscious pragmatic decision for simplicity, as the current presentation is heavily influenced by the Domain entities structure (in turn closely matches the Data source DTO), with little formatting needed. Once the needs of the product evolve and views become more complex, it should be considered if the effort to add view specific data entities and mapping infrastructure is deserved. 
 
-This layer depends on the Domain layer.
+#### View model state
+A state enum is useed to keep track of the states that the view will experience: idle, loading, loaded, error.
+
+The data associated to each state is also embedded into the same enum. Having a single state poperty instead of several properties that define the configuration of the the view is very useful in our case. As it communicates clearly what combinations of values are valid. For example, the array that holds the values to display is only present in the `loaded` state. This makes understanding the flow and testing very straightforward, for example combinations of values that are not valid are simply not possible.  
+
 ### Data layer
 Provides access to data through repositories and access to external data sources through APIs. And importantly, the mappers to convert the objects received from external data sources to the domain entities.
 This layer only depends on the Domain layer.
+
 ### Infrastructure layer
 Implements the interfaces to access data through the network.
+
 ### Dependency injection
 Dependency injection is used as the creational pattern, following a Container-Based approach.
 The implementation is pragmatic, and provides the minimum infrastructure to provide a centralized point for the configuration and creation and composition of all objects from all layers.
 The dependency injection is also the place that reads configuration values and injects them when they are needed (namely API URLs and API authentication key)
 
 ## Testing
-
 Tests are written using Quick and Nimble. This leads to a natural description of test cases and expectations, that are easy to understand in a BDD style.
-## Security
 
+## Security
 Security should start with threat and risk assessment to guide our strategy. In this case the main risk is that an attacker gets hold of our third party API key and abuses it or accesses data on our behalf.
 
 ### Protecting the keys during development
 Care must be taken not to expose the API key in source code repositories. To this effect in this project the API key is only available in a configuration source code file `Configuration.swift` that each developer must create from a template and provide the API key value. This file is ignored by git and should never be committed. 
 
 When building our apps in our CI/CD infrastructure the API key can be stored securely (for example using Github Actions secrets). And only injected during the build step.
+
 ### Protecting the keys in production
 On apps that we distribute to customers, protecting the keys is unfortunately a lost battle due to the nature of how the binaries a generated and the app resources packaged and distributed.
 
