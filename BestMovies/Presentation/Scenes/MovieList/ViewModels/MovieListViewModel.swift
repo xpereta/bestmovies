@@ -1,3 +1,4 @@
+import AsyncAlgorithms
 import Combine
 import Foundation
 
@@ -51,13 +52,16 @@ final class MovieListViewModel: MovieListViewModelType {
 
     private func setupSearchSubscription() {
         print("🧠 MovieListViewModel: setupSearchSubscription")
-        $searchText
-            .debounce(for: .seconds(0.5), scheduler: DispatchQueue.main)
-            .removeDuplicates()
-            .sink { [weak self] _ in
-                self?.resetAndLoad()
+        Task {
+            let asyncSearch = $searchText
+                .values
+                .debounce(for: .seconds(0.5))
+                .removeDuplicates()
+            
+            for await _ in asyncSearch {
+                self.resetAndLoad()
             }
-            .store(in: &cancellables)
+        }
     }
 
     func startLoading() {
