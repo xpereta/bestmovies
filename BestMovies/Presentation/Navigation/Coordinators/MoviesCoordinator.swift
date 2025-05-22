@@ -6,8 +6,12 @@ enum AppPage: Hashable {
     case movieDetails(Int)
 }
 
+@MainActor
 class Coordinator: ObservableObject {
     @Published var path: NavigationPath = NavigationPath()
+
+    lazy var getMoviesUseCase = Container.shared.getMoviesUseCase()
+    lazy var moviesListViewModel = MovieListViewModel(useCase: getMoviesUseCase)
 
     func push(page: AppPage) {
         path.append(page)
@@ -25,10 +29,7 @@ class Coordinator: ObservableObject {
     func build(page: AppPage) -> some View {
         switch page {
         case .moviesList:
-            let useCase = Container.shared.getMoviesUseCase()
-            let viewModel = MovieListViewModel(useCase: useCase)
-
-            MovieListView(viewModel: viewModel)
+            MovieListView(viewModel: self.moviesListViewModel)
         case .movieDetails(let id):
             let movieDetailsUseCase = Container.shared.getMovieDetailsUseCase()
             let reviewsUseCase = Container.shared.getReviewsUseCase()
