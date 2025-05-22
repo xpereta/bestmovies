@@ -48,23 +48,15 @@ final class MovieDetailViewModel: MovieDetailViewModelType {
 
         Task {
             do {
-                let movie = try await getMovieDetailsUseCase.execute(movieId: movieId)
-                state = .loaded(movie, [])
+                async let movieResult = try await getMovieDetailsUseCase.execute(movieId: movieId)
+                async let reviewsResult = try await getReviewsUseCase.execute(movieId: self.movieId)
 
-                loadReviews()
+                let (movie, reviews) = try await (movieResult, reviewsResult)
+
+                state = .loaded(movie, reviews)
             } catch {
                 state = .error("Failed to load movie details: \(error.localizedDescription)")
             }
-        }
-    }
-
-    private func loadReviews() {
-        Task {
-            guard case .loaded(let movieDetails, _) = state else { return }
-
-            let reviews = try await getReviewsUseCase.execute(movieId: self.movieId)
-
-            state = .loaded(movieDetails, reviews)
         }
     }
 }
