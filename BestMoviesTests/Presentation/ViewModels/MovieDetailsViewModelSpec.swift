@@ -158,6 +158,20 @@ class MovieDetailViewModelSpec: AsyncSpec {
                         await expect(sut.state).toEventually(equal(.error("Failed to load movie details: Movie not found with id 123.")))
                     }
                 }
+
+                context("when loading multiple times") {
+                    it("use case is called only one time") {
+                        await withTaskGroup(of: Void.self) { group in
+                            group.addTask { await sut.loadMovie() }
+                            group.addTask { await sut.loadMovie() }
+                            group.addTask { await sut.loadMovie() }
+                            group.addTask { await sut.loadMovie() }
+                        }
+
+                        await expect(spyGetMovieDetailsUseCase.executeWasCalled).toEventually(beTrue())
+                        expect(spyGetMovieDetailsUseCase.executeCallCount).to(equal(1))
+                    }
+                }
             }
         }
     }
