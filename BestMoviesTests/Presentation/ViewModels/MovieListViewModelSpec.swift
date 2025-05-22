@@ -97,6 +97,20 @@ class MovieListViewModelSpec: AsyncSpec {
                     }
                 }
 
+                context("when loading multiple times") {
+                    it("use case is called only one time") {
+                        await withTaskGroup(of: Void.self) { group in
+                            group.addTask { await sut.startLoading() }
+                            group.addTask { await sut.startLoading() }
+                            group.addTask { await sut.startLoading() }
+                            group.addTask { await sut.startLoading() }
+                        }
+
+                        await expect(spyUseCase.executeWasCalled).toEventually(beTrue())
+                        expect(spyUseCase.executeCallCount).to(equal(1))
+                    }
+                }
+
                 context("when loading next page") {
                     beforeEach {
                         spyUseCase.moviesToReturn = testMovies
