@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		47043A2D2DE4966200D2BAA3 /* AsyncAlgorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 47043A2C2DE4966200D2BAA3 /* AsyncAlgorithms */; };
 		475502F92DCA68FD00863B5D /* Quick in Frameworks */ = {isa = PBXBuildFile; productRef = 475502F82DCA68FD00863B5D /* Quick */; };
 		475503002DCA69F700863B5D /* Nimble in Frameworks */ = {isa = PBXBuildFile; productRef = 475502FF2DCA69F700863B5D /* Nimble */; };
 		476377832DD5DCFC00F60DF3 /* FactoryKit in Frameworks */ = {isa = PBXBuildFile; productRef = 476377822DD5DCFC00F60DF3 /* FactoryKit */; };
@@ -59,6 +60,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				476377832DD5DCFC00F60DF3 /* FactoryKit in Frameworks */,
+				47043A2D2DE4966200D2BAA3 /* AsyncAlgorithms in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -124,6 +126,7 @@
 			name = BestMovies;
 			packageProductDependencies = (
 				476377822DD5DCFC00F60DF3 /* FactoryKit */,
+				47043A2C2DE4966200D2BAA3 /* AsyncAlgorithms */,
 			);
 			productName = BestMovies;
 			productReference = 475377EA2DCA5487004B69CC /* BestMovies.app */;
@@ -213,6 +216,7 @@
 				475502F72DCA68FD00863B5D /* XCRemoteSwiftPackageReference "Quick" */,
 				475502FE2DCA69F700863B5D /* XCRemoteSwiftPackageReference "Nimble" */,
 				476377812DD5DCFC00F60DF3 /* XCRemoteSwiftPackageReference "Factory" */,
+				47043A2B2DE4966200D2BAA3 /* XCRemoteSwiftPackageReference "swift-async-algorithms" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 475377EB2DCA5487004B69CC /* Products */;
@@ -661,6 +665,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		47043A2B2DE4966200D2BAA3 /* XCRemoteSwiftPackageReference "swift-async-algorithms" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-async-algorithms.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.4;
+			};
+		};
 		475502F72DCA68FD00863B5D /* XCRemoteSwiftPackageReference "Quick" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Quick/Quick.git";
@@ -688,6 +700,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		47043A2C2DE4966200D2BAA3 /* AsyncAlgorithms */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 47043A2B2DE4966200D2BAA3 /* XCRemoteSwiftPackageReference "swift-async-algorithms" */;
+			productName = AsyncAlgorithms;
+		};
 		475502F82DCA68FD00863B5D /* Quick */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 475502F72DCA68FD00863B5D /* XCRemoteSwiftPackageReference "Quick" */;

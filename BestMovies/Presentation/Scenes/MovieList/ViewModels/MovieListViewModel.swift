@@ -1,3 +1,4 @@
+import AsyncAlgorithms
 import Combine
 import Foundation
 
@@ -20,7 +21,7 @@ protocol MovieListViewModelType: ObservableObject {
 @MainActor
 final class StubMovieListViewModel: MovieListViewModelType {
     @Published var state: MoviesListViewState
-    @Published var searchText: String
+    @Published var searchText: String = ""
 
     init(state: MoviesListViewState, searchText: String = "") {
         self.state = state
@@ -34,30 +35,39 @@ final class StubMovieListViewModel: MovieListViewModelType {
 @MainActor
 final class MovieListViewModel: MovieListViewModelType {
     @Published private(set) var state: MoviesListViewState = .idle
-    @Published var searchText: String = ""
+    @Published var searchText: String = "" {
+        didSet {
+            continuation.yield(searchText)
+        }
+    }
+
+    let (textStream, continuation) = AsyncStream.makeStream(of: String.self)
 
     private let useCase: GetMoviesUseCaseType
     private var loadTask: Task<Void, Never>?
     private var cancellables = Set<AnyCancellable>()
 
+    private var searchTask: Task<Void, Never>!
+
     init(useCase: GetMoviesUseCaseType) {
         self.useCase = useCase
-        setupSearchSubscription()
+        setupSearchTask()
     }
 
     deinit {
         cancellables.removeAll()
     }
 
-    private func setupSearchSubscription() {
-        print("🧠 MovieListViewModel: setupSearchSubscription")
-        $searchText
-            .debounce(for: .seconds(0.5), scheduler: DispatchQueue.main)
-            .removeDuplicates()
-            .sink { [weak self] _ in
-                self?.resetAndLoad()
+    private func setupSearchTask() {
+        searchTask = Task {
+            for await searchText in self.textStream {
+                guard !searchText.isEmpty else {
+                    continue
+                }
+
+                self.resetAndLoad()
             }
-            .store(in: &cancellables)
+        }
     }
 
     func startLoading() {
