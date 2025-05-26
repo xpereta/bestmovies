@@ -60,7 +60,7 @@ final class MovieListViewModel: MovieListViewModelType {
 
     private func setupSearchTask() {
         searchTask = Task {
-            for await searchText in self.textStream {
+            for await searchText in self.textStream.debounce(for: .milliseconds(350)) {
                 guard !searchText.isEmpty else {
                     continue
                 }
