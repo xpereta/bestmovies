@@ -45,9 +45,8 @@ final class MovieListViewModel: MovieListViewModelType {
 
     private let useCase: GetMoviesUseCaseType
     private var loadTask: Task<Void, Never>?
-    private var cancellables = Set<AnyCancellable>()
 
-    private var searchTask: Task<Void, Never>!
+    private var searchTask: Task<Void, Never>?
 
     init(useCase: GetMoviesUseCaseType) {
         self.useCase = useCase
@@ -55,7 +54,8 @@ final class MovieListViewModel: MovieListViewModelType {
     }
 
     deinit {
-        cancellables.removeAll()
+        searchTask?.cancel()
+        loadTask?.cancel()
     }
 
     private func setupSearchTask() {
