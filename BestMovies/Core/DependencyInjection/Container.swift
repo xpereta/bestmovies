@@ -38,7 +38,7 @@ extension Container {
     }
 
     var apiProvider: Factory<ApiProvider> {
-        self { URLSessionApiProvider(urlSession: URLSession.shared) }
+        self { URLSessionApiProviderSlowMock(URLSessionApiProvider(urlSession: URLSession.shared), delaySeconds: 3.0) }
             .cached
     }
 }
