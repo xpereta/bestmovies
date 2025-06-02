@@ -116,7 +116,6 @@ final class MovieListViewModel: MovieListViewModelType {
         guard case .loaded(let movies, let currentPage, true, false) = state else { return }
 
         let nextPage = currentPage + 1
-        state = .loaded(movies, currentPage: currentPage, hasMore: true, isLoadingMore: true)
 
         Task {
             do {
