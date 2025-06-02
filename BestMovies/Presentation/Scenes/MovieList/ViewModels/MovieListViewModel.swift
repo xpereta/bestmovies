@@ -14,8 +14,9 @@ protocol MovieListViewModelType: ObservableObject {
     var state: MoviesListViewState { get }
     var searchText: String { get set }
 
-    func startLoading()
-    func loadNextPage()
+    func startLoading() async
+    func loadNextPage() async
+    func resetLoading() async
 }
 
 @MainActor
@@ -28,8 +29,9 @@ final class StubMovieListViewModel: MovieListViewModelType {
         self.searchText = searchText
     }
 
-    func startLoading() {}
-    func loadNextPage() {}
+    func startLoading() async {}
+    func loadNextPage() async {}
+    func resetLoading() async {}
 }
 
 @MainActor
@@ -65,24 +67,27 @@ final class MovieListViewModel: MovieListViewModelType {
                     continue
                 }
 
-                self.resetAndLoad()
+                state = .loading
+
+                await self.resetAndLoad()
             }
         }
     }
 
-    func startLoading() {
+    func startLoading() async {
         print("🧠 MovieListViewModel: startLoading")
         guard case .idle = state else { return }
 
-        resetAndLoad()
+        state = .loading
+        print("****** State set to .loading ******")
+
+        await resetAndLoad()
     }
 
-    private func resetAndLoad() {
+    private func resetAndLoad() async {
         print("🧠 MovieListViewModel: resetAndLoad")
 
         loadTask?.cancel()
-
-        state = .loading
 
         loadTask = Task {
             do {
@@ -103,7 +108,11 @@ final class MovieListViewModel: MovieListViewModelType {
         }
     }
 
-    func loadNextPage() {
+    func resetLoading() async {
+        await resetAndLoad()
+    }
+
+    func loadNextPage() async {
         guard case .loaded(let movies, let currentPage, true, false) = state else { return }
 
         let nextPage = currentPage + 1

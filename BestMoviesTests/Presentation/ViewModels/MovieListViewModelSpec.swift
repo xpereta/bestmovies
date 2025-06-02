@@ -67,14 +67,14 @@ class MovieListViewModelSpec: AsyncSpec {
                     it("changes state from idle, to loading, to loaded, with the right movies") { @MainActor in
                         expect(sut.state) == .idle
 
-                        sut.startLoading()
-                        expect(sut.state) == .loading
+                        await sut.startLoading()
+                        expect(sut.state).to(equal(.loading))
 
                         await expect(sut.state).toEventually(equal(.loaded(testMovies, currentPage: 1, hasMore: true, isLoadingMore: false)))
                     }
 
                     it("calls the use case with correct parameters") { @MainActor in
-                        sut.startLoading()
+                        await sut.startLoading()
 
                         await expect(spyUseCase.executeCallCount).toEventually(equal(1))
                         await expect(spyUseCase.lastPageRequested).toEventually(equal(1))
@@ -90,7 +90,7 @@ class MovieListViewModelSpec: AsyncSpec {
                     it("changes state from idle to loading to error") { @MainActor in
                         expect(sut.state) == .idle
 
-                        sut.startLoading()
+                        await sut.startLoading()
                         expect(sut.state) == .loading
 
                         await expect(sut.state).toEventually(equal(.error("Test error")))
@@ -105,7 +105,7 @@ class MovieListViewModelSpec: AsyncSpec {
 
                     it("appends new movies to existing ones") { @MainActor in
                         // Load first page
-                        sut.startLoading()
+                        await sut.startLoading()
                         await expect(sut.state).toEventually(equal(.loaded(testMovies, currentPage: 1, hasMore: true, isLoadingMore: false)))
 
                         // Configure second page
@@ -116,7 +116,7 @@ class MovieListViewModelSpec: AsyncSpec {
                         spyUseCase.hasMoreToReturn = false
 
                         // Load second page
-                        sut.loadNextPage()
+                        await sut.loadNextPage()
 
                         await expect(sut.state).toEventually(equal(.loaded(testMovies + page2Movies, currentPage: 2, hasMore: false, isLoadingMore: false)))
                         await expect(spyUseCase.lastPageRequested).toEventually(equal(2))
@@ -147,14 +147,14 @@ class MovieListViewModelSpec: AsyncSpec {
                             // Load first page
                             spyUseCase.moviesToReturn = testMovies
                             spyUseCase.hasMoreToReturn = true
-                            sut.startLoading()
+                            await sut.startLoading()
 
                             await expect(sut.state).toEventually(equal(.loaded(testMovies, currentPage: 1, hasMore: true, isLoadingMore: false)))
 
                             // Change search text
                             sut.searchText = "new search"
 
-                            await expect(sut.state).toEventually(equal(.loading))
+                            expect(sut.state).to(equal(.loading))
                             await expect(sut.state).toEventually(equal(.loaded(testMovies, currentPage: 1, hasMore: true, isLoadingMore: false)))
                         }
                     }

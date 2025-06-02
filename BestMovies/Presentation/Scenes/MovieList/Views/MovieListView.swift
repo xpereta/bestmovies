@@ -34,7 +34,7 @@ struct MovieListView<ViewModel>: View where ViewModel: MovieListViewModelType {
             }
             .navigationTitle("Best Movies")
             .task {
-                viewModel.startLoading()
+                await viewModel.startLoading()
             }
         }
     }
@@ -52,10 +52,15 @@ struct MovieListView<ViewModel>: View where ViewModel: MovieListViewModelType {
                 }
                 .onAppear {
                     if !isLoadingMore {
-                        viewModel.loadNextPage()
+                        Task {
+                            await viewModel.loadNextPage()
+                        }
                     }
                 }
             }
+        }
+        .refreshable {
+            await viewModel.resetLoading()
         }
         .animation(.default, value: movies)
         .overlay {
