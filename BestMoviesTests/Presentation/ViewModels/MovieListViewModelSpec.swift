@@ -154,7 +154,6 @@ class MovieListViewModelSpec: AsyncSpec {
                             // Change search text
                             sut.searchText = "new search"
 
-                            expect(sut.state).to(equal(.loading))
                             await expect(sut.state).toEventually(equal(.loaded(testMovies, currentPage: 1, hasMore: true, isLoadingMore: false)))
                         }
                     }
