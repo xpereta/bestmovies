@@ -26,13 +26,14 @@ extension Container {
                 baseURL: Configuration.apiBaseURL,
                 apiKey: Configuration.apiKey
             )
+
             return MovieRepository(apiClient: self.apiClient(apiConfiguration))
         }
     }
 
     var apiClient: ParameterFactory<TMDBConfiguration, TMDBAPI.ClientType> {
         self {
-            return TMDBAPI.Client(apiProvider: self.apiProvider(), apiConfiguration: $0)
+            TMDBAPI.Client(apiProvider: self.apiProvider(), apiConfiguration: $0)
         }
         .cached
     }

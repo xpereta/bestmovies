@@ -8,6 +8,7 @@ final class URLSessionApiProviderSlowMock: ApiProvider {
         self.decoratee = decoratee
         self.delaySeconds = delaySeconds
     }
+
     func performRequest(_ urlRequest: URLRequest, delegate: (any URLSessionTaskDelegate)?) async throws -> (data: Data, urlResponse: URLResponse) {
         try await Task.sleep(for: .seconds(delaySeconds))
 

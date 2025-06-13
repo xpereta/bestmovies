@@ -58,7 +58,6 @@
 --patternlet inline
 
 # Insert/remove explicit self where applicable.
---rules redundantSelf
 --self remove
 --selfrequired
 
