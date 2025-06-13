@@ -31,7 +31,7 @@ class MovieDetailsMapperSpec: QuickSpec {
                             originalLanguage: "en"
                         )
 
-                        let movieDetails = MovieDetailsMapper.map(dto)
+                        let movieDetails = MovieDetailsMapper().map(dto)
 
                         expect(movieDetails.id).to(equal(1))
                         expect(movieDetails.title).to(equal("The Matrix"))
@@ -83,7 +83,7 @@ class MovieDetailsMapperSpec: QuickSpec {
                             originalLanguage: "en"
                         )
 
-                        let movieDetails = MovieDetailsMapper.map(dto)
+                        let movieDetails = MovieDetailsMapper().map(dto)
 
                         expect(movieDetails.posterPath).to(beNil())
                         expect(movieDetails.backdropPath).to(beNil())
@@ -115,7 +115,7 @@ class MovieDetailsMapperSpec: QuickSpec {
                             originalLanguage: "en"
                         )
 
-                        let movieDetails = MovieDetailsMapper.map(dto)
+                        let movieDetails = MovieDetailsMapper().map(dto)
                         expect(movieDetails.runtimeFormatted).to(equal("2h 34m"))
                     }
                 }

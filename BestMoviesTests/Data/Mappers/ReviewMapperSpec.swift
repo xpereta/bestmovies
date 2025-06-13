@@ -24,7 +24,7 @@ class ReviewMapperSpec: QuickSpec {
                             authorDetails: authorDetailsDTO
                         )
 
-                        let review = ReviewMapper.map(dto)
+                        let review = ReviewMapper().map(dto)
 
                         expect(review.id).to(equal("123"))
                         expect(review.author).to(equal("johndoe"))
@@ -55,7 +55,7 @@ class ReviewMapperSpec: QuickSpec {
                             authorDetails: nil
                         )
 
-                        let review = ReviewMapper.map(dto)
+                        let review = ReviewMapper().map(dto)
 
                         expect(review.authorDetails).to(beNil())
                     }
@@ -71,7 +71,7 @@ class ReviewMapperSpec: QuickSpec {
                             authorDetails: nil
                         )
 
-                        let review = ReviewMapper.map(dto)
+                        let review = ReviewMapper().map(dto)
 
                         expect(review.createdAt).to(beNil())
                     }
@@ -97,7 +97,7 @@ class ReviewMapperSpec: QuickSpec {
                         )
                     ]
 
-                    let reviews = ReviewMapper.mapList(dtos)
+                    let reviews = ReviewMapper().mapList(dtos)
 
                     expect(reviews).to(haveCount(2))
                     expect(reviews[0].id).to(equal("123"))
@@ -105,7 +105,7 @@ class ReviewMapperSpec: QuickSpec {
                 }
 
                 it("returns empty array when given empty input") {
-                    let reviews = ReviewMapper.mapList([])
+                    let reviews = ReviewMapper().mapList([])
                     expect(reviews).to(beEmpty())
                 }
             }

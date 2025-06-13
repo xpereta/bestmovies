@@ -6,7 +6,7 @@ struct MovieRepository: MovieRepositoryType {
     func fetchMovies(page: Int, query: String?) async throws -> (movies: [Movie], hasMorePages: Bool) {
         let response = try await apiClient.fetchMovies(page: page, query: query)
 
-        let movies = MovieMapper.mapList(response.results)
+        let movies = MovieMapper().mapList(response.results)
         let hasMorePages = response.page < response.totalPages
 
         return (movies: movies, hasMorePages: hasMorePages)
@@ -16,7 +16,7 @@ struct MovieRepository: MovieRepositoryType {
         do {
             let response = try await apiClient.fetchMovieDetails(id)
 
-            return MovieDetailsMapper.map(response)
+            return MovieDetailsMapper().map(response)
         } catch ApiProviderError.failed(statusCode: 404) {
             throw MovieRepositoryError.movieNotFound(withId: id)
         }
@@ -25,7 +25,7 @@ struct MovieRepository: MovieRepositoryType {
     func fetchReviews(movieId: Int) async throws -> [Review] {
         let response = try await apiClient.fetchMovieReviews(movieId: movieId)
 
-        let reviews = ReviewMapper.mapList(response.results)
+        let reviews = ReviewMapper().mapList(response.results)
 
         return reviews
     }

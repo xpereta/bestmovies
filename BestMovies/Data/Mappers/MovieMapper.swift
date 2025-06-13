@@ -1,14 +1,14 @@
 import Foundation
 
 struct MovieMapper {
-    private static let dateFormatter = {
-        let formatter = ISO8601DateFormatter()
-        formatter.formatOptions = [.withFullDate]
-        return formatter
-    }()
+    private let dateParseStrategy: Date.ParseStrategy
 
-    static func map(_ dto: TMDBAPI.DTO.Movie) -> Movie {
-        let date = dateFormatter.date(from: dto.releaseDate)
+    init(dateParseStrategy: Date.ParseStrategy = .shortISO8601) {
+        self.dateParseStrategy = dateParseStrategy
+    }
+
+    func map(_ dto: TMDBAPI.DTO.Movie) -> Movie {
+        let date = try? Date(dto.releaseDate, strategy: dateParseStrategy)
 
         return Movie(
             id: dto.id,
@@ -20,7 +20,7 @@ struct MovieMapper {
         )
     }
 
-    static func mapList(_ dto: [TMDBAPI.DTO.Movie]) -> [Movie] {
+    func mapList(_ dto: [TMDBAPI.DTO.Movie]) -> [Movie] {
         return dto.map { map($0) }
     }
 }

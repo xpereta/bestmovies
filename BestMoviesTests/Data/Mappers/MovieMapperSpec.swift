@@ -19,7 +19,7 @@ class MovieMapperSpec: QuickSpec {
                             voteAverage: 8.7
                         )
 
-                        let movie = MovieMapper.map(dto)
+                        let movie = MovieMapper().map(dto)
 
                         expect(movie.id).to(equal(1))
                         expect(movie.title).to(equal("The Matrix"))
@@ -47,7 +47,7 @@ class MovieMapperSpec: QuickSpec {
                             voteAverage: 8.7
                         )
 
-                        let movie = MovieMapper.map(dto)
+                        let movie = MovieMapper().map(dto)
 
                         expect(movie.posterPath).to(beNil())
                         expect(movie.posterURL).to(beNil())
@@ -65,7 +65,7 @@ class MovieMapperSpec: QuickSpec {
                             voteAverage: 8.7
                         )
 
-                        let movie = MovieMapper.map(dto)
+                        let movie = MovieMapper().map(dto)
 
                         expect(movie.releaseDate).to(beNil())
                     }
@@ -82,7 +82,7 @@ class MovieMapperSpec: QuickSpec {
                             voteAverage: 8.7
                         )
 
-                        let movie = MovieMapper.map(dto)
+                        let movie = MovieMapper().map(dto)
 
                         expect(movie.releaseDate).to(beNil())
                     }
@@ -99,7 +99,7 @@ class MovieMapperSpec: QuickSpec {
                             voteAverage: 8.7
                         )
 
-                        let movie = MovieMapper.map(dto)
+                        let movie = MovieMapper().map(dto)
 
                         expect(movie.releaseDate).to(beNil())
                     }
@@ -127,7 +127,7 @@ class MovieMapperSpec: QuickSpec {
                         )
                     ]
 
-                    let movies = MovieMapper.mapList(dtos)
+                    let movies = MovieMapper().mapList(dtos)
 
                     expect(movies).to(haveCount(2))
                     expect(movies[0].title).to(equal("The Matrix"))
@@ -135,7 +135,7 @@ class MovieMapperSpec: QuickSpec {
                 }
 
                 it("returns empty array when given empty input") {
-                    let movies = MovieMapper.mapList([])
+                    let movies = MovieMapper().mapList([])
 
                     expect(movies).to(beEmpty())
                 }

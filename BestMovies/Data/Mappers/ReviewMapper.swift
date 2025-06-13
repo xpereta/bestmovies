@@ -1,14 +1,14 @@
 import Foundation
 
 struct ReviewMapper {
-    private static let dateFormatter = {
-        let formatter = ISO8601DateFormatter()
-        formatter.formatOptions = [.withFullDate]
-        return formatter
-    }()
+    private let dateParseStrategy: Date.ParseStrategy
 
-    static func map(_ dto: TMDBAPI.DTO.Review) -> Review {
-        let createdAt = dateFormatter.date(from: dto.createdAt)
+    init(dateParseStrategy: Date.ParseStrategy = .shortISO8601) {
+        self.dateParseStrategy = dateParseStrategy
+    }
+
+    func map(_ dto: TMDBAPI.DTO.Review) -> Review {
+        let createdAt = try? Date(dto.createdAt, strategy: dateParseStrategy)
 
         var authorDetails: Review.AuthorDetails?
 
@@ -25,7 +25,7 @@ struct ReviewMapper {
         )
     }
 
-    static func mapList(_ dto: [TMDBAPI.DTO.Review]) -> [Review] {
+    func mapList(_ dto: [TMDBAPI.DTO.Review]) -> [Review] {
         return dto.map { map($0) }
     }
 
