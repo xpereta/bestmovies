@@ -43,6 +43,8 @@ final class MovieListViewModel: MovieListViewModelType {
         }
     }
 
+    private var previousSearchText: String = ""
+
     let (textStream, continuation) = AsyncStream.makeStream(of: String.self)
 
     private let useCase: GetMoviesUseCaseType
@@ -63,9 +65,11 @@ final class MovieListViewModel: MovieListViewModelType {
     private func setupSearchTask() {
         searchTask = Task {
             for await searchText in self.textStream.debounce(for: .milliseconds(350)) {
-                guard !searchText.isEmpty else {
+                guard searchText != self.previousSearchText else {
                     continue
                 }
+
+                previousSearchText = searchText
 
                 state = .loading
 

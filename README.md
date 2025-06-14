@@ -63,7 +63,12 @@ The implementation is pragmatic, and provides the minimum infrastructure to prov
 The dependency injection is also the place that reads configuration values and injects them when they are needed (namely API URLs and API authentication key)
 
 ## Testing
-Tests are written using Quick and Nimble. This leads to a natural description of test cases and expectations, that are easy to understand in a BDD style.
+Unit tests are written using Quick and Nimble. This leads to a natural description of test cases and expectations, that are easy to understand in a BDD style.
+
+### UI testing
+UI test are more expensive to create and maintan, and usualy very fragile and flaky. Used for cases where UI specific behaviours that can't be covered by unit tests.
+
+Can be used to cover the critical flows, and to reproduce bug scenarios and ensure that there are no regressions.
 
 ## Security
 Security should start with threat and risk assessment to guide our strategy. In this case the main risk is that an attacker gets hold of our third party API key and abuses it or accesses data on our behalf.
