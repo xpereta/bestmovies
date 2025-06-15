@@ -1,4 +1,4 @@
-@testable import BestMovies
+@testable import Data
 import Foundation
 import Nimble
 import Quick
@@ -8,10 +8,10 @@ class ReviewMapperSpec: QuickSpec {
     // swiftlint:disable:next function_body_length
     override class func spec() {
         describe("ReviewMapper") {
-            var configurationProvider: MockConfigurationProvider!
+            var configurationProvider: TestConfigurationProvider!
 
             beforeEach {
-                configurationProvider = MockConfigurationProvider()
+                configurationProvider = TestConfigurationProvider()
             }
 
             context("when mapping a single review") {

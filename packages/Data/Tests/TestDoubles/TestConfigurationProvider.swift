@@ -1,6 +1,6 @@
-@testable import BestMovies
+import Domain
 
-struct MockConfigurationProvider: ConfigurationProvider {
+struct TestConfigurationProvider: ConfigurationProvider {
     var posterBaseURL: String
     var backdropBaseURL: String
     var avatarBaseURL: String

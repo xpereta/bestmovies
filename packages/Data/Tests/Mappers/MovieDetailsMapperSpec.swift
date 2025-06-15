@@ -1,19 +1,18 @@
-@testable import BestMovies
+@testable import Data
 import Domain
 import Foundation
 import Nimble
 import Quick
 import TMDBAPI
-import Data
 
 class MovieDetailsMapperSpec: QuickSpec {
     // swiftlint:disable:next function_body_length
     override class func spec() {
         describe("MovieDetailsMapper") {
-            var configurationProvider: MockConfigurationProvider!
+            var configurationProvider: TestConfigurationProvider!
 
             beforeEach {
-                configurationProvider = MockConfigurationProvider()
+                configurationProvider = TestConfigurationProvider()
             }
 
             context("when mapping a DTO") {

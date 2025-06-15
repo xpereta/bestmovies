@@ -1,4 +1,5 @@
-@testable import BestMovies
+@testable import Data
+import Domain
 import Foundation
 import Nimble
 import Quick
@@ -8,10 +9,10 @@ class MovieMapperSpec: QuickSpec {
     // swiftlint:disable:next function_body_length
     override class func spec() {
         describe("MovieDTOMapper") {
-            var configurationProvider: MockConfigurationProvider!
+            var configurationProvider: TestConfigurationProvider!
 
             beforeEach {
-                configurationProvider = MockConfigurationProvider()
+                configurationProvider = TestConfigurationProvider()
             }
 
             context("when mapping a single DTO") {

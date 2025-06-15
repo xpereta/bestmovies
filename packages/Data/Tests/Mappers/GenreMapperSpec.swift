@@ -1,4 +1,4 @@
-@testable import BestMovies
+@testable import Data
 import Domain
 import Foundation
 import Nimble

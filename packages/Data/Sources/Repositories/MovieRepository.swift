@@ -26,7 +26,7 @@ public struct MovieRepository: MovieRepositoryType {
             let response = try await apiClient.fetchMovieDetails(id)
 
             return MovieDetailsMapper(configurationProvider: configurationProvider).map(response)
-        } catch TMDBAPI.APIError.notFound {
+        } catch {
             throw MovieRepositoryError.movieNotFound(withId: id)
         }
     }
