@@ -1,7 +1,17 @@
 import Foundation
 
 struct AppConfigurationProvider: ConfigurationProvider {
-    var posterBaseURL: String { Configuration.posterBaseURL }
-    var backdropBaseURL: String { Configuration.backdropBaseURL }
-    var avatarBaseURL: String { Configuration.avatarBaseURL }
+    let posterBaseURL: String
+    let backdropBaseURL: String
+    let avatarBaseURL: String
+
+    init(
+        posterBaseURL: String = Configuration.posterBaseURL,
+        backdropBaseURL: String = Configuration.backdropBaseURL,
+        avatarBaseURL: String = Configuration.avatarBaseURL
+    ) {
+        self.posterBaseURL = posterBaseURL
+        self.backdropBaseURL = backdropBaseURL
+        self.avatarBaseURL = avatarBaseURL
+    }
 }
