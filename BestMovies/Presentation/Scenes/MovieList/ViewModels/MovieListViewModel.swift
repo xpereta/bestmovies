@@ -1,7 +1,7 @@
 import AsyncAlgorithms
 import Combine
-import Foundation
 import Domain
+import Foundation
 
 enum MoviesListViewState: Equatable {
     case idle

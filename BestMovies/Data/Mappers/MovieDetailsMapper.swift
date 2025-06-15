@@ -1,6 +1,6 @@
+import Domain
 import Foundation
 import TMDBAPI
-import Domain
 
 struct MovieDetailsMapper {
     private let dateParseStrategy: Date.ParseStrategy

@@ -1,5 +1,5 @@
-import Foundation
 import Domain
+import Foundation
 
 public extension TMDBAPI.DTO {
     struct MovieResponse: Decodable {

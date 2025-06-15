@@ -1,8 +1,8 @@
+import Domain
 import FactoryKit
 import Foundation
 import Networking
 import TMDBAPI
-import Domain
 
 extension Container {
     var configurationProvider: Factory<ConfigurationProvider> {
