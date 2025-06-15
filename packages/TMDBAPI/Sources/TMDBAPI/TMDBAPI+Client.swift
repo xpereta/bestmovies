@@ -30,10 +30,14 @@ public extension TMDBAPI {
         }
 
         public func fetchMovieDetails(_ id: Int) async throws -> TMDBAPI.DTO.MovieDetails {
-            let request = try TMDBAPI.Endpoint.movie(id: id, configuration: apiConfiguration).makeURLRequest()
-            let movie = try await apiProvider.performRequest(request, decodeTo: TMDBAPI.DTO.MovieDetails.self)
+            do {
+                let request = try TMDBAPI.Endpoint.movie(id: id, configuration: apiConfiguration).makeURLRequest()
+                let movie = try await apiProvider.performRequest(request, decodeTo: TMDBAPI.DTO.MovieDetails.self)
 
-            return movie
+                return movie
+            } catch {
+                throw TMDBAPI.APIError.notFound
+            }
         }
 
         public func fetchMovieReviews(movieId: Int) async throws -> TMDBAPI.DTO.ReviewResponse {
