@@ -1,6 +1,6 @@
-@testable import BestMovies
 import BestMoviesDomain
 import Foundation
+@testable import Movies
 import Nimble
 import Quick
 

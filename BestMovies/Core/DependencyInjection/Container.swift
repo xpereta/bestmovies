@@ -1,6 +1,7 @@
 import BestMoviesDomain
 import FactoryKit
 import Foundation
+import Movies
 import Networking
 import TMDBAPI
 import TMDBDataSource
@@ -26,6 +27,16 @@ extension Container {
     var getReviewsUseCase: Factory<GetReviewsUseCaseType> {
         Factory(self) {
             GetReviewsUseCase(repository: self.getMoviesRepository())
+        }
+    }
+
+    var appMoviesDependencies: Factory<MoviesDependencies> {
+        Factory(self) {
+            AppMoviesDependencies(
+                getMoviesUseCase: self.getMoviesUseCase(),
+                getMovieDetailsUseCase: self.getMovieDetailsUseCase(),
+                getReviewsUseCase: self.getReviewsUseCase()
+            )
         }
     }
 

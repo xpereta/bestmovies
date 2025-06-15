@@ -7,14 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		475502F92DCA68FD00863B5D /* Quick in Frameworks */ = {isa = PBXBuildFile; productRef = 475502F82DCA68FD00863B5D /* Quick */; };
-		475503002DCA69F700863B5D /* Nimble in Frameworks */ = {isa = PBXBuildFile; productRef = 475502FF2DCA69F700863B5D /* Nimble */; };
+		474A36BB2DFF3C8D00A1087B /* Movies in Frameworks */ = {isa = PBXBuildFile; productRef = 474A36BA2DFF3C8D00A1087B /* Movies */; };
 		4756F0042DFF34D8004AF00B /* BestMoviesDomain in Frameworks */ = {isa = PBXBuildFile; productRef = 4756F0032DFF34D8004AF00B /* BestMoviesDomain */; };
 		4756F0062DFF35AE004AF00B /* TMDBAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 4756F0052DFF35AE004AF00B /* TMDBAPI */; };
 		4756F0082DFF35B2004AF00B /* TMDBDataSource in Frameworks */ = {isa = PBXBuildFile; productRef = 4756F0072DFF35B2004AF00B /* TMDBDataSource */; };
 		476377832DD5DCFC00F60DF3 /* FactoryKit in Frameworks */ = {isa = PBXBuildFile; productRef = 476377822DD5DCFC00F60DF3 /* FactoryKit */; };
 		47D3EBD42DD9F7400059B8B6 /* Networking in Frameworks */ = {isa = PBXBuildFile; productRef = 47D3EBD32DD9F7400059B8B6 /* Networking */; };
-		47F609832DFEC8EF00FC0E41 /* AsyncAlgorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 47043A2C2DE4966200D2BAA3 /* AsyncAlgorithms */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,6 +33,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		474A36B92DFF3C4600A1087B /* Movies */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Movies; sourceTree = "<group>"; };
 		475377EA2DCA5487004B69CC /* BestMovies.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BestMovies.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		475377FD2DCA5489004B69CC /* BestMoviesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BestMoviesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		475378072DCA5489004B69CC /* BestMoviesUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BestMoviesUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -42,6 +41,7 @@
 		4756EFFC2DFF34B0004AF00B /* BestMoviesDomain */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = BestMoviesDomain; sourceTree = "<group>"; };
 		4756EFFE2DFF34B0004AF00B /* Networking */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Networking; sourceTree = "<group>"; };
 		4756EFFF2DFF34B0004AF00B /* TMDBAPI */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = TMDBAPI; sourceTree = "<group>"; };
+		4756F00A2DFF3722004AF00B /* CommonUI */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = CommonUI; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -83,7 +83,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				47F609832DFEC8EF00FC0E41 /* AsyncAlgorithms in Frameworks */,
+				474A36BB2DFF3C8D00A1087B /* Movies in Frameworks */,
 				4756F0062DFF35AE004AF00B /* TMDBAPI in Frameworks */,
 				4756F0082DFF35B2004AF00B /* TMDBDataSource in Frameworks */,
 				47D3EBD42DD9F7400059B8B6 /* Networking in Frameworks */,
@@ -96,8 +96,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				475502F92DCA68FD00863B5D /* Quick in Frameworks */,
-				475503002DCA69F700863B5D /* Nimble in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -178,6 +176,8 @@
 		4756F0092DFF362D004AF00B /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				474A36B92DFF3C4600A1087B /* Movies */,
+				4756F00A2DFF3722004AF00B /* CommonUI */,
 			);
 			path = Features;
 			sourceTree = "<group>";
@@ -206,10 +206,10 @@
 			packageProductDependencies = (
 				476377822DD5DCFC00F60DF3 /* FactoryKit */,
 				47D3EBD32DD9F7400059B8B6 /* Networking */,
-				47043A2C2DE4966200D2BAA3 /* AsyncAlgorithms */,
 				4756F0032DFF34D8004AF00B /* BestMoviesDomain */,
 				4756F0052DFF35AE004AF00B /* TMDBAPI */,
 				4756F0072DFF35B2004AF00B /* TMDBDataSource */,
+				474A36BA2DFF3C8D00A1087B /* Movies */,
 			);
 			productName = BestMovies;
 			productReference = 475377EA2DCA5487004B69CC /* BestMovies.app */;
@@ -233,8 +233,6 @@
 			);
 			name = BestMoviesTests;
 			packageProductDependencies = (
-				475502F82DCA68FD00863B5D /* Quick */,
-				475502FF2DCA69F700863B5D /* Nimble */,
 			);
 			productName = BestMoviesTests;
 			productReference = 475377FD2DCA5489004B69CC /* BestMoviesTests.xctest */;
@@ -293,10 +291,7 @@
 			mainGroup = 475377E12DCA5487004B69CC;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				475502F72DCA68FD00863B5D /* XCRemoteSwiftPackageReference "Quick" */,
-				475502FE2DCA69F700863B5D /* XCRemoteSwiftPackageReference "Nimble" */,
 				476377812DD5DCFC00F60DF3 /* XCRemoteSwiftPackageReference "Factory" */,
-				47043A2B2DE4966200D2BAA3 /* XCRemoteSwiftPackageReference "swift-async-algorithms" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 475377EB2DCA5487004B69CC /* Products */;
@@ -745,30 +740,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		47043A2B2DE4966200D2BAA3 /* XCRemoteSwiftPackageReference "swift-async-algorithms" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/apple/swift-async-algorithms.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.4;
-			};
-		};
-		475502F72DCA68FD00863B5D /* XCRemoteSwiftPackageReference "Quick" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/Quick/Quick.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 7.6.2;
-			};
-		};
-		475502FE2DCA69F700863B5D /* XCRemoteSwiftPackageReference "Nimble" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/Quick/Nimble.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 13.7.1;
-			};
-		};
 		476377812DD5DCFC00F60DF3 /* XCRemoteSwiftPackageReference "Factory" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/hmlongco/Factory/";
@@ -780,20 +751,9 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		47043A2C2DE4966200D2BAA3 /* AsyncAlgorithms */ = {
+		474A36BA2DFF3C8D00A1087B /* Movies */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 47043A2B2DE4966200D2BAA3 /* XCRemoteSwiftPackageReference "swift-async-algorithms" */;
-			productName = AsyncAlgorithms;
-		};
-		475502F82DCA68FD00863B5D /* Quick */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 475502F72DCA68FD00863B5D /* XCRemoteSwiftPackageReference "Quick" */;
-			productName = Quick;
-		};
-		475502FF2DCA69F700863B5D /* Nimble */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 475502FE2DCA69F700863B5D /* XCRemoteSwiftPackageReference "Nimble" */;
-			productName = Nimble;
+			productName = Movies;
 		};
 		4756F0032DFF34D8004AF00B /* BestMoviesDomain */ = {
 			isa = XCSwiftPackageProductDependency;

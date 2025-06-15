@@ -1,5 +1,5 @@
 {
-  "originHash" : "600eec7684838302fd42a51de29efae24898d4c3760692aff259969529f20bc0",
+  "originHash" : "989641bfb9e48a1c540485d4870a8d8c6437500e235da72b1ae5959cb910bf4a",
   "pins" : [
     {
       "identity" : "cwlcatchexception",
@@ -17,15 +17,6 @@
       "state" : {
         "revision" : "0139c665ebb45e6a9fbdb68aabfd7c39f3fe0071",
         "version" : "2.2.2"
-      }
-    },
-    {
-      "identity" : "factory",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/hmlongco/Factory/",
-      "state" : {
-        "revision" : "22157b88670bbeac591895c0fc8b8f7f340cf757",
-        "version" : "2.5.0"
       }
     },
     {
@@ -60,8 +51,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-argument-parser.git",
       "state" : {
-        "revision" : "41982a3656a71c768319979febd796c6fd111d5c",
-        "version" : "1.5.0"
+        "revision" : "011f0c765fb46d9cac61bca19be0527e99c98c8b",
+        "version" : "1.5.1"
       }
     },
     {

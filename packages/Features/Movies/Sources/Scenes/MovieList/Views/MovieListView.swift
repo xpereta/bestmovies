@@ -1,4 +1,5 @@
 import BestMoviesDomain
+import CommonUI
 import SwiftUI
 
 struct MovieListView<ViewModel>: View where ViewModel: MovieListViewModelType {

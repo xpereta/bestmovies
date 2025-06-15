@@ -1,13 +1,13 @@
 import SwiftUI
 
-struct FailedImageView: View {
-    let systemName: String
+public struct FailedImageView: View {
+    private let systemName: String
 
-    init(systemName: String = "film") {
+    public init(systemName: String = "film") {
         self.systemName = systemName
     }
 
-    var body: some View {
+    public var body: some View {
         Image(systemName: systemName)
             .resizable()
             .foregroundStyle(.gray)

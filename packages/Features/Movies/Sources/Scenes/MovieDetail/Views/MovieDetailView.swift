@@ -1,4 +1,5 @@
 import BestMoviesDomain
+import CommonUI
 import SwiftUI
 import UIKit
 
