@@ -1,5 +1,5 @@
 @testable import BestMovies
-import Combine
+import Domain
 import Foundation
 import Nimble
 import Quick
