@@ -36,7 +36,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		472B1D822DDA006B005ACFE3 /* TMDBAPI */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = TMDBAPI; path = packages/TMDBAPI/TMDBAPI; sourceTree = "<group>"; };
+		472B1D822DDA006B005ACFE3 /* TMDBAPI */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = TMDBAPI; path = packages/TMDBAPI; sourceTree = "<group>"; };
 		475377EA2DCA5487004B69CC /* BestMovies.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BestMovies.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		475377FD2DCA5489004B69CC /* BestMoviesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BestMoviesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		475378072DCA5489004B69CC /* BestMoviesUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BestMoviesUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
