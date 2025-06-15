@@ -4,11 +4,17 @@ import TMDBAPI
 
 struct MovieRepository: MovieRepositoryType {
     let apiClient: TMDBAPI.ClientType
+    private let configurationProvider: ConfigurationProvider
+
+    init(apiClient: TMDBAPI.ClientType, configurationProvider: ConfigurationProvider) {
+        self.apiClient = apiClient
+        self.configurationProvider = configurationProvider
+    }
 
     func fetchMovies(page: Int, query: String?) async throws -> (movies: [Movie], hasMorePages: Bool) {
         let response = try await apiClient.fetchMovies(page: page, query: query)
 
-        let movies = MovieMapper().mapList(response.results)
+        let movies = MovieMapper(configurationProvider: configurationProvider).mapList(response.results)
         let hasMorePages = response.page < response.totalPages
 
         return (movies: movies, hasMorePages: hasMorePages)
@@ -18,7 +24,7 @@ struct MovieRepository: MovieRepositoryType {
         do {
             let response = try await apiClient.fetchMovieDetails(id)
 
-            return MovieDetailsMapper().map(response)
+            return MovieDetailsMapper(configurationProvider: configurationProvider).map(response)
         } catch ApiProviderError.failed(statusCode: 404) {
             throw MovieRepositoryError.movieNotFound(withId: id)
         }
@@ -27,7 +33,7 @@ struct MovieRepository: MovieRepositoryType {
     func fetchReviews(movieId: Int) async throws -> [Review] {
         let response = try await apiClient.fetchMovieReviews(movieId: movieId)
 
-        let reviews = ReviewMapper().mapList(response.results)
+        let reviews = ReviewMapper(configurationProvider: configurationProvider).mapList(response.results)
 
         return reviews
     }

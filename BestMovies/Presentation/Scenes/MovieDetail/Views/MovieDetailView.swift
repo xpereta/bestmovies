@@ -279,8 +279,6 @@ struct ReviewCard: View {
         """ + """
                 virtual reality simulation that keeps humanity under control.
         """,
-        posterPath: "/f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg",
-        backdropPath: "/l4QHerTSbMI7qgvasqxP36pqjN6.jpg",
         releaseDate: Date(),
         voteAverage: 8.7,
         voteCount: 24563,
@@ -293,7 +291,9 @@ struct ReviewCard: View {
         tagline: "Welcome to the Real World",
         budget: 63000000,
         revenue: 463517383,
-        originalLanguage: "en"
+        originalLanguage: "en",
+        posterURL: URL(string: "https://image.tmdb.org/t/p/w500/f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg"),
+        backdropURL: URL(string: "https://image.tmdb.org/t/p/original/l4QHerTSbMI7qgvasqxP36pqjN6.jpg")
     )
 
     let loadedState = MovieDetailViewModel.State.loaded(movieDetails, [])
@@ -309,8 +309,6 @@ struct ReviewCard: View {
         """ + """
                 virtual reality simulation that keeps humanity under control.
         """,
-        posterPath: "/f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg",
-        backdropPath: "/l4QHerTSbMI7qgvasqxP36pqjN6.jpg",
         releaseDate: Date(),
         voteAverage: 8.7,
         voteCount: 24563,
@@ -323,7 +321,9 @@ struct ReviewCard: View {
         tagline: "Welcome to the Real World",
         budget: 63000000,
         revenue: 463517383,
-        originalLanguage: "en"
+        originalLanguage: "en",
+        posterURL: URL(string: "https://image.tmdb.org/t/p/w500/f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg"),
+        backdropURL: URL(string: "https://image.tmdb.org/t/p/original/l4QHerTSbMI7qgvasqxP36pqjN6.jpg")
     )
 
     let reviews = [
@@ -334,8 +334,9 @@ struct ReviewCard: View {
             createdAt: Date(),
             authorDetails: Review.AuthorDetails(
                 name: "John Doe",
-                avatarPath: "/utEXl2EDiXBK6f41wCLsvprvMg4.jpg",
-                rating: 5.5)
+                rating: 5.5,
+                avatarURL: URL(string: "https://image.tmdb.org/t/p/original/utEXl2EDiXBK6f41wCLsvprvMg4.jpg"),
+            )
         ),
         Review(
             id: "2",
@@ -344,8 +345,9 @@ struct ReviewCard: View {
             createdAt: Date(),
             authorDetails: Review.AuthorDetails(
                 name: "Jane Doe",
-                avatarPath: "/invalid.jpg",
-                rating: 7.4)
+                rating: 7.4,
+                avatarURL: URL(string: "https://image.tmdb.org/t/p/original/invalid.jpg"),
+            )
         )
     ]
 
@@ -362,8 +364,6 @@ struct ReviewCard: View {
         """ + """
         machines that have constructed a virtual reality simulation that keeps humanity under control.
         """,
-        posterPath: "/f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg",
-        backdropPath: "/error.jpg",
         releaseDate: Date(),
         voteAverage: 8.7,
         voteCount: 24563,
@@ -376,7 +376,9 @@ struct ReviewCard: View {
         tagline: "Welcome to the Real World",
         budget: 63000000,
         revenue: 463517383,
-        originalLanguage: "en"
+        originalLanguage: "en",
+        posterURL: URL(string: "https://image.tmdb.org/t/p/w500/f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg"),
+        backdropURL: URL(string: "https://image.tmdb.org/t/p/original/error.jpg")
     )
 
     let loadedState = MovieDetailViewModel.State.loaded(movieDetails, [])

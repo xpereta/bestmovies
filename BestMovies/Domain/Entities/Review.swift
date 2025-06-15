@@ -9,18 +9,37 @@ struct Review: Identifiable, Equatable {
 
     struct AuthorDetails {
         let name: String?
-        let avatarPath: String?
         let rating: Double?
+        let avatarURL: URL?
+
+        init(
+            name: String?,
+            rating: Double?,
+            avatarURL: URL?
+        ) {
+            self.name = name
+            self.rating = rating
+            self.avatarURL = avatarURL
+        }
 
         var ratingFormatted: String? {
             guard let rating else { return nil }
             return String(format: "%.1f", rating)
         }
-
-        var avatarURL: URL? {
-            guard let avatarPath else { return nil }
-            return URL(string: "\(Configuration.avatarBaseURL)\(avatarPath)")
-        }
+    }
+    
+    init(
+        id: String,
+        author: String,
+        content: String,
+        createdAt: Date?,
+        authorDetails: AuthorDetails?
+    ) {
+        self.id = id
+        self.author = author
+        self.content = content
+        self.createdAt = createdAt
+        self.authorDetails = authorDetails
     }
 
     static func == (lhs: Review, rhs: Review) -> Bool {

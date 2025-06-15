@@ -1,11 +1,9 @@
 import Foundation
 
-struct MovieDetails: Identifiable, Equatable {
+struct MovieDetails: Identifiable {
     let id: Int
     let title: String
     let overview: String
-    let posterPath: String?
-    let backdropPath: String?
     let releaseDate: Date?
     let voteAverage: Double
     let voteCount: Int
@@ -16,15 +14,41 @@ struct MovieDetails: Identifiable, Equatable {
     let budget: Int
     let revenue: Int
     let originalLanguage: String
-
-    var posterURL: URL? {
-        guard let posterPath = posterPath else { return nil }
-        return URL(string: "\(Configuration.posterBaseURL)\(posterPath)")
-    }
-
-    var backdropURL: URL? {
-        guard let backdropPath = backdropPath else { return nil }
-        return URL(string: "\(Configuration.backdropBaseURL)\(backdropPath)")
+    let posterURL: URL?
+    let backdropURL: URL?
+    
+    init(
+        id: Int,
+        title: String,
+        overview: String,
+        releaseDate: Date?,
+        voteAverage: Double,
+        voteCount: Int,
+        runtime: Int?,
+        genres: [Genre],
+        status: String,
+        tagline: String?,
+        budget: Int,
+        revenue: Int,
+        originalLanguage: String,
+        posterURL: URL?,
+        backdropURL: URL?
+    ) {
+        self.id = id
+        self.title = title
+        self.overview = overview
+        self.releaseDate = releaseDate
+        self.voteAverage = voteAverage
+        self.voteCount = voteCount
+        self.runtime = runtime
+        self.genres = genres
+        self.status = status
+        self.tagline = tagline
+        self.budget = budget
+        self.revenue = revenue
+        self.originalLanguage = originalLanguage
+        self.posterURL = posterURL
+        self.backdropURL = backdropURL
     }
 
     var runtimeFormatted: String? {
@@ -32,5 +56,12 @@ struct MovieDetails: Identifiable, Equatable {
         let hours = runtime / 60
         let minutes = runtime % 60
         return "\(hours)h \(minutes)m"
+    }
+}
+
+extension MovieDetails: Equatable {
+    // Optimized equatable implementation, id is enough for our use cases
+    static func == (lhs: MovieDetails, rhs: MovieDetails) -> Bool {
+        return lhs.id == rhs.id
     }
 }

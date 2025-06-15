@@ -3,21 +3,30 @@ import TMDBAPI
 
 struct MovieMapper {
     private let dateParseStrategy: Date.ParseStrategy
-
-    init(dateParseStrategy: Date.ParseStrategy = .shortISO8601) {
+    private let configurationProvider: ConfigurationProvider
+    
+    init(
+        dateParseStrategy: Date.ParseStrategy = .shortISO8601,
+        configurationProvider: ConfigurationProvider
+    ) {
         self.dateParseStrategy = dateParseStrategy
+        self.configurationProvider = configurationProvider
     }
-
+    
     func map(_ dto: TMDBAPI.DTO.Movie) -> Movie {
         let date = try? Date(dto.releaseDate, strategy: dateParseStrategy)
-
+        var posterURL: URL?
+        if let path = dto.posterPath {
+            posterURL = URL(string: "\(configurationProvider.posterBaseURL)\(path)")
+        }
+        
         return Movie(
             id: dto.id,
             title: dto.title,
             overview: dto.overview,
-            posterPath: dto.posterPath,
             releaseDate: date,
-            voteAverage: dto.voteAverage
+            voteAverage: dto.voteAverage,
+            posterURL: posterURL
         )
     }
 

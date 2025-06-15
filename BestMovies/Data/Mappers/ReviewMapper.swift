@@ -3,20 +3,25 @@ import TMDBAPI
 
 struct ReviewMapper {
     private let dateParseStrategy: Date.ParseStrategy
-
-    init(dateParseStrategy: Date.ParseStrategy = .shortISO8601) {
+    private let configurationProvider: ConfigurationProvider
+    
+    init(
+        dateParseStrategy: Date.ParseStrategy = .shortISO8601,
+        configurationProvider: ConfigurationProvider
+    ) {
         self.dateParseStrategy = dateParseStrategy
+        self.configurationProvider = configurationProvider
     }
-
+    
     func map(_ dto: TMDBAPI.DTO.Review) -> Review {
         let createdAt = try? Date(dto.createdAt, strategy: dateParseStrategy)
 
         var authorDetails: Review.AuthorDetails?
 
         if let authorDetailsDTO = dto.authorDetails {
-            authorDetails = AuthorDetailsMapper.map(authorDetailsDTO)
+            authorDetails = AuthorDetailsMapper.map(authorDetailsDTO, configurationProvider: configurationProvider)
         }
-
+        
         return Review(
             id: dto.id,
             author: dto.author,
@@ -31,11 +36,16 @@ struct ReviewMapper {
     }
 
     struct AuthorDetailsMapper {
-        static func map(_ dto: TMDBAPI.DTO.AuthorDetails) -> Review.AuthorDetails {
+        static func map(_ dto: TMDBAPI.DTO.AuthorDetails, configurationProvider: ConfigurationProvider) -> Review.AuthorDetails {
+            var avatarURL: URL?
+            if let path = dto.avatarPath {
+                avatarURL = URL(string: "\(configurationProvider.avatarBaseURL)\(path)")
+            }
+
             return Review.AuthorDetails(
                 name: dto.name,
-                avatarPath: dto.avatarPath,
-                rating: dto.rating
+                rating: dto.rating,
+                avatarURL: avatarURL
             )
         }
     }

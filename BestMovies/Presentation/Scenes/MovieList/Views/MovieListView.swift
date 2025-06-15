@@ -149,25 +149,25 @@ struct MovieRow: View {
             id: 1,
             title: "Inception",
             overview: "A thief who enters dreams",
-            posterPath: "/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg",
             releaseDate: Date(timeIntervalSince1970: 1279238400),
             voteAverage: 8.4,
+            posterURL: URL(string: "https://image.tmdb.org/t/p/w500/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg")
         ),
         Movie(
             id: 2,
             title: "The Dark Knight",
             overview: "Batman fights the Joker",
-            posterPath: "/qJ2tW6WMUDux911r6m7haRef0WH.jpg",
             releaseDate: Date(timeIntervalSince1970: 1216166400),
             voteAverage: 8.9,
+            posterURL: URL(string: "https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg")
         ),
         Movie(
             id: 3,
             title: "Pulp Fiction",
             overview: "Multiple interrelated stories",
-            posterPath: "/d5iIlFn5s0ImszYzBPb8JPIfbXD.jpg",
             releaseDate: Date(timeIntervalSince1970: 781401600),
             voteAverage: 8.5,
+            posterURL: URL(string: "https://image.tmdb.org/t/p/w500/d5iIlFn5s0ImszYzBPb8JPIfbXD.jpg")
         )
     ]
 
@@ -183,25 +183,25 @@ struct MovieRow: View {
             id: 1,
             title: "Inception",
             overview: "A thief who enters dreams",
-            posterPath: "/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg",
             releaseDate: Date(timeIntervalSince1970: 1279238400),
             voteAverage: 8.4,
+            posterURL: URL(string: "https://image.tmdb.org/t/p/w500/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg")
         ),
         Movie(
             id: 2,
             title: "The Dark Knight",
             overview: "Batman fights the Joker",
-            posterPath: "/qJ2tW6WMUDux911r6m7haRef0WH.jpg",
             releaseDate: Date(timeIntervalSince1970: 1216166400),
             voteAverage: 8.9,
+            posterURL: URL(string: "https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg")
         ),
         Movie(
             id: 3,
             title: "Pulp Fiction",
             overview: "Multiple interrelated stories",
-            posterPath: "/d5iIlFn5s0ImszYzBPb8JPIfbXD.jpg",
             releaseDate: Date(timeIntervalSince1970: 781401600),
             voteAverage: 8.5,
+            posterURL: URL(string: "https://image.tmdb.org/t/p/w500/d5iIlFn5s0ImszYzBPb8JPIfbXD.jpg")
         )
     ]
 
@@ -228,9 +228,9 @@ struct MovieRow: View {
         id: 1,
         title: "Inception",
         overview: "A thief who enters dreams",
-        posterPath: "/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg",
         releaseDate: Date(timeIntervalSince1970: 1279238400),
         voteAverage: 8.4,
+        posterURL: URL(string: "https://image.tmdb.org/t/p/w500/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg")
     )
     List {
         MovieRow(movie: movie)

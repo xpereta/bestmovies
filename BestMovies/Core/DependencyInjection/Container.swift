@@ -4,6 +4,11 @@ import Networking
 import TMDBAPI
 
 extension Container {
+    var configurationProvider: Factory<ConfigurationProvider> {
+        self { AppConfigurationProvider() }
+            .cached
+    }
+
     var getMoviesUseCase: Factory<GetMoviesUseCaseType> {
         Factory(self) {
             GetMoviesUseCase(repository: self.getMoviesRepository())
@@ -29,7 +34,10 @@ extension Container {
                 apiKey: Configuration.apiKey
             )
 
-            return MovieRepository(apiClient: self.apiClient(apiConfiguration))
+            return MovieRepository(
+                apiClient: self.apiClient(apiConfiguration),
+                configurationProvider: self.configurationProvider()
+            )
         }
     }
 
