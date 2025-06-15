@@ -3,16 +3,16 @@ import Foundation
 import Networking
 import TMDBAPI
 
-struct MovieRepository: MovieRepositoryType {
-    let apiClient: TMDBAPI.ClientType
+public struct MovieRepository: MovieRepositoryType {
+    private let apiClient: TMDBAPI.ClientType
     private let configurationProvider: ConfigurationProvider
 
-    init(apiClient: TMDBAPI.ClientType, configurationProvider: ConfigurationProvider) {
+    public init(apiClient: TMDBAPI.ClientType, configurationProvider: ConfigurationProvider) {
         self.apiClient = apiClient
         self.configurationProvider = configurationProvider
     }
 
-    func fetchMovies(page: Int, query: String?) async throws -> (movies: [Movie], hasMorePages: Bool) {
+    public func fetchMovies(page: Int, query: String?) async throws -> (movies: [Movie], hasMorePages: Bool) {
         let response = try await apiClient.fetchMovies(page: page, query: query)
 
         let movies = MovieMapper(configurationProvider: configurationProvider).mapList(response.results)
@@ -21,7 +21,7 @@ struct MovieRepository: MovieRepositoryType {
         return (movies: movies, hasMorePages: hasMorePages)
     }
 
-    func fetchMovieDetails(_ id: Int) async throws -> MovieDetails {
+    public func fetchMovieDetails(_ id: Int) async throws -> MovieDetails {
         do {
             let response = try await apiClient.fetchMovieDetails(id)
 
@@ -31,7 +31,7 @@ struct MovieRepository: MovieRepositoryType {
         }
     }
 
-    func fetchReviews(movieId: Int) async throws -> [Review] {
+    public func fetchReviews(movieId: Int) async throws -> [Review] {
         let response = try await apiClient.fetchMovieReviews(movieId: movieId)
 
         let reviews = ReviewMapper(configurationProvider: configurationProvider).mapList(response.results)

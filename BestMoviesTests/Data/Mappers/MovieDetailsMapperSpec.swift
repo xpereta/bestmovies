@@ -1,8 +1,10 @@
 @testable import BestMovies
+import Domain
 import Foundation
 import Nimble
 import Quick
 import TMDBAPI
+import Data
 
 class MovieDetailsMapperSpec: QuickSpec {
     // swiftlint:disable:next function_body_length

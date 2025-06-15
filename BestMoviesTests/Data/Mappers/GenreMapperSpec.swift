@@ -1,4 +1,5 @@
 @testable import BestMovies
+import Domain
 import Foundation
 import Nimble
 import Quick
@@ -14,7 +15,7 @@ class GenreMapperSpec: QuickSpec {
                         name: "Action"
                     )
 
-                    let genre = GenreMapper.map(dto)
+                    let genre = GenreMapper().map(dto)
 
                     expect(genre.id).to(equal(28))
                     expect(genre.name).to(equal("Action"))
@@ -29,7 +30,7 @@ class GenreMapperSpec: QuickSpec {
                         TMDBAPI.DTO.Genre(id: 878, name: "Science Fiction")
                     ]
 
-                    let genres = GenreMapper.mapList(dtos)
+                    let genres = GenreMapper().mapList(dtos)
 
                     expect(genres).to(haveCount(3))
                     expect(genres[0].name).to(equal("Action"))
@@ -38,7 +39,7 @@ class GenreMapperSpec: QuickSpec {
                 }
 
                 it("returns empty array when given empty input") {
-                    let genres = GenreMapper.mapList([])
+                    let genres = GenreMapper().mapList([])
 
                     expect(genres).to(beEmpty())
                 }
