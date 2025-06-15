@@ -8,6 +8,12 @@ class ReviewMapperSpec: QuickSpec {
     // swiftlint:disable:next function_body_length
     override class func spec() {
         describe("ReviewMapper") {
+            var configurationProvider: MockConfigurationProvider!
+
+            beforeEach {
+                configurationProvider = MockConfigurationProvider()
+            }
+
             context("when mapping a single review") {
                 context("with all properties") {
                     it("maps all properties correctly") {
@@ -25,7 +31,7 @@ class ReviewMapperSpec: QuickSpec {
                             authorDetails: authorDetailsDTO
                         )
 
-                        let review = ReviewMapper().map(dto)
+                        let review = ReviewMapper(configurationProvider: configurationProvider).map(dto)
 
                         expect(review.id).to(equal("123"))
                         expect(review.author).to(equal("johndoe"))
@@ -41,7 +47,7 @@ class ReviewMapperSpec: QuickSpec {
                         // Author details validation
                         expect(review.authorDetails).toNot(beNil())
                         expect(review.authorDetails?.name).to(equal("John Doe"))
-                        expect(review.authorDetails?.avatarPath).to(equal("/avatar.jpg"))
+                        expect(review.authorDetails?.avatarURL?.absoluteString).to(equal("https://image.tmdb.org/t/p/w200/avatar.jpg"))
                         expect(review.authorDetails?.rating).to(equal(8.5))
                     }
                 }
@@ -56,7 +62,7 @@ class ReviewMapperSpec: QuickSpec {
                             authorDetails: nil
                         )
 
-                        let review = ReviewMapper().map(dto)
+                        let review = ReviewMapper(configurationProvider: configurationProvider).map(dto)
 
                         expect(review.authorDetails).to(beNil())
                     }
@@ -72,7 +78,7 @@ class ReviewMapperSpec: QuickSpec {
                             authorDetails: nil
                         )
 
-                        let review = ReviewMapper().map(dto)
+                        let review = ReviewMapper(configurationProvider: configurationProvider).map(dto)
 
                         expect(review.createdAt).to(beNil())
                     }
@@ -98,7 +104,7 @@ class ReviewMapperSpec: QuickSpec {
                         )
                     ]
 
-                    let reviews = ReviewMapper().mapList(dtos)
+                    let reviews = ReviewMapper(configurationProvider: configurationProvider).mapList(dtos)
 
                     expect(reviews).to(haveCount(2))
                     expect(reviews[0].id).to(equal("123"))
@@ -106,7 +112,7 @@ class ReviewMapperSpec: QuickSpec {
                 }
 
                 it("returns empty array when given empty input") {
-                    let reviews = ReviewMapper().mapList([])
+                    let reviews = ReviewMapper(configurationProvider: configurationProvider).mapList([])
                     expect(reviews).to(beEmpty())
                 }
             }
@@ -119,10 +125,10 @@ class ReviewMapperSpec: QuickSpec {
                         rating: 8.5
                     )
 
-                    let authorDetails = ReviewMapper.AuthorDetailsMapper.map(dto)
+                    let authorDetails = ReviewMapper.AuthorDetailsMapper.map(dto, configurationProvider: configurationProvider)
 
                     expect(authorDetails.name).to(equal("John Doe"))
-                    expect(authorDetails.avatarPath).to(equal("/avatar.jpg"))
+                    expect(authorDetails.avatarURL?.absoluteString).to(equal("https://image.tmdb.org/t/p/w200/avatar.jpg"))
                     expect(authorDetails.rating).to(equal(8.5))
                 }
             }

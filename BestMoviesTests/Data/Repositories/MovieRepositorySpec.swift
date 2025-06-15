@@ -76,10 +76,12 @@ class MovieRepositorySpec: AsyncSpec {
         describe("MovieRepository") {
             var sut: MovieRepository!
             var mockClient: MockTMDBAPIClient!
+            var mockConfigurationProvider: ConfigurationProvider!
 
             beforeEach {
                 mockClient = MockTMDBAPIClient()
-                sut = MovieRepository(apiClient: mockClient)
+                mockConfigurationProvider = MockConfigurationProvider()
+                sut = MovieRepository(apiClient: mockClient, configurationProvider: mockConfigurationProvider)
             }
 
             // MARK: - fetchMovies Tests

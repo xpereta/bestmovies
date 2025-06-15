@@ -27,7 +27,7 @@ struct Review: Identifiable, Equatable {
             return String(format: "%.1f", rating)
         }
     }
-    
+
     init(
         id: String,
         author: String,

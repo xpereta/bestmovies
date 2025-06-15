@@ -16,7 +16,7 @@ struct MovieDetails: Identifiable {
     let originalLanguage: String
     let posterURL: URL?
     let backdropURL: URL?
-    
+
     init(
         id: Int,
         title: String,

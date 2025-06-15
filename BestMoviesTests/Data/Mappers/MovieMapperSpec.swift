@@ -8,6 +8,12 @@ class MovieMapperSpec: QuickSpec {
     // swiftlint:disable:next function_body_length
     override class func spec() {
         describe("MovieDTOMapper") {
+            var configurationProvider: MockConfigurationProvider!
+
+            beforeEach {
+                configurationProvider = MockConfigurationProvider()
+            }
+
             context("when mapping a single DTO") {
                 context("with valid information") {
                     it("maps all properties correctly") {
@@ -20,12 +26,12 @@ class MovieMapperSpec: QuickSpec {
                             voteAverage: 8.7
                         )
 
-                        let movie = MovieMapper().map(dto)
+                        let movie = MovieMapper(configurationProvider: configurationProvider).map(dto)
 
                         expect(movie.id).to(equal(1))
                         expect(movie.title).to(equal("The Matrix"))
                         expect(movie.overview).to(equal("A computer hacker learns about the true nature of reality"))
-                        expect(movie.posterPath).to(equal("/path/to/poster.jpg"))
+                        expect(movie.posterURL?.absoluteString).to(equal("https://image.tmdb.org/t/p/w200/path/to/poster.jpg"))
                         expect(movie.voteAverage).to(equal(8.7))
 
                         let calendar = Calendar.current
@@ -38,7 +44,7 @@ class MovieMapperSpec: QuickSpec {
                 }
 
                 context("with missing poster path") {
-                    it("maps to nil posterPath") {
+                    it("maps to nil posterURL") {
                         let dto = TMDBAPI.DTO.Movie(
                             id: 1,
                             title: "The Matrix",
@@ -48,9 +54,8 @@ class MovieMapperSpec: QuickSpec {
                             voteAverage: 8.7
                         )
 
-                        let movie = MovieMapper().map(dto)
+                        let movie = MovieMapper(configurationProvider: configurationProvider).map(dto)
 
-                        expect(movie.posterPath).to(beNil())
                         expect(movie.posterURL).to(beNil())
                     }
                 }
@@ -66,7 +71,7 @@ class MovieMapperSpec: QuickSpec {
                             voteAverage: 8.7
                         )
 
-                        let movie = MovieMapper().map(dto)
+                        let movie = MovieMapper(configurationProvider: configurationProvider).map(dto)
 
                         expect(movie.releaseDate).to(beNil())
                     }
@@ -83,7 +88,7 @@ class MovieMapperSpec: QuickSpec {
                             voteAverage: 8.7
                         )
 
-                        let movie = MovieMapper().map(dto)
+                        let movie = MovieMapper(configurationProvider: configurationProvider).map(dto)
 
                         expect(movie.releaseDate).to(beNil())
                     }
@@ -100,7 +105,7 @@ class MovieMapperSpec: QuickSpec {
                             voteAverage: 8.7
                         )
 
-                        let movie = MovieMapper().map(dto)
+                        let movie = MovieMapper(configurationProvider: configurationProvider).map(dto)
 
                         expect(movie.releaseDate).to(beNil())
                     }
@@ -128,15 +133,17 @@ class MovieMapperSpec: QuickSpec {
                         )
                     ]
 
-                    let movies = MovieMapper().mapList(dtos)
+                    let movies = MovieMapper(configurationProvider: configurationProvider).mapList(dtos)
 
                     expect(movies).to(haveCount(2))
                     expect(movies[0].title).to(equal("The Matrix"))
+                    expect(movies[0].posterURL?.absoluteString).to(equal("https://image.tmdb.org/t/p/w200/path1.jpg"))
                     expect(movies[1].title).to(equal("The Matrix Reloaded"))
+                    expect(movies[1].posterURL?.absoluteString).to(equal("https://image.tmdb.org/t/p/w200/path2.jpg"))
                 }
 
                 it("returns empty array when given empty input") {
-                    let movies = MovieMapper().mapList([])
+                    let movies = MovieMapper(configurationProvider: configurationProvider).mapList([])
 
                     expect(movies).to(beEmpty())
                 }
@@ -148,18 +155,18 @@ class MovieMapperSpec: QuickSpec {
                         id: 1,
                         title: "The Matrix",
                         overview: "First version",
-                        posterPath: "/path1.jpg",
                         releaseDate: Date(),
-                        voteAverage: 8.7
+                        voteAverage: 8.7,
+                        posterURL: URL(string: "https://image.tmdb.org/t/p/w200/path1.jpg")
                     )
 
                     let movie2 = Movie(
                         id: 1,
                         title: "Another Matrix",
                         overview: "Another version",
-                        posterPath: "/path2.jpg",
                         releaseDate: Date().addingTimeInterval(10),
-                        voteAverage: 9.0
+                        voteAverage: 9.0,
+                        posterURL: URL(string: "https://image.tmdb.org/t/p/w200/path2.jpg")
                     )
 
                     expect(movie1).to(equal(movie2))
@@ -170,18 +177,18 @@ class MovieMapperSpec: QuickSpec {
                         id: 1,
                         title: "The Matrix",
                         overview: "Overview",
-                        posterPath: "/path.jpg",
                         releaseDate: Date(),
-                        voteAverage: 9.0
+                        voteAverage: 9.0,
+                        posterURL: URL(string: "https://image.tmdb.org/t/p/w200/path.jpg")
                     )
 
                     let movie2 = Movie(
                         id: 2,
                         title: "The Matrix",
                         overview: "Overview",
-                        posterPath: "/path.jpg",
                         releaseDate: Date(),
-                        voteAverage: 9.0
+                        voteAverage: 9.0,
+                        posterURL: URL(string: "https://image.tmdb.org/t/p/w200/path.jpg")
                     )
 
                     expect(movie1).notTo(equal(movie2))

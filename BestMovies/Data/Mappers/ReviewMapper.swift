@@ -4,7 +4,7 @@ import TMDBAPI
 struct ReviewMapper {
     private let dateParseStrategy: Date.ParseStrategy
     private let configurationProvider: ConfigurationProvider
-    
+
     init(
         dateParseStrategy: Date.ParseStrategy = .shortISO8601,
         configurationProvider: ConfigurationProvider
@@ -12,7 +12,7 @@ struct ReviewMapper {
         self.dateParseStrategy = dateParseStrategy
         self.configurationProvider = configurationProvider
     }
-    
+
     func map(_ dto: TMDBAPI.DTO.Review) -> Review {
         let createdAt = try? Date(dto.createdAt, strategy: dateParseStrategy)
 
@@ -21,7 +21,7 @@ struct ReviewMapper {
         if let authorDetailsDTO = dto.authorDetails {
             authorDetails = AuthorDetailsMapper.map(authorDetailsDTO, configurationProvider: configurationProvider)
         }
-        
+
         return Review(
             id: dto.id,
             author: dto.author,

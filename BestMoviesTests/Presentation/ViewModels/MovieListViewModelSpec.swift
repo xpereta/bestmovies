@@ -54,8 +54,22 @@ class MovieListViewModelSpec: AsyncSpec {
 
             context("when loading movies") {
                 let testMovies = [
-                    Movie(id: 1, title: "Test 1", overview: "Overview 1", posterPath: "/1.jpg", releaseDate: Date(), voteAverage: 7.5),
-                    Movie(id: 2, title: "Test 2", overview: "Overview 2", posterPath: "/2.jpg", releaseDate: Date(), voteAverage: 8.0)
+                    Movie(
+                        id: 1,
+                        title: "Test 1",
+                        overview: "Overview 1",
+                        releaseDate: Date(),
+                        voteAverage: 7.5,
+                        posterURL: URL(string: "https://image.tmdb.org/t/p/w200/1.jpg")
+                    ),
+                    Movie(
+                        id: 2,
+                        title: "Test 2",
+                        overview: "Overview 2",
+                        releaseDate: Date(),
+                        voteAverage: 8.0,
+                        posterURL: URL(string: "https://image.tmdb.org/t/p/w200/2.jpg")
+                    )
                 ]
 
                 context("with successful response") {
@@ -110,7 +124,14 @@ class MovieListViewModelSpec: AsyncSpec {
 
                         // Configure second page
                         let page2Movies = [
-                            Movie(id: 3, title: "Test 3", overview: "Overview 3", posterPath: "/3.jpg", releaseDate: Date(), voteAverage: 8.5)
+                            Movie(
+                                id: 3,
+                                title: "Test 3",
+                                overview: "Overview 3",
+                                releaseDate: Date(),
+                                voteAverage: 8.5,
+                                posterURL: URL(string: "https://image.tmdb.org/t/p/w200/3.jpg")
+                            )
                         ]
                         spyUseCase.moviesToReturn = page2Movies
                         spyUseCase.hasMoreToReturn = false

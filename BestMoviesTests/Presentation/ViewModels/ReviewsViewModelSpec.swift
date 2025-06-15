@@ -43,8 +43,8 @@ class ReviewsViewModelSpec: AsyncSpec {
                         createdAt: Date(),
                         authorDetails: Review.AuthorDetails(
                             name: "John Doe",
-                            avatarPath: "/avatar1.jpg",
-                            rating: 8.5
+                            rating: 8.5,
+                            avatarURL: URL(string: "https://image.tmdb.org/t/p/w200/avatar1.jpg")
                         )
                     ),
                     Review(

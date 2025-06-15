@@ -4,7 +4,7 @@ import TMDBAPI
 struct MovieDetailsMapper {
     private let dateParseStrategy: Date.ParseStrategy
     private let configurationProvider: ConfigurationProvider
-    
+
     init(
         dateParseStrategy: Date.ParseStrategy = .shortISO8601,
         configurationProvider: ConfigurationProvider
@@ -12,7 +12,7 @@ struct MovieDetailsMapper {
         self.dateParseStrategy = dateParseStrategy
         self.configurationProvider = configurationProvider
     }
-    
+
     func map(_ dto: TMDBAPI.DTO.MovieDetails) -> MovieDetails {
         let date = try? Date(dto.releaseDate, strategy: dateParseStrategy)
         var posterURL: URL?
@@ -23,7 +23,7 @@ struct MovieDetailsMapper {
         if let path = dto.backdropPath {
             backdropURL = URL(string: "\(configurationProvider.backdropBaseURL)\(path)")
         }
-        
+
         return MovieDetails(
             id: dto.id,
             title: dto.title,

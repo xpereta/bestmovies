@@ -45,8 +45,6 @@ class MovieDetailViewModelSpec: AsyncSpec {
                     id: 123,
                     title: "Test Movie",
                     overview: "Test Overview",
-                    posterPath: "/test.jpg",
-                    backdropPath: "/backdrop.jpg",
                     releaseDate: Date(),
                     voteAverage: 8.5,
                     voteCount: 100,
@@ -56,7 +54,9 @@ class MovieDetailViewModelSpec: AsyncSpec {
                     tagline: "Test Tagline",
                     budget: 1000000,
                     revenue: 5000000,
-                    originalLanguage: "en"
+                    originalLanguage: "en",
+                    posterURL: URL(string: "https://image.tmdb.org/t/p/w200/test.jpg"),
+                    backdropURL: URL(string: "https://image.tmdb.org/t/p/w500/backdrop.jpg"),
                 )
                 reviews = [
                     Review(
@@ -66,8 +66,9 @@ class MovieDetailViewModelSpec: AsyncSpec {
                         createdAt: Date(),
                         authorDetails: Review.AuthorDetails(
                             name: "John Doe",
-                            avatarPath: "/utEXl2EDiXBK6f41wCLsvprvMg4.jpg",
-                            rating: 5.5)
+                            rating: 5.5,
+                            avatarURL: URL(string: "https://image.tmdb.org/t/p/w200/utEXl2EDiXBK6f41wCLsvprvMg4.jpg")
+                        )
                     ),
                     Review(
                         id: "2",
@@ -76,8 +77,9 @@ class MovieDetailViewModelSpec: AsyncSpec {
                         createdAt: Date(),
                         authorDetails: Review.AuthorDetails(
                             name: "Jane Doe",
-                            avatarPath: "/invalid.jpg",
-                            rating: 7.4)
+                            rating: 7.4,
+                            avatarURL: URL(string: "https://image.tmdb.org/t/p/w200/invalid.jpg")
+                        )
                     )
                 ]
 

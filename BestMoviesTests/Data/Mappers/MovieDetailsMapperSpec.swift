@@ -8,6 +8,12 @@ class MovieDetailsMapperSpec: QuickSpec {
     // swiftlint:disable:next function_body_length
     override class func spec() {
         describe("MovieDetailsMapper") {
+            var configurationProvider: MockConfigurationProvider!
+
+            beforeEach {
+                configurationProvider = MockConfigurationProvider()
+            }
+
             context("when mapping a DTO") {
                 context("with valid information") {
                     it("maps all properties correctly") {
@@ -32,13 +38,13 @@ class MovieDetailsMapperSpec: QuickSpec {
                             originalLanguage: "en"
                         )
 
-                        let movieDetails = MovieDetailsMapper().map(dto)
+                        let movieDetails = MovieDetailsMapper(configurationProvider: configurationProvider).map(dto)
 
                         expect(movieDetails.id).to(equal(1))
                         expect(movieDetails.title).to(equal("The Matrix"))
                         expect(movieDetails.overview).to(equal("A computer hacker learns about the true nature of reality"))
-                        expect(movieDetails.posterPath).to(equal("/path/to/poster.jpg"))
-                        expect(movieDetails.backdropPath).to(equal("/path/to/backdrop.jpg"))
+                        expect(movieDetails.posterURL?.absoluteString).to(equal("https://image.tmdb.org/t/p/w200/path/to/poster.jpg"))
+                        expect(movieDetails.backdropURL?.absoluteString).to(equal("https://image.tmdb.org/t/p/w500/path/to/backdrop.jpg"))
                         expect(movieDetails.voteAverage).to(equal(8.7))
                         expect(movieDetails.voteCount).to(equal(15401))
                         expect(movieDetails.runtime).to(equal(136))
@@ -84,10 +90,8 @@ class MovieDetailsMapperSpec: QuickSpec {
                             originalLanguage: "en"
                         )
 
-                        let movieDetails = MovieDetailsMapper().map(dto)
+                        let movieDetails = MovieDetailsMapper(configurationProvider: configurationProvider).map(dto)
 
-                        expect(movieDetails.posterPath).to(beNil())
-                        expect(movieDetails.backdropPath).to(beNil())
                         expect(movieDetails.posterURL).to(beNil())
                         expect(movieDetails.backdropURL).to(beNil())
                         expect(movieDetails.runtime).to(beNil())
@@ -116,7 +120,7 @@ class MovieDetailsMapperSpec: QuickSpec {
                             originalLanguage: "en"
                         )
 
-                        let movieDetails = MovieDetailsMapper().map(dto)
+                        let movieDetails = MovieDetailsMapper(configurationProvider: configurationProvider).map(dto)
                         expect(movieDetails.runtimeFormatted).to(equal("2h 34m"))
                     }
                 }
