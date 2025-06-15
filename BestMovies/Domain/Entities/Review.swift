@@ -19,7 +19,7 @@ struct Review: Identifiable, Equatable {
 
         var avatarURL: URL? {
             guard let avatarPath else { return nil }
-            return URL(string: "\(Configuration.posterBaseURL)\(avatarPath)")
+            return URL(string: "\(Configuration.avatarBaseURL)\(avatarPath)")
         }
     }
 

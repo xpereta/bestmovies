@@ -24,7 +24,7 @@ struct MovieDetails: Identifiable, Equatable {
 
     var backdropURL: URL? {
         guard let backdropPath = backdropPath else { return nil }
-        return URL(string: "\(Configuration.posterBaseURL)\(backdropPath)")
+        return URL(string: "\(Configuration.backdropBaseURL)\(backdropPath)")
     }
 
     var runtimeFormatted: String? {

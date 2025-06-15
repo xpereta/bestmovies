@@ -3,7 +3,7 @@
 enum Configuration {
     static let apiBaseURL = "https://api.themoviedb.org/3"
     static let apiKey = "<API-KEY>"
-    static let fullImageBaseURL = "https://image.tmdb.org/t/p/original"
-    static let posterBaseURL = "https://image.tmdb.org/t/p/w500"
+    static let backdropBaseURL = "https://image.tmdb.org/t/p/w500"
+    static let posterBaseURL = "https://image.tmdb.org/t/p/w200"
     static let avatarBaseURL = "https://image.tmdb.org/t/p/w200"
 }
