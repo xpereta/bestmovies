@@ -25,6 +25,23 @@ This project uses Swift Package Manager to manage the following third party depe
 - **Factory:** Container-based dependency injection.
 	- https://github.com/hmlongco/Factory
 
+## Modularization
+
+The `main` branch contain the application organized in logical layers.
+
+The `feature/modularization` branch contains a version of the application with each layer in separate SPM packages:
+
+- **Features**
+	- **Movies**: Implementation of the feature that displays a searchable list of movies an their detail.
+	- **CommonUI**: Common UI elements that can be reused across packages.
+- **Domain**
+	- **BestMoviesDomain**: The domain logic for the application.
+- **Data**
+	- **TMDBDataSource**: Gives access to TheMovieDataBase data using their API and performs the necessary data mapping.
+- **Services**
+	- **TMDBAPI**: Provides access to TheMovieDataBase API.
+	- **Networking**: Enables performing network requests.
+
 ## Functional description
 BestMovies is an iOS application that allows users to browse the top rated movies from The Movie Database (TMDB). It consists of a main list view of movies, including a search bar, and a child view that displays movie details.
 
