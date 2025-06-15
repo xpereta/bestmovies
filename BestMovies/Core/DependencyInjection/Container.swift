@@ -1,9 +1,9 @@
-import Data
-import Domain
+import BestMoviesDomain
 import FactoryKit
 import Foundation
 import Networking
 import TMDBAPI
+import TMDBDataSource
 
 extension Container {
     var configurationProvider: Factory<ConfigurationProvider> {

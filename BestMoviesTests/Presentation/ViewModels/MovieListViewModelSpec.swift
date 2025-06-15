@@ -1,5 +1,5 @@
 @testable import BestMovies
-import Domain
+import BestMoviesDomain
 import Foundation
 import Nimble
 import Quick

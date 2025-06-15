@@ -1,6 +1,6 @@
 import AsyncAlgorithms
+import BestMoviesDomain
 import Combine
-import Domain
 import Foundation
 
 enum MoviesListViewState: Equatable {

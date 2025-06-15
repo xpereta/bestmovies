@@ -1,4 +1,4 @@
-import Domain
+import BestMoviesDomain
 import SwiftUI
 
 struct MovieListView<ViewModel>: View where ViewModel: MovieListViewModelType {

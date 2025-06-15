@@ -1,4 +1,4 @@
-import Domain
+import BestMoviesDomain
 import SwiftUI
 import UIKit
 

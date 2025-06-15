@@ -1,5 +1,5 @@
+import BestMoviesDomain
 import Combine
-import Domain
 import Foundation
 
 @MainActor
