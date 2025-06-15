@@ -115,7 +115,6 @@
 				4756F0012DFF34B0004AF00B /* Packages */,
 				475377EC2DCA5487004B69CC /* BestMovies */,
 				475378002DCA5489004B69CC /* BestMoviesTests */,
-				4756F0022DFF34D8004AF00B /* Frameworks */,
 				475377EB2DCA5487004B69CC /* Products */,
 			);
 			sourceTree = "<group>";
@@ -164,13 +163,6 @@
 				4756F0002DFF34B0004AF00B /* Services */,
 			);
 			path = Packages;
-			sourceTree = "<group>";
-		};
-		4756F0022DFF34D8004AF00B /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		4756F0092DFF362D004AF00B /* Features */ = {
