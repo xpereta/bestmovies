@@ -1,4 +1,4 @@
-// swift-tools-version: 6.1
+// swift-tools-version: 5.10
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -16,6 +16,7 @@ let package = Package(
     ],
     dependencies: [
         .package(path: "../Networking"),
+        .package(path: "../Domain"),
         .package(url: "https://github.com/Quick/Quick.git", from: "7.6.2"),
         .package(url: "https://github.com/Quick/Nimble.git", from: "13.7.1")
     ],
@@ -25,7 +26,8 @@ let package = Package(
         .target(
             name: "TMDBAPI",
             dependencies: [
-                "Networking"
+                "Networking",
+                "Domain"
             ]
         ),
         .testTarget(
@@ -33,6 +35,7 @@ let package = Package(
             dependencies: [
                 "TMDBAPI",
                 "Networking",
+                "Domain",
                 "Quick",
                 "Nimble"
             ]

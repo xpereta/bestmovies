@@ -1,18 +1,18 @@
 import Foundation
 
-struct Review: Identifiable, Equatable {
-    let id: String
-    let author: String
-    let content: String
-    let createdAt: Date?
-    let authorDetails: AuthorDetails?
+public struct Review: Identifiable, Equatable {
+    public let id: String
+    public let author: String
+    public let content: String
+    public let createdAt: Date?
+    public let authorDetails: AuthorDetails?
 
-    struct AuthorDetails {
-        let name: String?
-        let rating: Double?
-        let avatarURL: URL?
+    public struct AuthorDetails {
+        public let name: String?
+        public let rating: Double?
+        public let avatarURL: URL?
 
-        init(
+        public init(
             name: String?,
             rating: Double?,
             avatarURL: URL?
@@ -22,13 +22,13 @@ struct Review: Identifiable, Equatable {
             self.avatarURL = avatarURL
         }
 
-        var ratingFormatted: String? {
+        public var ratingFormatted: String? {
             guard let rating else { return nil }
             return String(format: "%.1f", rating)
         }
     }
 
-    init(
+    public init(
         id: String,
         author: String,
         content: String,
@@ -42,7 +42,7 @@ struct Review: Identifiable, Equatable {
         self.authorDetails = authorDetails
     }
 
-    static func == (lhs: Review, rhs: Review) -> Bool {
+    public static func == (lhs: Review, rhs: Review) -> Bool {
         lhs.id == rhs.id
     }
 }

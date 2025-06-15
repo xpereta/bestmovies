@@ -1,5 +1,6 @@
 import Foundation
 import TMDBAPI
+import Domain
 
 struct GenreMapper {
     static func map(_ dto: TMDBAPI.DTO.Genre) -> Genre {

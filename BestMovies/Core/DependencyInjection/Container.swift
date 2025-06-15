@@ -2,10 +2,11 @@ import FactoryKit
 import Foundation
 import Networking
 import TMDBAPI
+import Domain
 
 extension Container {
     var configurationProvider: Factory<ConfigurationProvider> {
-        self { AppConfigurationProvider() }
+        self { AppConfigurationProvider(posterBaseURL: Configuration.posterBaseURL, backdropBaseURL: Configuration.backdropBaseURL, avatarBaseURL: Configuration.avatarBaseURL) }
             .cached
     }
 

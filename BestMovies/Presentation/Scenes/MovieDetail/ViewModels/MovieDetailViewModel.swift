@@ -1,5 +1,6 @@
 import Combine
 import Foundation
+import Domain
 
 @MainActor
 protocol MovieDetailViewModelType: ObservableObject {

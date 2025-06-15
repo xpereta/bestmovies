@@ -1,5 +1,7 @@
 import SwiftUI
 import UIKit
+import Domain
+import Domain
 
 struct MovieDetailView<ViewModel>: View where ViewModel: MovieDetailViewModelType {
     @ObservedObject private var viewModel: ViewModel

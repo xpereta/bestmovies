@@ -1,5 +1,6 @@
 import Foundation
 import TMDBAPI
+import Domain
 
 struct ReviewMapper {
     private let dateParseStrategy: Date.ParseStrategy

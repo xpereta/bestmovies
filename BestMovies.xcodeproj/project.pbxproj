@@ -10,6 +10,7 @@
 		475502F92DCA68FD00863B5D /* Quick in Frameworks */ = {isa = PBXBuildFile; productRef = 475502F82DCA68FD00863B5D /* Quick */; };
 		475503002DCA69F700863B5D /* Nimble in Frameworks */ = {isa = PBXBuildFile; productRef = 475502FF2DCA69F700863B5D /* Nimble */; };
 		476377832DD5DCFC00F60DF3 /* FactoryKit in Frameworks */ = {isa = PBXBuildFile; productRef = 476377822DD5DCFC00F60DF3 /* FactoryKit */; };
+		47CCAC7D2DFEEC40001F33E8 /* Domain in Frameworks */ = {isa = PBXBuildFile; productRef = 47CCAC7C2DFEEC40001F33E8 /* Domain */; };
 		47D3EBD42DD9F7400059B8B6 /* Networking in Frameworks */ = {isa = PBXBuildFile; productRef = 47D3EBD32DD9F7400059B8B6 /* Networking */; };
 		47F609832DFEC8EF00FC0E41 /* AsyncAlgorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 47043A2C2DE4966200D2BAA3 /* AsyncAlgorithms */; };
 		47F60A832DFECC1100FC0E41 /* TMDBAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 47F60A822DFECC1100FC0E41 /* TMDBAPI */; };
@@ -37,6 +38,7 @@
 		475377EA2DCA5487004B69CC /* BestMovies.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BestMovies.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		475377FD2DCA5489004B69CC /* BestMoviesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BestMoviesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		475378072DCA5489004B69CC /* BestMoviesUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BestMoviesUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		47CCAC7B2DFEEC40001F33E8 /* Domain */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Domain; path = packages/Domain; sourceTree = "<group>"; };
 		47D3EBCE2DD9F2240059B8B6 /* Networking */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Networking; path = packages/Networking; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -63,6 +65,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				47CCAC7D2DFEEC40001F33E8 /* Domain in Frameworks */,
 				47F60A832DFECC1100FC0E41 /* TMDBAPI in Frameworks */,
 				47F609832DFEC8EF00FC0E41 /* AsyncAlgorithms in Frameworks */,
 				47D3EBD42DD9F7400059B8B6 /* Networking in Frameworks */,
@@ -94,6 +97,7 @@
 			children = (
 				472B1D822DDA006B005ACFE3 /* TMDBAPI */,
 				47D3EBCE2DD9F2240059B8B6 /* Networking */,
+				47CCAC7B2DFEEC40001F33E8 /* Domain */,
 				475377EC2DCA5487004B69CC /* BestMovies */,
 				475378002DCA5489004B69CC /* BestMoviesTests */,
 				4753780A2DCA5489004B69CC /* BestMoviesUITests */,
@@ -145,6 +149,7 @@
 				47D3EBD32DD9F7400059B8B6 /* Networking */,
 				47043A2C2DE4966200D2BAA3 /* AsyncAlgorithms */,
 				47F60A822DFECC1100FC0E41 /* TMDBAPI */,
+				47CCAC7C2DFEEC40001F33E8 /* Domain */,
 			);
 			productName = BestMovies;
 			productReference = 475377EA2DCA5487004B69CC /* BestMovies.app */;
@@ -737,6 +742,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 476377812DD5DCFC00F60DF3 /* XCRemoteSwiftPackageReference "Factory" */;
 			productName = FactoryKit;
+		};
+		47CCAC7C2DFEEC40001F33E8 /* Domain */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Domain;
 		};
 		47D3EBD32DD9F7400059B8B6 /* Networking */ = {
 			isa = XCSwiftPackageProductDependency;

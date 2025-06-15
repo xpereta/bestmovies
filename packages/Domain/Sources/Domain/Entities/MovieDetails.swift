@@ -1,23 +1,23 @@
 import Foundation
 
-struct MovieDetails: Identifiable {
-    let id: Int
-    let title: String
-    let overview: String
-    let releaseDate: Date?
-    let voteAverage: Double
-    let voteCount: Int
-    let runtime: Int?
-    let genres: [Genre]
-    let status: String
-    let tagline: String?
-    let budget: Int
-    let revenue: Int
-    let originalLanguage: String
-    let posterURL: URL?
-    let backdropURL: URL?
+public struct MovieDetails: Identifiable {
+    public let id: Int
+    public let title: String
+    public let overview: String
+    public let releaseDate: Date?
+    public let voteAverage: Double
+    public let voteCount: Int
+    public let runtime: Int?
+    public let genres: [Genre]
+    public let status: String
+    public let tagline: String?
+    public let budget: Int
+    public let revenue: Int
+    public let originalLanguage: String
+    public let posterURL: URL?
+    public let backdropURL: URL?
 
-    init(
+    public init(
         id: Int,
         title: String,
         overview: String,
@@ -51,7 +51,7 @@ struct MovieDetails: Identifiable {
         self.backdropURL = backdropURL
     }
 
-    var runtimeFormatted: String? {
+    public var runtimeFormatted: String? {
         guard let runtime = runtime else { return nil }
         let hours = runtime / 60
         let minutes = runtime % 60
@@ -61,7 +61,7 @@ struct MovieDetails: Identifiable {
 
 extension MovieDetails: Equatable {
     // Optimized equatable implementation, id is enough for our use cases
-    static func == (lhs: MovieDetails, rhs: MovieDetails) -> Bool {
+    public static func == (lhs: MovieDetails, rhs: MovieDetails) -> Bool {
         return lhs.id == rhs.id
     }
 }
