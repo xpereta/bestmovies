@@ -45,7 +45,7 @@ struct MovieListView<ViewModel>: View where ViewModel: MovieListViewModelType {
     private func moviesList(movies: [Movie], hasMore: Bool, isLoadingMore: Bool) -> some View {
         List {
             ForEach(movies) { movie in
-                MovieRow(movie: movie)
+                MovieRow(movie: movie, viewModel: viewModel)
             }
             if hasMore {
                 HStack {
@@ -84,11 +84,11 @@ struct MovieListView<ViewModel>: View where ViewModel: MovieListViewModelType {
 
 struct MovieRow: View {
     let movie: Movie
-    @EnvironmentObject private var coordinator: Coordinator
+    var viewModel: MovieListViewModelType
 
     var body: some View {
         Button {
-            coordinator.push(page: .movieDetails(movie.id))
+            viewModel.movieTapped(id: movie.id)
         } label: {
             HStack(spacing: 12) {
                 AsyncImage(url: movie.posterURL) { phase in
@@ -234,7 +234,9 @@ struct MovieRow: View {
         voteAverage: 8.4,
         posterURL: URL(string: "https://image.tmdb.org/t/p/w500/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg")
     )
+    let viewModel = StubMovieListViewModel(
+        state: .loaded([], currentPage: 1, hasMore: false, isLoadingMore: false))
     List {
-        MovieRow(movie: movie)
+        MovieRow(movie: movie, viewModel: viewModel)
     }
 }

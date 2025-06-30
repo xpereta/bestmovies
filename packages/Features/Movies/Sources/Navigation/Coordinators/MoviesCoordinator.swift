@@ -18,11 +18,15 @@ class Coordinator: ObservableObject {
     @Published var path: NavigationPath = NavigationPath()
 
     private let dependencies: MoviesDependencies
-    var moviesListViewModel: MovieListViewModel
+    lazy var moviesListViewModel: MovieListViewModel = MovieListViewModel(
+        useCase: dependencies.getMoviesUseCase,
+        onMovieSelection: { [weak self] movieId in
+            self?.push(page: .movieDetails(movieId))
+        }
+    )
 
     init(dependencies: MoviesDependencies) {
         self.dependencies = dependencies
-        self.moviesListViewModel = MovieListViewModel(useCase: dependencies.getMoviesUseCase)
     }
 
     func push(page: AppPage) {
