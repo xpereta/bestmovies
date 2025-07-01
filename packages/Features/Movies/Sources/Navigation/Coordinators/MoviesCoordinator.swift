@@ -71,6 +71,5 @@ public struct CoordinatorView: View {
                     coordinator.build(page: page)
                 }
         }
-        .environmentObject(coordinator)
     }
 }

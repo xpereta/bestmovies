@@ -18,7 +18,7 @@ protocol MovieListViewModelType: ObservableObject {
     func startLoading() async
     func loadNextPage() async
     func resetLoading() async
-    
+
     func movieTapped(id: Int)
 }
 
@@ -26,7 +26,7 @@ protocol MovieListViewModelType: ObservableObject {
 final class StubMovieListViewModel: MovieListViewModelType {
     @Published var state: MoviesListViewState
     @Published var searchText: String = ""
-    
+
     init(state: MoviesListViewState, searchText: String = "") {
         self.state = state
         self.searchText = searchText
@@ -35,7 +35,7 @@ final class StubMovieListViewModel: MovieListViewModelType {
     func startLoading() async {}
     func loadNextPage() async {}
     func resetLoading() async {}
-    
+
     func movieTapped(id: Int) {}
 }
 
@@ -58,7 +58,7 @@ final class MovieListViewModel: MovieListViewModelType {
     private var searchTask: Task<Void, Never>?
 
     private let onMovieSelection: (Int) -> Void
-    
+
     init(useCase: GetMoviesUseCaseType, onMovieSelection: @escaping (Int) -> Void) {
         self.useCase = useCase
         self.onMovieSelection = onMovieSelection
@@ -143,8 +143,9 @@ final class MovieListViewModel: MovieListViewModelType {
             }
         }
     }
-    
+
     // MARK: Navigation
+
     func movieTapped(id: Int) {
         onMovieSelection(id)
     }

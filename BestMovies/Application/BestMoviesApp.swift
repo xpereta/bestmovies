@@ -6,7 +6,7 @@ import SwiftUI
 struct BestMoviesApp: App {
     var body: some Scene {
         WindowGroup {
-            var dependencies = Container.shared.appMoviesDependencies.resolve()
+            let dependencies = Container.shared.appMoviesDependencies.resolve()
             CoordinatorView(dependencies: dependencies)
         }
     }

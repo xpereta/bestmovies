@@ -84,7 +84,7 @@ struct MovieListView<ViewModel>: View where ViewModel: MovieListViewModelType {
 
 struct MovieRow: View {
     let movie: Movie
-    var viewModel: MovieListViewModelType
+    var viewModel: any MovieListViewModelType
 
     var body: some View {
         Button {

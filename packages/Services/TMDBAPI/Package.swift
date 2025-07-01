@@ -16,7 +16,6 @@ let package = Package(
     ],
     dependencies: [
         .package(path: "../Networking"),
-        .package(path: "../Domain/BestMoviesDomain"),
         .package(url: "https://github.com/Quick/Quick.git", from: "7.6.2"),
         .package(url: "https://github.com/Quick/Nimble.git", from: "13.7.1")
     ],
